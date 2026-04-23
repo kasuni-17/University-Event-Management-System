@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Club Admin | Event Feedback</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#21417f",
+                        "on-primary": "#ffffff",
+                        "on-surface": "#191c1d",
+                        "on-surface-variant": "#444650",
+                        "surface-container-low": "#f3f4f5",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-container": "#c2d2ff",
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"]
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .star-rating .material-symbols-outlined { cursor: pointer; transition: all 0.2s; }
+        .star-rating .material-symbols-outlined:hover, 
+        .star-rating .material-symbols-outlined.active { font-variation-settings: 'FILL' 1; color: #fbbf24; }
+        .tab-active { background-color: #eff6ff; color: #21417f; border: 1px solid #dbeafe; }
+        body { background-color: #f8fafc; }
+    </style>
+</head>
+<body class="font-body text-on-surface antialiased">
+<div id="layout-root">
+<header class="bg-white border-b border-slate-200 sticky-nav">
+    <div class="max-w-7xl mx-auto px-6 w-full flex justify-between items-center h-full">
+        <div class="flex items-center gap-12 h-full" id="navContainer">
+            <!-- Nav populated via roles -->
+        </div>
+        <div class="flex items-center gap-4 h-full">
+            <button class="relative p-2 text-slate-500 hover:text-primary transition-colors">
+                <span class="material-symbols-outlined">notifications</span>
+                <span class="absolute top-2.5 right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+            </button>
+            <div class="flex items-center gap-3 pl-3 border-l border-slate-200 relative cursor-pointer group" onclick="document.getElementById('profileDropdown').classList.toggle('hidden')">
+                <div class="h-9 w-9 rounded-full overflow-hidden border border-slate-200 bg-slate-100 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-slate-500">person</span>
+                </div>
+                <span id="userName" class="text-sm font-semibold text-slate-700 hidden lg:block">Club Admin</span>
+                <span class="material-symbols-outlined text-sm text-slate-400">expand_more</span>
+                
+                <div id="profileDropdown" class="hidden absolute top-full right-0 mt-4 w-48 bg-white rounded-xl shadow-lg border border-slate-200 py-2 z-50">
+                    <a href="profile.html" class="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors">
+                        <span class="material-symbols-outlined text-[18px]">person</span>
+                        My Profile
+                    </a>
+                    <div class="h-[1px] bg-slate-100 my-1 mx-2"></div>
+                    <a href="javascript:void(0)" onclick="logout()" class="flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors font-semibold">
+                        <span class="material-symbols-outlined text-[18px]">logout</span>
+                        Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="page-transition-enter">
+    <div class="max-w-7xl mx-auto px-6 py-12 w-full">
+    <div class="text-center mb-12">
+        <h1 class="text-4xl font-extrabold font-headline text-slate-900 mb-2">Event Feedback</h1>
+        <p class="text-slate-500">Share your experience or read what others have to say</p>
+    </div>
+
+    <!-- Standard Tabs for Club Admin -->
+    <div class="flex justify-center mb-12">
+        <div id="feedbackTabs" class="inline-flex p-1 bg-white rounded-2xl shadow-sm border border-slate-200">
+            <button onclick="switchTab('submit')" id="tab-submit" class="px-6 py-3 text-sm font-semibold rounded-xl text-slate-500 hover:bg-slate-50 transition-colors">Submit Feedback</button>
+            <button onclick="switchTab('all')" id="tab-all" class="px-6 py-3 text-sm font-semibold rounded-xl text-slate-500 hover:bg-slate-50 transition-colors">All Feedbacks</button>
+            <button onclick="switchTab('mysent')" id="tab-mysent" class="px-6 py-3 text-sm font-semibold rounded-xl text-slate-500 hover:bg-slate-50 transition-colors">My Sent Feedbacks <span id="mySentCount"></span></button>
+            <button onclick="switchTab('analytics')" id="tab-analytics" class="px-6 py-3 text-sm font-semibold rounded-xl text-slate-500 hover:bg-slate-50 transition-colors">Club Event Analytics</button>
+        </div>
+    </div>
+... (omitting some lines for brevity in thought, but I will provide the full block in the tool call)
+
+
+    <!-- Submit Feedback Section (Hidden by default, shown if tab clicked) -->
+    <div id="submitSection" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-10">
+        <!-- Dashboard Left: Eligible Events -->
+        <div class="lg:col-span-5 space-y-6">
+            <h2 class="text-2xl font-bold font-headline text-slate-800 px-2">Eligible Events</h2>
+            <div id="eligibleEventsList" class="space-y-4">
+                 <div class="animate-pulse space-y-4">
+                    <div class="h-24 bg-white rounded-2xl border border-slate-100"></div>
+                 </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Right: Rating Form -->
+        <div class="lg:col-span-7">
+            <div id="ratingFormContainer" class="bg-white rounded-3xl p-8 shadow-xl shadow-slate-200/50 border border-slate-100 sticky top-24">
+                <div id="placeholderView" class="text-center py-20 space-y-4">
+                    <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto text-slate-300">
+                        <span class="material-symbols-outlined text-4xl">rate_review</span>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-800">Select an event</h3>
+                        <p class="text-slate-500">Click the 'Rate' button on an eligible event to share your thoughts.</p>
+                    </div>
+                </div>
+
+                <div id="formView" class="hidden space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                    <h3 id="formEventTitle" class="text-2xl font-bold font-headline text-slate-900">Rate Event Name</h3>
+                    <div class="space-y-4">
+                        <p class="text-sm font-semibold text-slate-600">How would you rate your experience?</p>
+                        <div class="star-rating flex gap-2">
+                            <span class="material-symbols-outlined text-4xl text-slate-200 hover:text-amber-400" data-value="1">star</span>
+                            <span class="material-symbols-outlined text-4xl text-slate-200 hover:text-amber-400" data-value="2">star</span>
+                            <span class="material-symbols-outlined text-4xl text-slate-200 hover:text-amber-400" data-value="3">star</span>
+                            <span class="material-symbols-outlined text-4xl text-slate-200 hover:text-amber-400" data-value="4">star</span>
+                            <span class="material-symbols-outlined text-4xl text-slate-200 hover:text-amber-400" data-value="5">star</span>
+                        </div>
+                    </div>
+                    <div class="space-y-3">
+                        <label class="text-sm font-semibold text-slate-600">Comments & Suggestions</label>
+                        <textarea id="comment" rows="6" class="w-full rounded-2xl border-slate-200 focus:border-primary focus:ring-primary/20 p-4 text-slate-900 placeholder:text-slate-400 bg-slate-50/50" placeholder="What did you like? What could be improved?"></textarea>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <label class="flex items-center gap-3 cursor-pointer group">
+                            <input type="checkbox" id="anonymous" class="rounded border-slate-300 text-primary focus:ring-primary h-5 w-5 transition-all">
+                            <span class="text-sm font-medium text-slate-500 group-hover:text-slate-700 transition-colors">Submit Anonymously</span>
+                        </label>
+                        <button onclick="submitFeedback()" class="bg-primary hover:bg-[#1a3465] text-white px-8 py-3.5 rounded-2xl font-bold shadow-lg shadow-primary/20 active:scale-95 transition-all">
+                            Submit Feedback
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Analytics Section -->
+    <div id="analyticsSection" class="space-y-8 animate-in fade-in duration-500">
+        <div class="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+            <div>
+                <h2 class="text-2xl font-bold font-headline text-slate-900">Feedback Analytics</h2>
+                <p class="text-slate-500">View aggregate feedback data for your club's events</p>
+            </div>
+            <div class="w-full md:w-80">
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Select Event</label>
+                <select id="eventSelector" onchange="loadEventAnalytics(this.value)" class="w-full rounded-xl border-slate-200 focus:border-primary focus:ring-primary/20 py-2.5 px-4 font-semibold text-slate-700 bg-slate-50">
+                    <option value="all">All Club Events</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm">
+                <p class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-2">Total Feedbacks</p>
+                <h3 id="totalFeedbacks" class="text-4xl font-extrabold text-slate-900">0</h3>
+            </div>
+            <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm">
+                <p class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-2">Average Rating</p>
+                <h3 id="averageRating" class="text-4xl font-extrabold text-slate-900">0.0 <span class="text-amber-400 text-2xl">★</span></h3>
+            </div>
+            <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm">
+                <p class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-2">Events Analyzed</p>
+                <h3 id="eventsAnalyzed" class="text-4xl font-extrabold text-slate-900">0</h3>
+            </div>
+        </div>
+
+        <!-- Chart Section -->
+        <div class="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm">
+            <div class="flex items-center gap-2 mb-8">
+                <span class="material-symbols-outlined text-primary">bar_chart</span>
+                <h3 class="text-xl font-bold text-slate-900">Rating Distribution</h3>
+            </div>
+            <div class="h-[300px] w-full">
+                <canvas id="ratingChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Comments Section -->
+        <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+            <div class="p-8 border-b border-slate-100">
+                <h3 class="text-xl font-bold text-slate-900">Student Comments</h3>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead class="bg-slate-50">
+                        <tr class="text-[11px] font-black text-slate-400 uppercase tracking-widest">
+                            <th class="px-8 py-4">Event</th>
+                            <th class="px-8 py-4">User</th>
+                            <th class="px-8 py-4">Rating</th>
+                            <th class="px-8 py-4">Comment</th>
+                            <th class="px-8 py-4">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="commentsBody" class="divide-y divide-slate-100">
+                        <!-- Comments will be loaded here -->
+                        <tr>
+                            <td colspan="5" class="px-8 py-10 text-center text-slate-400 italic">No comments available.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- All Feedbacks Section -->
+    <div id="allSection" class="hidden space-y-8 animate-in fade-in duration-500">
+        <h2 class="text-2xl font-bold font-headline text-slate-900">All Feedback Submissions</h2>
+        <div id="allFeedbackList" class="space-y-6">
+            <p class="text-center text-slate-400 py-10">Loading all feedbacks...</p>
+        </div>
+    </div>
+
+    <!-- My Sent Feedbacks Section -->
+    <div id="mysentSection" class="hidden space-y-8 animate-in fade-in duration-500">
+        <h2 class="text-2xl font-bold font-headline text-slate-900">My Feedback History</h2>
+        <div id="myFeedbackList" class="space-y-6">
+            <p class="text-center text-slate-400 py-10">Loading your history...</p>
+        </div>
+    </div>
+    </div>
+</main>
+</div>
+
+<script>
+    let user = null;
+    let myClubId = null;
+    let selectedEventIdForSubmit = null;
+    let currentRatingForSubmit = 0;
+    let ratingChart = null;
+    let feedbackPollingInterval = null;
+
+    document.addEventListener('DOMContentLoaded', async () => {
+        user = JSON.parse(localStorage.getItem('user'));
+        if (!user) { window.location.href = 'login.html'; return; }
+        
+        document.getElementById('userName').textContent = user.name;
+        if (user.avatar) document.getElementById('userAvatar').src = user.avatar;
+        
+        renderNavBar();
+        await fetchMyClub();
+        
+        // Initial setup
+        initChart();
+        loadClubEvents();
+        setupStarRating();
+        fetchEligibleEvents();
+        updateMySentCount();
+
+        // Handle URL parameters for tab switching
+        const urlParams = new URLSearchParams(window.location.search);
+        const requestedTab = urlParams.get('tab');
+        if (requestedTab === 'submit') {
+            switchTab('submit');
+        } else {
+            switchTab('analytics');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            const dropdown = document.getElementById('profileDropdown');
+            const profileBtn = dropdown.parentElement;
+            if (!profileBtn.contains(e.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
+    });
+
+    async function updateMySentCount() {
+        try {
+            const resp = await fetch(`/api/feedback/student/${user.id}`);
+            const data = await resp.json();
+            document.getElementById('mySentCount').textContent = `(${data.length})`;
+        } catch (e) { console.error(e); }
+    }
+
+    function renderNavBar() {
+        const nav = document.getElementById('navContainer');
+        const role = user.role;
+        const logo = `<div class="flex items-center gap-2 cursor-pointer" onclick="window.location.href='${role.toLowerCase() === 'admin' ? 'admin' : 'student'}-dashboard.html'">
+            <img src="assets/images/logo.png" alt="Scholar Hub" class="h-8 md:h-10">
+        </div>`;
+        
+        let links = `
+            <nav class="hidden md:flex items-center h-full space-x-8">
+                <a class="nav-link text-sm font-medium text-slate-500 hover:text-primary h-full flex items-center" href="clubadmin-dashboard.html">Dashboard</a>
+                <a class="nav-link text-sm font-medium text-slate-500 hover:text-primary h-full flex items-center" href="clubadmin-myclub.html">My Club</a>
+                <a class="nav-link text-sm font-medium text-slate-500 hover:text-primary h-full flex items-center" href="clubadmin-events.html">Events</a>
+                <a class="nav-link text-sm font-medium text-slate-500 hover:text-primary h-full flex items-center" href="clubadmin-clubs.html">Clubs</a>
+                <a class="nav-link text-sm font-medium text-slate-500 hover:text-primary h-full flex items-center" href="clubadmin-venue.html">Venues</a>
+                <a class="nav-link text-sm font-medium text-slate-500 hover:text-primary h-full flex items-center" href="clubadmin-feedback.html">Feedback</a>
+            </nav>
+        `;
+        nav.innerHTML = logo + links;
+    }
+
+    async function fetchMyClub() {
+        try {
+            const resp = await fetch(`/api/clubs/organizer/${user.id}`);
+            const clubs = await resp.json();
+            if (clubs.length > 0) myClubId = clubs[0].id;
+        } catch (e) { console.error("Failed to fetch club", e); }
+    }
+
+    function switchTab(tab) {
+        const sections = ['submitSection', 'analyticsSection', 'allSection', 'mysentSection'];
+        sections.forEach(s => document.getElementById(s).classList.add('hidden'));
+
+        const tabs = ['tab-submit', 'tab-analytics', 'tab-all', 'tab-mysent'];
+        tabs.forEach(t => {
+            const el = document.getElementById(t);
+            if (el) {
+                el.classList.remove('tab-active', 'font-bold');
+                el.classList.add('text-slate-500');
+            }
+        });
+
+        const activeSec = tab + 'Section';
+        if (document.getElementById(activeSec)) {
+            document.getElementById(activeSec).classList.remove('hidden');
+        }
+        if (document.getElementById('tab-' + tab)) {
+            document.getElementById('tab-' + tab).classList.add('tab-active', 'font-bold');
+            document.getElementById('tab-' + tab).classList.remove('text-slate-500');
+        }
+
+        // Clear existing interval
+        if (feedbackPollingInterval) {
+            clearInterval(feedbackPollingInterval);
+            feedbackPollingInterval = null;
+        }
+
+        if (tab === 'analytics') {
+            loadEventAnalytics(document.getElementById('eventSelector').value);
+            // Polling for analytics too? Why not.
+            feedbackPollingInterval = setInterval(() => loadEventAnalytics(document.getElementById('eventSelector').value), 10000);
+        } else if (tab === 'all') {
+            fetchAllFeedback();
+            feedbackPollingInterval = setInterval(fetchAllFeedback, 5000);
+        } else if (tab === 'mysent') {
+            fetchMyFeedback();
+        }
+    }
+
+    async function fetchAllFeedback() {
+        try {
+            const resp = await fetch('/api/feedback/all');
+            const data = await resp.json();
+            const list = document.getElementById('allFeedbackList');
+            list.innerHTML = '';
+            if (data.length === 0) {
+                list.innerHTML = '<p class="text-center text-slate-400 py-10">No feedback entries found.</p>';
+                return;
+            }
+            data.forEach(f => {
+                const card = `
+                    <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm flex flex-col gap-4">
+                        <div class="flex justify-between items-start">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center"><span class="material-symbols-outlined text-slate-300">person</span></div>
+                                <div>
+                                    <p class="font-bold text-sm">${f.student ? f.student.name : 'Anonymous'}</p>
+                                    <p class="text-[10px] text-slate-400 uppercase font-black tracking-widest">${new Date(f.submittedAt).toLocaleDateString()}</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-1 text-amber-400 font-bold">${f.rating} ★</div>
+                        </div>
+                        <p class="text-sm text-slate-600 italic">"${f.comment || 'No comment'}"</p>
+                        <p class="text-[10px] font-bold text-primary uppercase tracking-widest leading-none">${f.event.title}</p>
+                    </div>
+                `;
+                list.innerHTML += card;
+            });
+        } catch (e) { console.error(e); }
+    }
+
+    async function fetchMyFeedback() {
+        try {
+            const resp = await fetch(`/api/feedback/student/${user.id}`);
+            const data = await resp.json();
+            const list = document.getElementById('myFeedbackList');
+            list.innerHTML = '';
+            if (data.length === 0) {
+                list.innerHTML = '<p class="text-center text-slate-400 py-10">You haven\'t sent any feedback yet.</p>';
+                return;
+            }
+            data.forEach(f => {
+                const card = `
+                    <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm flex flex-col gap-4">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="font-bold text-sm">Sent for ${f.event.title}</p>
+                                <p class="text-[10px] text-slate-400 uppercase font-black tracking-widest">${new Date(f.submittedAt).toLocaleDateString()}</p>
+                            </div>
+                            <div class="flex items-center gap-1 text-primary font-bold">${f.rating}/5</div>
+                        </div>
+                        <p class="text-sm text-slate-600">${f.comment}</p>
+                    </div>
+                `;
+                list.innerHTML += card;
+            });
+        } catch (e) { console.error(e); }
+    }
+
+    async function loadClubEvents() {
+        if (!myClubId) return;
+        try {
+            const resp = await fetch(`/api/events`);
+            if (resp.ok) {
+                const allEvents = await resp.json();
+                const now = new Date();
+                // Filter for this club's events that have already started/happened
+                const myPastEvents = allEvents.filter(e => 
+                    e.organizer.id === myClubId && 
+                    new Date(e.startTime) < now
+                );
+                
+                const selector = document.getElementById('eventSelector');
+                selector.innerHTML = '<option value="all">All Club Events</option>';
+                myPastEvents.forEach(ev => {
+                    const opt = document.createElement('option');
+                    opt.value = ev.id;
+                    opt.textContent = ev.title;
+                    selector.appendChild(opt);
+                });
+            }
+        } catch (e) { console.error("Failed to load club events for analytics", e); }
+    }
+
+    async function loadEventAnalytics(eventId) {
+        if (!myClubId) return;
+        
+        if (eventId === 'all') {
+            try {
+                const resp = await fetch(`/api/events`);
+                if (resp.ok) {
+                    const allEvents = await resp.json();
+                    const now = new Date();
+                    const myPastEvents = allEvents.filter(e => 
+                        e.organizer.id === myClubId && 
+                        new Date(e.startTime) < now
+                    );
+                    
+                    let totalRes = 0;
+                    let ratingSum = 0;
+                    let ratingDist = {1:0, 2:0, 3:0, 4:0, 5:0};
+                    let allComments = [];
+    
+                    for (const ev of myPastEvents) {
+                        const statRes = await fetch(`/api/feedback/admin/event/${ev.id}/analytics`);
+                        if (statRes.ok) {
+                            const data = await statRes.json();
+                            totalRes += data.totalFeedback;
+                            ratingSum += (data.averageRating * data.totalFeedback);
+                            for(let i=1; i<=5; i++) ratingDist[i] += (data.ratingDistribution[i] || 0);
+                            if(data.feedbacks) allComments.push(...data.feedbacks);
+                        }
+                    }
+    
+                    document.getElementById('totalFeedbacks').textContent = totalRes;
+                    document.getElementById('averageRating').innerHTML = `${totalRes > 0 ? (ratingSum/totalRes).toFixed(1) : '0.0'} <span class="text-amber-400 text-2xl">★</span>`;
+                    document.getElementById('eventsAnalyzed').textContent = myPastEvents.length;
+    
+                    updateChart(ratingDist);
+                    renderComments(allComments.sort((a,b) => new Date(b.submittedAt) - new Date(a.submittedAt)));
+                }
+                return;
+            } catch (e) { console.error("Failed to load aggregate analytics", e); return; }
+        }
+    
+        const url = `/api/feedback/admin/event/${eventId}/analytics`;
+        try {
+            const resp = await fetch(url);
+            if (resp.ok) {
+                const data = await resp.json();
+                
+                document.getElementById('totalFeedbacks').textContent = data.totalFeedback;
+                document.getElementById('averageRating').innerHTML = `${data.averageRating.toFixed(1)} <span class="text-amber-400 text-2xl">★</span>`;
+                document.getElementById('eventsAnalyzed').textContent = '1';
+    
+                updateChart(data.ratingDistribution);
+                renderComments(data.feedbacks);
+            }
+        } catch (e) { console.error(e); }
+    }
+
+    function initChart() {
+        const ctx = document.getElementById('ratingChart').getContext('2d');
+        ratingChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['1 Star', '2 Stars', '3 Stars', '4 Stars', '5 Stars'],
+                datasets: [{
+                    data: [0, 0, 0, 0, 0],
+                    backgroundColor: [
+                        '#ef4444', '#f97316', '#fbbf24', '#a3e635', '#22c55e'
+                    ],
+                    borderRadius: 8,
+                    barThickness: 40
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true, grid: { borderDash: [5, 5] }, ticks: { stepSize: 1 } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+    }
+
+    function updateChart(dist) {
+        if (!ratingChart) return;
+        const values = [dist[1]||0, dist[2]||0, dist[3]||0, dist[4]||0, dist[5]||0];
+        ratingChart.data.datasets[0].data = values;
+        ratingChart.update();
+    }
+
+    function renderComments(feedbacks) {
+        const body = document.getElementById('commentsBody');
+        body.innerHTML = '';
+        if (!feedbacks || feedbacks.length === 0) {
+            body.innerHTML = '<tr><td colspan="5" class="px-8 py-10 text-center text-slate-400 italic">No comments available.</td></tr>';
+            return;
+        }
+
+        feedbacks.forEach(f => {
+            const tr = document.createElement('tr');
+            tr.className = "hover:bg-slate-50 transition-colors";
+            tr.innerHTML = `
+                <td class="px-8 py-5 text-sm font-bold text-slate-700">${f.event.title}</td>
+                <td class="px-8 py-5 text-sm text-slate-600">${f.student ? f.student.name : 'Anonymous'}</td>
+                <td class="px-8 py-5">
+                    <div class="flex text-amber-400">
+                        ${'★'.repeat(f.rating)}${'☆'.repeat(5-f.rating)}
+                    </div>
+                </td>
+                <td class="px-8 py-5 text-sm text-slate-500 max-w-xs truncate" title="${f.comment}">${f.comment}</td>
+                <td class="px-8 py-5 text-xs text-slate-400">${new Date(f.submittedAt).toLocaleDateString()}</td>
+            `;
+            body.appendChild(tr);
+        });
+    }
+
+    // --- Submit Feedback logic (same as student) ---
+
+    function setupStarRating() {
+        const stars = document.querySelectorAll('.star-rating span');
+        stars.forEach(star => {
+            star.addEventListener('click', () => {
+                const val = parseInt(star.getAttribute('data-value'));
+                currentRatingForSubmit = val;
+                stars.forEach((s, i) => {
+                    if (i < val) s.classList.add('active');
+                    else s.classList.remove('active');
+                });
+            });
+        });
+    }
+
+    async function fetchEligibleEvents() {
+        try {
+            const resp = await fetch(`/api/events/student/${user.id}/eligible-feedback`);
+            const events = await resp.json();
+            const list = document.getElementById('eligibleEventsList');
+            list.innerHTML = '';
+            
+            if (events.length === 0) {
+                list.innerHTML = '<p class="text-center text-slate-500 py-10 bg-white rounded-3xl border border-slate-100">No events found to rate.</p>';
+                return;
+            }
+
+            events.forEach(ev => {
+                const card = document.createElement('div');
+                card.id = `event-card-${ev.id}`;
+                card.className = "bg-white p-5 rounded-3xl border border-slate-100 shadow-sm flex items-center gap-5 hover:shadow-md transition-all cursor-pointer group";
+                card.innerHTML = `
+                    <div class="w-16 h-16 rounded-2xl overflow-hidden flex-shrink-0 shadow-sm">
+                        <img alt="${ev.title}" class="w-full h-full object-cover" src="${ev.posterUrl || 'https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?auto=format&fit=crop&q=80&w=2070'}"/>
+                    </div>
+                    <div class="flex-grow">
+                        <h3 class="font-bold text-slate-800 text-base leading-tight">${ev.title}</h3>
+                        <div class="flex items-center gap-3 mt-1.5 text-slate-400 text-[11px] font-bold tracking-tight">
+                            <span>${new Date(ev.startTime).toLocaleDateString()}</span>
+                            <span>•</span>
+                            <span>${ev.registrationRequired ? 'Registered' : 'Public'}</span>
+                        </div>
+                    </div>
+                    <button class="rate-btn px-6 py-2.5 bg-slate-50 text-slate-600 text-xs font-bold rounded-xl border border-slate-100 group-hover:bg-slate-100 transition-all">Rate</button>
+                `;
+                card.onclick = () => selectEventForSubmit(ev);
+                list.appendChild(card);
+            });
+        } catch (e) { console.error(e); }
+    }
+
+    function selectEventForSubmit(ev) {
+        selectedEventIdForSubmit = ev.id;
+        document.querySelectorAll('.rate-btn').forEach(btn => {
+            btn.textContent = 'Rate';
+            btn.className = "rate-btn px-6 py-2.5 bg-slate-50 text-slate-600 text-xs font-bold rounded-xl border border-slate-100";
+        });
+        const card = document.getElementById(`event-card-${ev.id}`);
+        const btn = card.querySelector('.rate-btn');
+        btn.textContent = 'Selected';
+        btn.className = "rate-btn px-6 py-2.5 bg-primary text-white text-xs font-bold rounded-xl shadow-lg shadow-primary/20";
+        
+        document.getElementById('placeholderView').classList.add('hidden');
+        document.getElementById('formView').classList.remove('hidden');
+        document.getElementById('formEventTitle').textContent = `Rate ${ev.title}`;
+        
+        currentRatingForSubmit = 0;
+        document.querySelectorAll('.star-rating span').forEach(s => s.classList.remove('active'));
+        document.getElementById('comment').value = '';
+    }
+
+    async function submitFeedback() {
+        if (!selectedEventIdForSubmit) return;
+        if (currentRatingForSubmit === 0) { alert("Please provide a star rating."); return; }
+
+        const feedback = {
+            eventId: selectedEventIdForSubmit,
+            rating: currentRatingForSubmit,
+            comment: document.getElementById('comment').value,
+            anonymous: document.getElementById('anonymous').checked,
+            userId: user.id
+        };
+
+        try {
+            const resp = await fetch('/api/feedback', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(feedback)
+            });
+
+            if (resp.ok) {
+                showSuccessPopup("Feedback submitted successfully. Your analytics will be updated shortly.", "back");
+                updateMySentCount(); // Refresh the count
+            } else {
+                alert("Failed to submit feedback.");
+            }
+        } catch (e) { console.error(e); alert("Error submitting feedback."); }
+    }
+
+    function showSuccessPopup(message, action) {
+        const popup = document.getElementById('successPopup');
+        document.getElementById('successPopupMessage').textContent = message;
+        
+        const btn = document.getElementById('successPopupButton');
+        if (action === 'back') {
+            btn.textContent = 'Back to Feedbacks';
+            btn.onclick = () => {
+                popup.classList.add('hidden');
+                switchTab('all');
+            };
+        }
+
+        popup.classList.remove('hidden');
+    }
+
+    function logout() {
+        localStorage.clear();
+        sessionStorage.clear();
+        window.location.href = 'landing-page.html';
+    }
+</script>
+
+<!-- Success Popup -->
+<div id="successPopup" class="hidden fixed inset-0 z-[200] flex items-center justify-center bg-slate-900/60 backdrop-blur-md p-4 animate-in fade-in duration-300">
+    <div class="bg-white rounded-[2rem] shadow-2xl max-w-sm w-full overflow-hidden transform animate-in zoom-in-95 duration-500">
+        <div class="p-10 text-center">
+            <div class="mb-8">
+                <div class="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto">
+                    <span class="material-symbols-outlined text-5xl text-green-600">check_circle</span>
+                </div>
+            </div>
+            <h3 class="text-3xl font-extrabold text-slate-900 mb-3 font-headline">Success!</h3>
+            <p id="successPopupMessage" class="text-slate-500 leading-relaxed mb-10">Your submission was successful.</p>
+            <button id="successPopupButton" class="w-full px-8 py-4 rounded-2xl font-bold text-white bg-primary hover:bg-[#1a3465] shadow-xl shadow-primary/20 active:scale-95 transition-all text-lg">
+                Done
+            </button>
+        </div>
+    </div>
+</div>
+
+<script src="assets/js/transitions.js"></script>
+</body>
+</html>

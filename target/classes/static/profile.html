@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Scholar Hub | My Profile</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="assets/css/transitions.css">
+    <script id="tailwind-config">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#21417f",
+                        "on-primary": "#ffffff",
+                        "on-surface": "#191c1d",
+                        "on-surface-variant": "#444650",
+                        "surface-container-low": "#f3f4f5",
+                        "surface-container-lowest": "#ffffff"
+                    },
+                    fontFamily: {"headline": ["Manrope"], "body": ["Inter"]},
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        body { background-color: #f8fafc; }
+        .profile-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .input-group:focus-within label { color: #21417f; }
+    </style>
+</head>
+<body class="font-body text-on-surface antialiased">
+<div id="layout-root">
+<header class="bg-white border-b border-slate-200 sticky-nav">
+    <div class="max-w-7xl mx-auto px-6 w-full flex justify-between items-center h-full">
+        <div class="flex items-center gap-12 h-full" id="navContainer">
+            <div class="flex items-center gap-2 cursor-pointer h-full" onclick="window.history.back()">
+                <span class="material-symbols-outlined text-slate-400">arrow_back</span>
+                <img src="assets/images/logo.png" alt="Scholar Hub" class="h-8 md:h-10">
+            </div>
+        </div>
+        <div class="flex items-center gap-4 h-full">
+             <div class="flex items-center gap-3 pl-3 border-l border-slate-200 relative cursor-pointer group h-full" onclick="document.getElementById('profileDropdown').classList.toggle('hidden')">
+                <div class="h-9 w-9 rounded-full overflow-hidden border border-slate-200 bg-slate-100 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-slate-500">person</span>
+                </div>
+                <span id="userNameTop" class="text-sm font-semibold text-slate-700 hidden lg:block">User Profile</span>
+                <span class="material-symbols-outlined text-sm text-slate-400">expand_more</span>
+                
+                <div id="profileDropdown" class="hidden absolute top-full right-0 mt-4 w-48 bg-white rounded-xl shadow-lg border border-slate-200 py-2 z-50">
+                    <a href="profile.html" class="flex items-center gap-2 px-4 py-2 text-sm text-primary bg-slate-50 font-bold">
+                        <span class="material-symbols-outlined text-[18px]">person</span>
+                        My Profile
+                    </a>
+                    <div class="h-[1px] bg-slate-100 my-1 mx-2"></div>
+                    <a href="javascript:void(0)" onclick="logout()" class="flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors font-semibold">
+                        <span class="material-symbols-outlined text-[18px]">logout</span>
+                        Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="page-transition-enter">
+    <div class="max-w-4xl mx-auto px-6 py-12 w-full">
+    <div class="mb-10">
+        <h1 class="text-4xl font-extrabold font-headline text-slate-900 mb-2">Profile Settings</h1>
+        <p class="text-slate-500">Manage your account information and preferences</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Sidebar -->
+        <div class="lg:col-span-1 space-y-6">
+            <div class="bg-white p-8 rounded-[2rem] shadow-xl shadow-slate-200/50 border border-slate-100 text-center">
+                <div class="relative inline-block mb-6">
+                    <div class="w-28 h-28 rounded-full overflow-hidden border-4 border-white shadow-lg bg-slate-100 mx-auto">
+                        <img id="profileAvatar" src="https://lh3.googleusercontent.com/a/default-user=s128" alt="User" class="w-full h-full object-cover">
+                    </div>
+                    <button onclick="triggerPhotoUpload()" class="absolute bottom-0 right-0 p-2 bg-primary text-white rounded-full shadow-lg border-2 border-white hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined text-sm">edit</span>
+                    </button>
+                </div>
+                <h2 id="profileNameDisplay" class="text-xl font-bold text-slate-900">User Name</h2>
+                <p id="profileEmailDisplay" class="text-sm text-slate-500 mb-4">user@example.com</p>
+                <div id="roleBadge" class="inline-flex px-3 py-1 rounded-full bg-primary/10 text-primary text-[10px] font-black uppercase tracking-widest">Student</div>
+            </div>
+
+            <div class="bg-white p-6 rounded-[2rem] shadow-lg shadow-slate-200/40 border border-slate-100">
+                <h3 class="text-sm font-bold text-slate-800 mb-4 px-2">Account Actions</h3>
+                <div class="space-y-1">
+                    <button onclick="logout()" class="w-full flex items-center gap-3 px-4 py-3 text-sm font-semibold text-slate-600 hover:bg-slate-50 rounded-xl transition-colors">
+                        <span class="material-symbols-outlined text-slate-400">logout</span>
+                        Sign Out
+                    </button>
+                    <button onclick="confirmDeactivation()" class="w-full flex items-center gap-3 px-4 py-3 text-sm font-semibold text-red-600 hover:bg-red-50 rounded-xl transition-colors">
+                        <span class="material-symbols-outlined text-red-400">no_accounts</span>
+                        Deactivate Account
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Form -->
+        <div class="lg:col-span-2">
+            <div class="bg-white p-10 rounded-[2.5rem] shadow-xl shadow-slate-200/50 border border-slate-100">
+                <h3 class="text-2xl font-bold font-headline text-slate-900 mb-8 pb-4 border-b border-slate-50">Edit Details</h3>
+                
+                <form id="profileForm" class="space-y-8" onsubmit="updateProfile(event)">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="input-group">
+                            <label class="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Full Name</label>
+                            <input type="text" id="editName" required class="w-full rounded-2xl border-slate-200 focus:border-primary focus:ring-primary/20 p-4 text-sm font-medium text-slate-700 bg-slate-50/50">
+                        </div>
+                        <div class="input-group">
+                            <label class="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">University ID</label>
+                            <input type="text" id="editUniId" class="w-full rounded-2xl border-slate-200 focus:border-primary focus:ring-primary/20 p-4 text-sm font-medium text-slate-700 bg-slate-50/50" placeholder="e.g. IT21000000">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="input-group">
+                            <label class="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">University Email (Read-only)</label>
+                            <input type="email" id="editEmail" disabled class="w-full rounded-2xl border-slate-200 bg-slate-100 p-4 text-sm font-medium text-slate-400 cursor-not-allowed">
+                        </div>
+                        <div class="input-group">
+                            <label class="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Personal Gmail</label>
+                            <input type="email" id="editPersonalEmail" required class="w-full rounded-2xl border-slate-200 focus:border-primary focus:ring-primary/20 p-4 text-sm font-medium text-slate-700 bg-slate-50/50" placeholder="e.g. example@gmail.com">
+                        </div>
+                    </div>
+
+                    <div class="pt-4">
+                        <h4 class="text-sm font-bold text-slate-800 mb-6 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary text-xl">lock</span>
+                            Change Password
+                        </h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="input-group">
+                                <label class="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">New Password</label>
+                                <input type="password" id="newPassword" class="w-full rounded-2xl border-slate-200 focus:border-primary focus:ring-primary/20 p-4 text-sm font-medium text-slate-700 bg-slate-50/50" placeholder="••••••••">
+                            </div>
+                            <div class="input-group">
+                                <label class="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Confirm Password</label>
+                                <input type="password" id="confirmPassword" class="w-full rounded-2xl border-slate-200 focus:border-primary focus:ring-primary/20 p-4 text-sm font-medium text-slate-700 bg-slate-50/50" placeholder="••••••••">
+                            </div>
+                        </div>
+                    </div>
+
+                    <input type="file" id="photoInput" class="hidden" accept="image/*" onchange="uploadProfilePhoto(this)">
+
+                    <div class="flex items-center justify-end gap-4 pt-6 mt-6 border-t border-slate-50">
+                        <button type="button" onclick="window.history.back()" class="px-8 py-4 text-sm font-bold text-slate-500 hover:text-slate-700 transition-colors flex items-center gap-2">
+                            <span class="material-symbols-outlined text-[18px]">arrow_back</span> Back
+                        </button>
+                        <button type="submit" id="saveBtn" class="px-10 py-4 bg-primary text-white text-sm font-bold rounded-2xl shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all">
+                            Save Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    </div>
+</main>
+</div>
+
+<!-- Deactivation Modal -->
+<div id="deactivateModal" class="hidden fixed inset-0 z-[200] flex items-center justify-center bg-slate-900/60 backdrop-blur-md p-4 animate-in fade-in duration-300">
+    <div class="bg-white rounded-[2rem] shadow-2xl max-w-sm w-full overflow-hidden transform animate-in zoom-in-95 duration-500">
+        <div class="p-10 text-center">
+            <div class="mb-8 rotate-12 inline-block">
+                <div class="w-20 h-20 bg-red-100 rounded-[2rem] flex items-center justify-center mx-auto">
+                    <span class="material-symbols-outlined text-4xl text-red-600">warning</span>
+                </div>
+            </div>
+            <h3 class="text-2xl font-extrabold text-slate-900 mb-2 font-headline">Deactivate account?</h3>
+            <p class="text-slate-500 text-sm leading-relaxed mb-10">This will disable your access to the platform. You will need to contact an admin to re-activate your account.</p>
+            <div class="space-y-3">
+                <button onclick="deactivateAccount()" class="w-full px-8 py-4 rounded-2xl font-bold text-white bg-red-600 hover:bg-red-700 shadow-xl shadow-red-200 active:scale-95 transition-all">
+                    Yes, Deactivate
+                </button>
+                <button onclick="document.getElementById('deactivateModal').classList.add('hidden')" class="w-full px-8 py-4 rounded-2xl font-bold text-slate-500 hover:bg-slate-50 transition-all">
+                    Keep my account
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let user = null;
+
+    document.addEventListener('DOMContentLoaded', () => {
+        user = JSON.parse(localStorage.getItem('user'));
+        if (!user) { window.location.href = 'login.html'; return; }
+        
+        // Initial UI Load
+        document.getElementById('userNameTop').textContent = user.name;
+        document.getElementById('profileNameDisplay').textContent = user.name;
+        document.getElementById('profileEmailDisplay').textContent = user.email;
+        document.getElementById('roleBadge').textContent = user.role;
+        if (user.avatarUrl) {
+            document.getElementById('profileAvatar').src = user.avatarUrl;
+        }
+
+        // Form fields
+        document.getElementById('editName').value = user.name || '';
+        document.getElementById('editUniId').value = user.universityId || '';
+        document.getElementById('editEmail').value = user.email || '';
+        document.getElementById('editPersonalEmail').value = user.personalEmail || '';
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            const dropdown = document.getElementById('profileDropdown');
+            const profileBtn = dropdown.parentElement;
+            if (dropdown && !profileBtn.contains(e.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
+    });
+
+    async function uploadProfilePhoto(input) {
+        if (!input.files || !input.files[0]) return;
+        
+        const photoBtn = input.previousElementSibling;
+        const originalContent = photoBtn.innerHTML;
+        photoBtn.innerHTML = '<span class="material-symbols-outlined animate-spin text-sm">sync</span>';
+        
+        const formData = new FormData();
+        formData.append('file', input.files[0]);
+
+        try {
+            const resp = await fetch('/api/upload', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (resp.ok) {
+                const data = await resp.json();
+                user.avatarUrl = data.url;
+                document.getElementById('profileAvatar').src = data.url;
+                showToast("Photo uploaded! Click save to keep changes.", "success");
+            } else {
+                showToast("Photo upload failed.");
+            }
+        } catch (error) {
+            console.error(error);
+            showToast("Error uploading photo.");
+        } finally {
+            photoBtn.innerHTML = originalContent;
+        }
+    }
+
+    function triggerPhotoUpload() {
+        document.getElementById('photoInput').click();
+    }
+
+    function showToast(message, type = 'error') {
+        const toast = document.getElementById('profileToast');
+        const toastMsg = document.getElementById('toastMsg');
+        const toastTitle = document.getElementById('toastTitle');
+        const toastIcon = document.getElementById('toastIcon');
+        const innerContainer = toast.querySelector('div');
+        
+        toastMsg.innerText = message;
+        
+        if (type === 'success') {
+            innerContainer.classList.replace('border-error', 'border-green-500');
+            toastTitle.innerText = "Success";
+            toastIcon.innerText = "check_circle";
+            toastIcon.classList.replace('text-error', 'text-green-500');
+            toastIcon.parentElement.classList.replace('bg-error/10', 'bg-green-50');
+        } else {
+            innerContainer.classList.replace('border-green-500', 'border-error');
+            toastTitle.innerText = "Notification";
+            toastIcon.innerText = "error";
+            toastIcon.classList.replace('text-green-500', 'text-error');
+            toastIcon.parentElement.classList.replace('bg-green-50', 'bg-error/10');
+        }
+
+        toast.classList.remove('translate-x-[150%]');
+        toast.classList.add('translate-x-0');
+        
+        setTimeout(hideToast, 5000);
+    }
+
+    function hideToast() {
+        const toast = document.getElementById('profileToast');
+        toast.classList.remove('translate-x-0');
+        toast.classList.add('translate-x-[150%]');
+    }
+
+    async function updateProfile(e) {
+        e.preventDefault();
+        
+        const saveBtn = document.getElementById('saveBtn');
+        const newPassword = document.getElementById('newPassword').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        const newPersonalEmail = document.getElementById('editPersonalEmail').value.trim().toLowerCase();
+        
+        if (newPassword && newPassword !== confirmPassword) {
+            showToast("Passwords do not match!");
+            return;
+        }
+
+        if (newPersonalEmail && !newPersonalEmail.endsWith('@gmail.com')) {
+            showToast("Personal email must be a @gmail.com address.");
+            return;
+        }
+
+        saveBtn.disabled = true;
+        saveBtn.innerHTML = '<span class="material-symbols-outlined animate-spin text-sm">sync</span> Processing...';
+
+        const emailChanged = user.personalEmail !== newPersonalEmail;
+
+        const updateData = {
+            id: user.id,
+            name: document.getElementById('editName').value,
+            universityId: document.getElementById('editUniId').value,
+            email: user.email,
+            personalEmail: newPersonalEmail,
+            avatarUrl: user.avatarUrl,
+            role: user.role,
+            active: true
+        };
+
+        if (newPassword) {
+            updateData.password = newPassword;
+        }
+
+        try {
+            const resp = await fetch(`/api/users/${user.id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updateData)
+            });
+
+            if (resp.ok) {
+                const updatedUser = await resp.json();
+                localStorage.setItem('user', JSON.stringify(updatedUser));
+                
+                if (emailChanged) {
+                    showToast("Profile and personal email updated!", "success");
+                } else {
+                    showToast("Profile updated successfully!", "success");
+                }
+                
+                setTimeout(() => window.location.reload(), 1500);
+            } else {
+                const err = await resp.text();
+                showToast("Update failed: " + err);
+            }
+        } catch (error) {
+            console.error(error);
+            showToast("An error occurred while updating.");
+        } finally {
+            saveBtn.disabled = false;
+            saveBtn.innerHTML = 'Save Changes';
+        }
+    }
+
+    function confirmDeactivation() {
+        document.getElementById('deactivateModal').classList.remove('hidden');
+    }
+
+    async function deactivateAccount() {
+        try {
+            const updateData = { ...user, active: false };
+            const resp = await fetch(`/api/users/${user.id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updateData)
+            });
+
+            if (resp.ok) {
+                showToast("Your account has been deactivated.", "success");
+                setTimeout(() => logout(), 1500);
+            } else {
+                showToast("Deactivation failed.");
+            }
+        } catch (error) {
+            console.error(error);
+            showToast("An error occurred.");
+        }
+    }
+
+    function logout() {
+        localStorage.clear();
+        sessionStorage.clear();
+        window.location.href = 'landing-page.html';
+    }
+</script>
+<script src="assets/js/transitions.js"></script>
+</body>
+</html>

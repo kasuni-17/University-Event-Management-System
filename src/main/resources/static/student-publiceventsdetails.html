@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Public Event Details - Scholar Hub</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#21417f",
+            "primary-container": "#3b5998",
+            "on-primary": "#ffffff",
+            "surface": "#f8f9fa",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#f3f4f5",
+            "surface-container": "#edeeef",
+            "surface-container-high": "#e7e8e9",
+            "surface-container-highest": "#e1e3e4",
+            "on-surface": "#191c1d",
+            "on-surface-variant": "#444650",
+            "outline": "#747781",
+            "outline-variant": "#c4c6d2",
+            "secondary": "#006e25",
+            "tertiary": "#574000",
+            "tertiary-fixed": "#ffdf9e",
+            "on-tertiary-fixed": "#261a00",
+            "error": "#ba1a1a"
+          },
+          fontFamily: { "headline": ["Manrope"], "body": ["Inter"], "label": ["Inter"] },
+          borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" }
+        }
+      }
+    }
+  </script>
+  <style>
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; display: inline-block; line-height: 1; }
+    .hero-gradient { background: linear-gradient(180deg, rgba(25, 28, 29, 0) 0%, rgba(25, 28, 29, 0.4) 100%); }
+    body { font-family: 'Inter', sans-serif; }
+  </style>
+</head>
+<body class="bg-surface font-body text-on-surface">
+  <!-- Standard Student Header -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-50 h-16 flex items-center">
+    <div class="max-w-7xl mx-auto px-6 w-full flex justify-between items-center">
+      <div class="flex items-center gap-12">
+        <div class="flex items-center gap-2 cursor-pointer" onclick="window.location.href='student-dashboard.html'">
+          <img src="assets/images/logo.png" alt="Scholar Hub" class="h-8 md:h-10">
+        </div>
+        <nav class="hidden md:flex items-center space-x-8 text-sm font-semibold">
+          <a class="text-slate-500 hover:text-primary transition-colors" href="student-dashboard.html">Dashboard</a>
+          <a class="text-primary border-b-2 border-primary pb-1" href="student-event.html">Events</a>
+          <a class="text-slate-500 hover:text-primary transition-colors" href="student-clubs.html">Clubs</a>
+          <a class="text-slate-500 hover:text-primary transition-colors" href="student-venues.html">Venues</a>
+          <a class="text-slate-500 hover:text-primary transition-colors" href="student-feedback.html">Feedback</a>
+        </nav>
+      </div>
+      <div class="flex items-center gap-4">
+        <button class="relative p-1 text-slate-500 hover:text-primary">
+          <span class="material-symbols-outlined align-middle">notifications</span>
+        </button>
+        <div class="flex items-center gap-3 pl-3 border-l border-slate-200 relative cursor-pointer" onclick="document.getElementById('profileDropdown').classList.toggle('hidden')">
+          <div class="w-9 h-9 rounded-full bg-[#f2d8b1] overflow-hidden border border-slate-200">
+            <img id="userAvatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHXb6YVp36W3mF8hGjX6X4g_zH6wO8w6uR-pG-T7VnKx3r2f-b4m9v3j5=s128" alt="Profile" class="w-full h-full object-cover">
+          </div>
+          <span id="userName" class="text-sm font-semibold text-slate-700 hidden lg:block">Student User</span>
+          <span class="material-symbols-outlined text-sm text-slate-400">expand_more</span>
+          <div id="profileDropdown" class="hidden absolute top-full right-0 mt-4 w-48 bg-white rounded-xl shadow-lg border border-slate-200 py-2 z-50">
+            <a href="profile.html" class="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50">
+              <span class="material-symbols-outlined text-[18px]">person</span>My Profile
+            </a>
+            <div class="h-[1px] bg-slate-100 my-1 mx-2"></div>
+            <a href="#" onclick="logout()" class="flex items-center gap-2 px-4 py-2 text-sm text-error hover:bg-error/5 font-semibold">
+              <span class="material-symbols-outlined text-[18px]">logout</span>Logout
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-6 py-10 md:px-10">
+    <nav class="mb-10">
+      <a class="group flex items-center gap-2 text-slate-400 hover:text-primary transition-colors font-semibold" href="student-event.html">
+        <span class="material-symbols-outlined">arrow_back</span>
+        <span class="text-sm tracking-tight">Back to Events</span>
+      </a>
+    </nav>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+      <div class="lg:col-span-8 space-y-10">
+        <section class="relative aspect-[21/9] w-full overflow-hidden rounded-2xl shadow-lg border border-slate-100">
+          <img id="eventBanner" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1540575861501-7ad05823c94b?auto=format&fit=crop&q=80&w=2070" alt="Banner">
+          <div class="absolute inset-0 hero-gradient"></div>
+        </section>
+
+        <section class="space-y-4">
+          <div class="flex flex-wrap gap-2">
+            <span class="inline-flex items-center px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-bold tracking-wider uppercase">
+              <span class="material-symbols-outlined text-[12px] mr-1">public</span>Public Event
+            </span>
+            <span id="eventCategoryBadge" class="inline-flex items-center px-3 py-1 rounded-full bg-slate-100 text-slate-600 text-[10px] font-bold tracking-wider uppercase">Sports</span>
+          </div>
+          <h1 id="eventTitle" class="font-headline font-extrabold text-4xl md:text-5xl text-on-surface tracking-tighter leading-tight">Annual Sports Meet</h1>
+        </section>
+
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-6 bg-white p-8 rounded-2xl border border-slate-100 shadow-sm">
+          <div class="flex items-start gap-4">
+            <div class="p-3 bg-slate-50 rounded-xl text-primary border border-slate-100">
+              <span class="material-symbols-outlined">calendar_today</span>
+            </div>
+            <div>
+              <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Date</p>
+              <p id="eventDate" class="font-semibold text-slate-700">---</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div class="p-3 bg-slate-50 rounded-xl text-primary border border-slate-100">
+              <span class="material-symbols-outlined">schedule</span>
+            </div>
+            <div>
+              <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Time</p>
+              <p id="eventTime" class="font-semibold text-slate-700">---</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div class="p-3 bg-slate-50 rounded-xl text-primary border border-slate-100">
+              <span class="material-symbols-outlined">location_on</span>
+            </div>
+            <div>
+              <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Location</p>
+              <p id="eventLocation" class="font-semibold text-slate-700">---</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="space-y-6">
+          <h2 class="font-headline font-bold text-2xl text-on-surface">About the Event</h2>
+          <div id="eventDescription" class="text-slate-600 leading-relaxed space-y-4"></div>
+        </section>
+      </div>
+
+      <aside class="lg:col-span-4 space-y-8">
+        <div class="bg-white p-8 rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 sticky top-24">
+          <div class="mb-8 flex items-center gap-4 pb-6 border-b border-slate-50">
+            <div class="w-12 h-12 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center overflow-hidden">
+              <img id="organizerLogo" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1599305090598-fe179d501c27?auto=format&fit=crop&q=80&w=200" alt="Logo">
+            </div>
+            <div>
+              <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Organized by</p>
+              <p id="organizerName" class="font-bold text-slate-800">---</p>
+            </div>
+          </div>
+
+          <div class="space-y-3 mb-8">
+            <div class="flex items-center gap-3">
+              <div class="p-2 bg-emerald-100 rounded-full text-emerald-600">
+                <span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">public</span>
+              </div>
+              <div>
+                <span class="font-bold text-base text-slate-800">Open Admission</span>
+                <p class="text-[11px] text-slate-500">This event is open to everyone. No registration required!</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="space-y-4">
+            <button id="feedbackBtn" onclick="handleFeedback()" class="w-full py-4 bg-slate-50 hover:bg-slate-100 text-slate-700 font-bold rounded-xl active:scale-95 transition-all border border-slate-100 flex items-center justify-center gap-2">
+              <span class="material-symbols-outlined">rate_review</span>Submit Feedback
+            </button>
+            <div class="grid grid-cols-2 gap-3 pt-2">
+              <button class="flex items-center justify-center gap-2 py-3 bg-slate-50 hover:bg-slate-100 text-slate-600 font-bold text-sm rounded-lg transition-all">
+                <span class="material-symbols-outlined text-lg">share</span>Share
+              </button>
+              <button class="flex items-center justify-center gap-2 py-3 bg-slate-50 hover:bg-slate-100 text-slate-600 font-bold text-sm rounded-lg transition-all">
+                <span class="material-symbols-outlined text-lg">bookmark</span>Save
+              </button>
+            </div>
+          </div>
+
+          <!-- Stats -->
+          <div class="mt-8 pt-6 border-t border-slate-50 flex justify-around items-center">
+            <div class="text-center">
+              <p id="viewCount" class="text-xl font-bold text-slate-800">---</p>
+              <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Views</p>
+            </div>
+            <div class="h-8 w-px bg-slate-50"></div>
+            <div class="text-center">
+              <p id="interestedCount" class="text-xl font-bold text-slate-800">---</p>
+              <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Interested</p>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="py-12 border-t border-slate-100 text-center">
+    <p class="font-headline font-extrabold tracking-tighter text-slate-200 text-lg opacity-40">Scholar Hub</p>
+  </footer>
+
+  <!-- Notice Backdrop -->
+  <div id="noticeModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-sm w-full p-8 text-center animate-in zoom-in-95 duration-200">
+      <div class="w-20 h-20 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-6">
+        <span class="material-symbols-outlined text-4xl text-amber-600">info</span>
+      </div>
+      <h3 class="text-2xl font-bold text-slate-900 mb-2">Notice</h3>
+      <p id="noticeMessage" class="text-slate-500 leading-relaxed mb-8">This event hasn't happened yet! Feedback is only available for past events.</p>
+      <button onclick="document.getElementById('noticeModal').classList.add('hidden')" class="w-full px-6 py-3.5 rounded-xl font-bold text-white bg-primary hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all">Back</button>
+    </div>
+  </div>
+
+  <script>
+    let currentEvent = null;
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (user) {
+            document.getElementById('userName').textContent = user.name;
+        }
+        loadEventDetails();
+    });
+
+    async function loadEventDetails() {
+        const id = new URLSearchParams(window.location.search).get('id');
+        if (!id) return;
+        
+        try {
+            const resp = await fetch(`/api/events/${id}`);
+            currentEvent = await resp.json();
+            renderEvent(currentEvent);
+        } catch (e) {
+            console.error("Failed to load event", e);
+        }
+    }
+
+    function renderEvent(ev) {
+        document.getElementById('eventTitle').textContent = ev.title;
+        document.getElementById('eventCategoryBadge').textContent = ev.eventType || 'Sports';
+        document.getElementById('eventBanner').src = ev.posterUrl || 'https://images.unsplash.com/photo-1540575861501-7ad05823c94b?auto=format&fit=crop&q=80&w=2070';
+        document.getElementById('eventDate').textContent = new Date(ev.startTime).toLocaleDateString(undefined, {
+            weekday: 'short', year: 'numeric', month: 'short', day: 'numeric'
+        });
+        document.getElementById('eventTime').textContent = new Date(ev.startTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        document.getElementById('eventLocation').textContent = ev.venue ? ev.venue.name : ev.location || 'University Grounds';
+        document.getElementById('eventDescription').innerHTML = `<p>${ev.description}</p>`;
+        document.getElementById('organizerName').textContent = ev.organizer ? (typeof ev.organizer === 'object' ? ev.organizer.name : ev.organizer) : 'Sports Council';
+        
+        // Mock stats
+        document.getElementById('viewCount').textContent = Math.floor(Math.random() * 2000) + 500;
+        document.getElementById('interestedCount').textContent = Math.floor(Math.random() * 500) + 100;
+
+        // Feedback Logic initial visual
+        const isPast = new Date(ev.startTime) < new Date();
+        const feedbackBtn = document.getElementById('feedbackBtn');
+        if (!isPast) {
+            feedbackBtn.classList.add('opacity-70');
+        }
+    }
+
+    function handleFeedback() {
+        if (!currentEvent) return;
+        const isPast = new Date(currentEvent.startTime) < new Date();
+        
+        if (isPast) {
+            window.location.href = `student-feedback.html?eventId=${currentEvent.id}`;
+        } else {
+            document.getElementById('noticeModal').classList.remove('hidden');
+        }
+    }
+
+    function logout() {
+        localStorage.removeItem('user');
+        window.location.href = 'login.html';
+    }
+  </script>
+</body>
+</html>

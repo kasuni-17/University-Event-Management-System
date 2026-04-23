@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Uni Event Portal</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#21417f",
+                        "accent": "#4B69FF",
+                        "background-light": "#f8f9fa",
+                        "on-surface": "#191c1d",
+                        "error": "#ba1a1a"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "display": ["Manrope"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"}
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, .font-headline { font-family: 'Manrope', sans-serif; }
+
+        .hero-gradient {
+            background: linear-gradient(to bottom, rgba(0, 51, 102, 0.7), rgba(0, 51, 102, 0.9));
+        }
+
+        .feature-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        /* ── Auth Buttons ── */
+        .btn-signin {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 9px 20px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #21417f;
+            background: transparent;
+            border: 1.5px solid #21417f;
+            border-radius: 10px;
+            text-decoration: none;
+            letter-spacing: 0.02em;
+            transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+        }
+        .btn-signin:hover {
+            background: #21417f;
+            color: #ffffff;
+            box-shadow: 0 4px 14px rgba(33, 65, 127, 0.25);
+            transform: translateY(-1px);
+        }
+        .btn-signin:active { transform: translateY(0); }
+
+        .btn-signup {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 9px 22px;
+            font-size: 13px;
+            font-weight: 800;
+            color: #ffffff;
+            background: linear-gradient(135deg, #21417f 0%, #4B69FF 100%);
+            border: none;
+            border-radius: 10px;
+            text-decoration: none;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            box-shadow: 0 4px 14px rgba(75, 105, 255, 0.30);
+            transition: box-shadow 0.25s ease, transform 0.15s ease, filter 0.2s ease;
+        }
+        .btn-signup:hover {
+            box-shadow: 0 6px 22px rgba(75, 105, 255, 0.50);
+            filter: brightness(1.08);
+            transform: translateY(-2px);
+        }
+        .btn-signup:active { transform: translateY(0); box-shadow: 0 2px 8px rgba(75,105,255,0.30); }
+        .btn-signup .arrow-icon {
+            font-size: 16px;
+            transition: transform 0.2s ease;
+        }
+        .btn-signup:hover .arrow-icon { transform: translateX(3px) translateY(-1px); }
+
+        /* Fade-in entrance for the auth group */
+        @keyframes fadeSlideIn {
+            from { opacity: 0; transform: translateY(-6px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .auth-btn-group {
+            animation: fadeSlideIn 0.5s ease 0.1s both;
+        }
+    </style>
+</head>
+<body class="bg-[#f8f9fa] text-on-surface antialiased overflow-x-hidden">
+<div id="layout-root">
+    <div class="relative flex min-h-screen flex-col">
+        <!-- Dashboard-style TopNavBar -->
+        <header class="bg-white border-b border-slate-200 sticky top-0 z-50 h-16 flex items-center">
+            <div class="max-w-7xl mx-auto px-6 w-full flex justify-between items-center">
+                <div class="flex items-center gap-12">
+                    <a href="landing-page.html" class="flex items-center gap-2">
+                        <img src="assets/images/logo.png" alt="Scholar Hub" class="h-8 md:h-10">
+                    </a>
+
+                    <nav class="hidden md:flex items-center space-x-8 text-sm font-semibold h-full">
+                        <a class="nav-link text-primary border-b-2 border-primary pb-1 h-full flex items-center" href="landing-page.html">Home</a>
+                        <a class="nav-link text-slate-500 hover:text-primary transition-colors font-medium h-full flex items-center" href="public-events.html">Events</a>
+                        <a class="nav-link text-slate-500 hover:text-primary transition-colors font-medium h-full flex items-center" href="public-clubs.html">Clubs</a>
+                        <a class="nav-link text-slate-500 hover:text-primary transition-colors font-medium h-full flex items-center" href="about-us.html">About Us</a>
+                    </nav>
+                </div>
+                
+                <div class="flex items-center gap-4">
+                    <div class="relative hidden lg:block">
+                        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+                        <input class="bg-slate-50 border border-slate-200 rounded-lg pl-10 pr-4 py-2 text-sm w-48 focus:ring-primary focus:border-primary transition-all" placeholder="Search..." type="text"/>
+                    </div>
+                    <!-- Auth buttons: professional Sign In (outline) + Sign Up (gradient) -->
+                    <div class="flex items-center gap-3 pl-4 border-l border-slate-200 auth-btn-group">
+                        <a href="login.html" class="btn-signin" id="nav-signin-btn">
+                            <span class="material-symbols-outlined" style="font-size:16px;">login</span>
+                            Sign In
+                        </a>
+                        <a href="signup.html" class="btn-signup" id="nav-signup-btn">
+                            Sign Up
+                            <span class="material-symbols-outlined arrow-icon">north_east</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="page-transition-enter flex-1">
+            <!-- Hero Section with Premium Image and Wording -->
+            <section class="relative h-[600px] flex items-center overflow-hidden">
+                <!-- Background Image (Actual SLIIT Building) -->
+                <div class="absolute inset-0 z-0">
+                    <img src="assets/images/SLIIT-malabe.jpg" alt="SLIIT Campus" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-r from-slate-900/90 via-slate-900/40 to-transparent"></div>
+                </div>
+                
+                <div class="max-w-7xl mx-auto px-6 w-full relative z-10">
+                    <div class="max-w-2xl space-y-8 animate-slideUp">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/20 backdrop-blur-md text-white text-xs font-bold uppercase tracking-widest border border-white/20">
+                            <span class="flex h-2 w-2 rounded-full bg-accent animate-pulse"></span>
+                            Official SLIIT Event Portal
+                        </div>
+                        
+                        <h1 class="text-5xl lg:text-7xl font-headline font-extrabold text-white leading-[1.1] tracking-tight">
+                            Your Ultimate Gateway to <span class="text-accent">SLIIT Campus Life</span>
+                        </h1>
+                        
+                        <p class="text-xl text-slate-200 font-medium leading-relaxed">
+                            Discover vibrant clubs, exciting events, and meaningful student experiences. Everything you need to thrive at SLIIT, all in one seamless platform.
+                        </p>
+                        
+                        <div class="flex flex-wrap gap-4 pt-4">
+                            <button class="px-8 py-4 bg-accent text-white font-bold rounded-xl hover:shadow-lg hover:shadow-accent/40 transition-all active:scale-95 flex items-center gap-2" onclick="window.location.href='signup.html'">
+                                Get Started Today <span class="material-symbols-outlined text-[20px]">north_east</span>
+                            </button>
+                            <button class="px-8 py-4 bg-white/10 backdrop-blur-md text-white font-bold rounded-xl border border-white/20 hover:bg-white/20 transition-all" onclick="document.getElementById('features').scrollIntoView({behavior: 'smooth'})">
+                                Explore Features
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Stats Bar (from 2nd image) -->
+            <section class="bg-slate-50 border-y border-slate-200 py-12">
+                <div class="max-w-7xl mx-auto px-6">
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-8">
+                        <div class="text-center">
+                            <h3 class="text-3xl lg:text-4xl font-headline font-extrabold text-primary">500+</h3>
+                            <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mt-2">Events Organized</p>
+                        </div>
+                        <div class="text-center">
+                            <h3 class="text-3xl lg:text-4xl font-headline font-extrabold text-primary">15k+</h3>
+                            <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mt-2">Students Registered</p>
+                        </div>
+                        <div class="text-center">
+                            <h3 class="text-3xl lg:text-4xl font-headline font-extrabold text-primary">40+</h3>
+                            <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mt-2">Active Clubs</p>
+                        </div>
+                        <div class="text-center">
+                            <h3 class="text-3xl lg:text-4xl font-headline font-extrabold text-primary">100%</h3>
+                            <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mt-2">Digital Process</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Functions/Features Section (from 2nd image) -->
+            <section id="features" class="py-24 bg-white">
+                <div class="max-w-7xl mx-auto px-6">
+                    <div class="text-center mb-20 space-y-4">
+                        <h2 class="text-[#4B69FF] text-xs font-extrabold uppercase tracking-[0.3em]">Our Platform</h2>
+                        <h3 class="text-4xl lg:text-5xl font-headline font-extrabold text-slate-900">Designed for Seamless Campus Life</h3>
+                        <p class="text-slate-500 max-w-2xl mx-auto text-lg">Powerful features built specifically for the unique needs of university students and faculty organizers.</p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                        <!-- Card 1 -->
+                        <div class="feature-card bg-white p-10 rounded-[2rem] border border-slate-100 shadow-sm flex flex-col items-center text-center">
+                            <div class="w-16 h-16 bg-[#F0F4FF] rounded-2xl flex items-center justify-center mb-8">
+                                <span class="material-symbols-outlined text-[#4B69FF] text-3xl">search_insights</span>
+                            </div>
+                            <h4 class="text-xl font-bold text-slate-900 mb-4">Event Discovery</h4>
+                            <p class="text-slate-500 leading-relaxed text-sm">Find the latest workshops, seminars, and cultural fests with our intelligent search and personalized feed.</p>
+                        </div>
+
+                        <!-- Card 2 -->
+                        <div class="feature-card bg-white p-10 rounded-[2rem] border border-slate-100 shadow-sm flex flex-col items-center text-center">
+                            <div class="w-16 h-16 bg-[#F0F4FF] rounded-2xl flex items-center justify-center mb-8">
+                                <span class="material-symbols-outlined text-[#4B69FF] text-3xl">person_check</span>
+                            </div>
+                            <h4 class="text-xl font-bold text-slate-900 mb-4">Easy Registration</h4>
+                            <p class="text-slate-500 leading-relaxed text-sm">One-click registration system with QR-code based entry for all university-sanctioned events.</p>
+                        </div>
+
+                        <!-- Card 3 -->
+                        <div class="feature-card bg-white p-10 rounded-[2rem] border border-slate-100 shadow-sm flex flex-col items-center text-center">
+                            <div class="w-16 h-16 bg-[#F0F4FF] rounded-2xl flex items-center justify-center mb-8">
+                                <span class="material-symbols-outlined text-[#4B69FF] text-3xl">groups</span>
+                            </div>
+                            <h4 class="text-xl font-bold text-slate-900 mb-4">Club Management</h4>
+                            <p class="text-slate-500 leading-relaxed text-sm">Dedicated administrative dashboards for club leads to manage members, events, and communications.</p>
+                        </div>
+
+                        <!-- Card 4 -->
+                        <div class="feature-card bg-white p-10 rounded-[2rem] border border-slate-100 shadow-sm flex flex-col items-center text-center">
+                            <div class="w-16 h-16 bg-[#F0F4FF] rounded-2xl flex items-center justify-center mb-8">
+                                <span class="material-symbols-outlined text-[#4B69FF] text-3xl">monitoring</span>
+                            </div>
+                            <h4 class="text-xl font-bold text-slate-900 mb-4">Analytics & Reports</h4>
+                            <p class="text-slate-500 leading-relaxed text-sm">Get detailed participation insights and automated attendance reports for certificates and records.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Call to Action Section -->
+            <section class="py-20 px-6">
+                <div class="max-w-7xl mx-auto bg-primary rounded-[3rem] p-12 lg:p-24 text-center relative overflow-hidden">
+                    <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10"></div>
+                    <div class="relative z-10 max-w-3xl mx-auto space-y-10">
+                        <h2 class="text-3xl lg:text-6xl font-headline font-extrabold text-white leading-tight">Ready to launch your next big event at SLIIT?</h2>
+                        <p class="text-slate-200 text-lg lg:text-xl">Join 100+ event organizers already using EventHub to manage their campus activities.</p>
+                        <div class="flex flex-wrap justify-center gap-6">
+                            <button class="px-10 py-5 bg-accent text-white font-bold rounded-2xl hover:scale-105 transition-all shadow-xl shadow-accent/30" onclick="window.location.href='signup.html'">Become an Organizer</button>
+                            <button class="px-10 py-5 bg-white/10 text-white font-bold rounded-2xl border border-white/20 hover:bg-white/20 transition-all">Download Guide</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Improved Footer -->
+        <footer class="bg-slate-900 text-slate-400 py-16 border-t border-slate-800" id="footer">
+            <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-16">
+                <div class="space-y-6">
+                    <div class="flex items-center gap-2 text-white font-bold text-2xl">
+                        <span class="material-symbols-outlined text-accent">hub</span>
+                        <span>SLIIT EventHub</span>
+                    </div>
+                    <p class="text-sm leading-relaxed">The ultimate platform for university event management and coordination at SLIIT.</p>
+                    <div class="flex gap-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-white hover:bg-accent transition-colors"><span class="material-symbols-outlined">public</span></a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-white hover:bg-accent transition-colors"><span class="material-symbols-outlined">mail</span></a>
+                    </div>
+                </div>
+                <div>
+                    <h5 class="text-white font-bold text-sm uppercase tracking-widest mb-8">Platform</h5>
+                    <ul class="space-y-4 text-sm">
+                        <li><a href="landing-page.html" class="hover:text-white transition-colors">Home</a></li>
+                        <li><a href="public-events.html" class="hover:text-white transition-colors">Browse Events</a></li>
+                        <li><a href="public-clubs.html" class="hover:text-white transition-colors">Clubs Directory</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 class="text-white font-bold text-sm uppercase tracking-widest mb-8">Resources</h5>
+                    <ul class="space-y-4 text-sm">
+                        <li><a href="#" class="hover:text-white transition-colors">Student Help Desk</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Organizer Guide</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 class="text-white font-bold text-sm uppercase tracking-widest mb-8">Stay Updated</h5>
+                    <p class="text-xs mb-6">Subscribe to our newsletter for the latest event notifications.</p>
+                    <div class="flex gap-2">
+                        <input class="bg-slate-800 border-none rounded-xl px-4 py-3 text-sm w-full focus:ring-accent" placeholder="Email address" type="email"/>
+                        <button class="bg-accent text-white p-3 rounded-xl hover:bg-accent/90"><span class="material-symbols-outlined">send</span></button>
+                    </div>
+                </div>
+            </div>
+            <div class="max-w-7xl mx-auto px-6 mt-16 pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4 text-xs">
+                <p>© 2024 SLIIT EventHub. University Event Management System.</p>
+                <div class="flex gap-8">
+                    <a href="#" class="hover:text-white transition-colors uppercase tracking-widest">Privacy Policy</a>
+                    <a href="#" class="hover:text-white transition-colors uppercase tracking-widest">Terms of Service</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>
+
+    <!-- Scripts -->
+    <script src="assets/js/transitions.js"></script>
+</body>
+</html>

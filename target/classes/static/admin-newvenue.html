@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Add New Venue | Scholar Hub Admin</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#21417f","primary-container": "#3b5998","on-primary": "#ffffff","primary-fixed": "#d9e2ff","on-primary-fixed": "#001944","secondary": "#006e25","secondary-container": "#80f98b","on-secondary": "#ffffff","on-secondary-container": "#007327","error": "#ba1a1a","error-container": "#ffdad6","on-error": "#ffffff","on-error-container": "#93000a","surface": "#f8f9fa","surface-container-low": "#f3f4f5","surface-container": "#edeeef","surface-container-high": "#e7e8e9","surface-container-lowest": "#ffffff","on-surface": "#191c1d","on-surface-variant": "#444650","background": "#f8f9fa","outline": "#747781","outline-variant": "#c4c6d2"
+          },
+          fontFamily: { "headline": ["Manrope"], "body": ["Inter"] },
+          borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" }
+        }
+      }
+    }
+  </script>
+  <style>
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; vertical-align: middle; }
+    body { font-family: 'Inter', sans-serif; background: #f8f9fa; }
+  </style>
+  <link rel="stylesheet" href="assets/css/transitions.css">
+</head>
+<body class="text-on-surface min-h-screen">
+<div id="layout-root">
+<header class="bg-white border-b border-slate-200 sticky-nav h-16 flex items-center shadow-sm">
+  <div class="flex justify-between items-center w-full px-8 max-w-7xl mx-auto h-full">
+    <div class="flex items-center gap-8 h-full">
+      <img src="assets/images/logo.png" alt="SLIIT Events Hub" class="h-10 object-contain">
+      <nav class="hidden md:flex items-center gap-6 font-['Manrope'] font-semibold tracking-tight h-full">
+        <a class="nav-link text-slate-500 hover:text-primary transition-colors h-full flex items-center" href="admin-dashboard.html">Dashboard</a>
+        <a class="nav-link text-slate-500 hover:text-primary transition-colors h-full flex items-center" href="admin-user.html">Users</a>
+        <a class="nav-link text-slate-500 hover:text-primary transition-colors h-full flex items-center" href="admin-events.html">Events</a>
+        <a class="nav-link text-slate-500 hover:text-primary transition-colors h-full flex items-center" href="admin-clubs.html">Clubs</a>
+        <a class="nav-link text-slate-500 hover:text-primary transition-colors h-full flex items-center" href="admin-venue.html">Venues</a>
+        <a class="nav-link text-slate-500 hover:text-primary transition-colors h-full flex items-center" href="admin-feedback.html">Feedback</a>
+      </nav>
+    </div>
+    <div class="flex items-center gap-4 h-full">
+      <button class="p-2 text-slate-500 hover:bg-slate-100 rounded-lg relative">
+        <span class="material-symbols-outlined">notifications</span>
+        <span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+      </button>
+      <div class="flex items-center gap-2 pl-2 border-l border-slate-200 relative cursor-pointer group h-full" onclick="document.getElementById('profileDropdown').classList.toggle('hidden')">
+        <div class="h-9 w-9 rounded-full overflow-hidden border border-slate-200 bg-slate-100 flex items-center justify-center">
+          <span class="material-symbols-outlined text-slate-500">person</span>
+        </div>
+        <span class="text-sm font-semibold text-slate-700 hidden lg:block">Admin User</span>
+        <div id="profileDropdown" class="hidden absolute top-full right-0 mt-4 w-48 bg-white rounded-xl shadow-lg border border-slate-200 py-2 z-50">
+            <a href="javascript:void(0)" onclick="logout()" class="flex items-center gap-2 px-4 py-2 text-sm text-error hover:bg-error/5 transition-colors font-semibold">
+                <span class="material-symbols-outlined text-[18px]">logout</span>
+                Logout
+            </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="page-transition-enter">
+  <div class="max-w-3xl mx-auto px-8 py-12 space-y-8 w-full">
+  <div class="flex items-center gap-3">
+    <a class="text-primary hover:opacity-80 flex items-center gap-1 font-medium" href="admin-venue.html"><span class="material-symbols-outlined">arrow_back</span>Back to Venues</a>
+  </div>
+  <div>
+    <h1 class="text-3xl font-['Manrope'] font-extrabold text-primary mb-1">Add New Venue</h1>
+    <p class="text-on-surface-variant">Register a new campus venue for event bookings and scheduling.</p>
+  </div>
+  
+  <form id="newVenueForm" class="space-y-8">
+    <!-- Basic Details -->
+    <section class="bg-surface-container-lowest rounded-xl border border-outline-variant/20 shadow-sm p-6 space-y-5">
+      <div class="flex items-center gap-3 border-b border-outline-variant/20 pb-4">
+        <div class="w-1.5 h-6 rounded-full bg-primary"></div>
+        <h2 class="font-['Manrope'] font-bold text-lg">Venue Details</h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div class="space-y-1.5 md:col-span-2">
+          <label class="text-xs font-bold uppercase tracking-wider text-outline">Venue Name</label>
+          <input id="venueName" required class="w-full bg-surface-container-low rounded-lg px-4 py-3 text-sm border-none focus:ring-2 focus:ring-primary/20 transition-all" placeholder="e.g. Science Block Lecture Hall A" type="text"/>
+        </div>
+        <div class="space-y-1.5">
+          <label class="text-xs font-bold uppercase tracking-wider text-outline">Venue Type</label>
+          <div class="relative">
+            <select id="venueType" required class="w-full bg-surface-container-low rounded-lg px-4 py-3 text-sm border-none focus:ring-2 focus:ring-primary/20 appearance-none">
+              <option disabled selected value="">Select Type</option>
+              <option value="AUDITORIUM">Auditorium</option>
+              <option value="HALL">Lecture Hall</option>
+              <option value="MEETING_ROOM">Conference Room</option>
+              <option value="OUTDOOR">Outdoor / Plaza</option>
+              <option value="LAB">Laboratory</option>
+              <option value="SPORTS_AREA">Sports Area</option>
+            </select>
+            <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline pointer-events-none">expand_more</span>
+          </div>
+        </div>
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between">
+            <label class="text-xs font-bold uppercase tracking-wider text-outline">Maximum Capacity</label>
+            <label class="flex items-center gap-2 cursor-pointer group">
+              <input type="checkbox" id="unlimitedCapacity" class="h-4 w-4 rounded border-slate-200 text-primary focus:ring-primary/20 transition-all">
+              <span class="text-[10px] font-bold text-slate-400 group-hover:text-primary transition-colors uppercase tracking-widest">Unlimited</span>
+            </label>
+          </div>
+          <input id="venueCapacity" required class="w-full bg-surface-container-low rounded-lg px-4 py-3 text-sm border-none focus:ring-2 focus:ring-primary/20 transition-all disabled:opacity-50 disabled:bg-slate-100" placeholder="e.g. 500" type="number"/>
+        </div>
+        <div class="space-y-1.5 md:col-span-2">
+          <label class="text-xs font-bold uppercase tracking-wider text-outline">Campus Location / Building</label>
+          <input id="venueLocation" required class="w-full bg-surface-container-low rounded-lg px-4 py-3 text-sm border-none focus:ring-2 focus:ring-primary/20" placeholder="e.g. North Campus, Block C, Level 3" type="text"/>
+        </div>
+        <div class="space-y-1.5 md:col-span-2">
+          <label class="text-xs font-bold uppercase tracking-wider text-outline">Description & Facilities</label>
+          <textarea id="venueDescription" class="w-full bg-surface-container-low rounded-lg px-4 py-3 text-sm border-none focus:ring-2 focus:ring-primary/20 h-24 resize-none" placeholder="Brief description of the venue, available facilities (projector, AC, etc.)..."></textarea>
+        </div>
+        
+        <!-- NEW IMAGE UPLOAD -->
+        <div class="space-y-1.5 md:col-span-2">
+          <label class="text-xs font-bold uppercase tracking-wider text-outline text-primary">Venue Cover Image</label>
+          <input id="venueImage" type="file" accept="image/*" class="w-full bg-surface-container-low rounded-lg px-4 py-2.5 text-sm border-none focus:ring-2 focus:ring-primary/20 transition-all"/>
+        </div>
+      </div>
+    </section>
+
+    <!-- Actions -->
+    <div class="flex gap-4 pt-4">
+      <button id="submitBtn" class="flex-1 py-3 bg-primary text-on-primary rounded-xl font-bold hover:opacity-90 transition-all shadow-md flex justify-center items-center gap-2" type="submit">
+        <span>Add Venue</span>
+      </button>
+      <a class="flex-1 py-3 bg-surface-container text-on-surface rounded-xl font-bold hover:bg-surface-container-high transition-all text-center" href="admin-venue.html">Cancel</a>
+    </div>
+  </form>
+    </div>
+</main>
+</div>
+
+<footer class="bg-slate-900 text-slate-400 py-6 border-t border-slate-800 mt-auto">
+  <div class="max-w-[1400px] mx-auto px-12 flex flex-col md:flex-row justify-between items-center gap-4">
+    <p class="text-xs">© 2024 Scholar Hub Admin. University Event Management System.</p>
+    <div class="flex gap-6 text-xs uppercase tracking-widest font-bold">
+      <a class="hover:text-white" href="#">Privacy Policy</a>
+      <a class="hover:text-white" href="#">Terms of Service</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  let editId = new URLSearchParams(window.location.search).get('id');
+
+  // Helper to upload a file to /api/upload
+  async function uploadFile(fileInput) {
+    if (!fileInput.files || fileInput.files.length === 0) return null;
+    const formData = new FormData();
+    formData.append("file", fileInput.files[0]);
+
+    try {
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData
+      });
+      if (response.ok) {
+        const data = await response.json();
+        return data.url; 
+      }
+      return null;
+    } catch (e) {
+      console.error("Upload failed", e);
+      return null;
+    }
+  }
+
+  document.getElementById('unlimitedCapacity').addEventListener('change', (e) => {
+    const capacityInput = document.getElementById('venueCapacity');
+    if (e.target.checked) {
+      capacityInput.value = '99999';
+      capacityInput.disabled = true;
+      capacityInput.required = false;
+    } else {
+      capacityInput.value = '';
+      capacityInput.disabled = false;
+      capacityInput.required = true;
+    }
+  });
+
+  async function loadVenueForEdit() {
+    if (!editId) return;
+    
+    document.querySelector('h1').innerText = "Edit Venue";
+    document.getElementById('submitBtn').innerText = "Update Venue";
+
+    try {
+        const res = await fetch(`/api/venues/${editId}`);
+        if(res.ok) {
+            const venue = await res.json();
+            document.getElementById('venueName').value = venue.name;
+            document.getElementById('venueType').value = venue.venueType;
+            document.getElementById('venueCapacity').value = venue.capacity;
+            document.getElementById('venueLocation').value = venue.location;
+            document.getElementById('venueDescription').value = venue.facilities || '';
+            if (venue.capacity >= 99999) {
+                document.getElementById('unlimitedCapacity').checked = true;
+                document.getElementById('venueCapacity').disabled = true;
+            }
+        }
+    } catch(e) {
+        console.error(e);
+    }
+  }
+
+  document.getElementById('newVenueForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    const originalText = btn.innerText;
+    btn.innerHTML = `<span class="material-symbols-outlined animate-spin text-sm">progress_activity</span> Processing...`;
+
+    // 1. Upload Image (Optional check)
+    let imageUrl = "";
+    try {
+        imageUrl = await uploadFile(document.getElementById('venueImage')) || "";
+    } catch (uploadErr) {
+        console.error("Upload process failed:", uploadErr);
+    }
+
+    // 2. Build JSON
+    const typeValue = document.getElementById('venueType').value;
+    const unlimited = document.getElementById('unlimitedCapacity').checked;
+    let capValue = unlimited ? 99999 : parseInt(document.getElementById('venueCapacity').value);
+    if (isNaN(capValue)) capValue = 0;
+
+    const venueData = {
+      name: document.getElementById('venueName').value,
+      venueType: typeValue,
+      capacity: capValue,
+      location: document.getElementById('venueLocation').value,
+      facilities: document.getElementById('venueDescription').value
+    };
+    if (imageUrl) venueData.imageUrl = imageUrl;
+    if (editId) venueData.id = editId;
+
+    // 3. Submit
+    try {
+      const url = editId ? `/api/venues/${editId}` : '/api/venues';
+      const method = editId ? 'PUT' : 'POST';
+      
+      const resp = await fetch(url, {
+        method: method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(venueData)
+      });
+
+      if (resp.ok) {
+        window.location.href = 'admin-venue.html';
+      } else {
+        const errText = await resp.text();
+        alert(`Error: ${errText || "Failed to save venue"}`);
+        btn.disabled = false;
+        btn.innerText = originalText;
+      }
+    } catch(err) {
+      alert("Network Error: Could not reach the server.");
+      btn.disabled = false;
+      btn.innerText = originalText;
+    }
+  });
+
+  function logout() {
+    localStorage.clear();
+    sessionStorage.clear();
+    window.location.href = 'landing-page.html';
+  }
+
+  loadVenueForEdit();
+</script>
+<script src="assets/js/transitions.js"></script>
+</body>
+</html>

@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Feedback Management | Scholar Hub Admin</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#21417f","primary-container": "#3b5998","on-primary": "#ffffff","primary-fixed": "#d9e2ff","on-primary-fixed": "#001944","secondary": "#006e25","secondary-container": "#80f98b","on-secondary": "#ffffff","on-secondary-container": "#007327","tertiary": "#574000","tertiary-fixed": "#ffdf9e","on-tertiary-fixed-variant": "#5b4300","error": "#ba1a1a","error-container": "#ffdad6","on-error": "#ffffff","on-error-container": "#93000a","surface": "#f8f9fa","surface-container-low": "#f3f4f5","surface-container": "#edeeef","surface-container-high": "#e7e8e9","surface-container-lowest": "#ffffff","on-surface": "#191c1d","on-surface-variant": "#444650","background": "#f8f9fa","outline": "#747781","outline-variant": "#c4c6d2"
+          },
+          fontFamily: { "headline": ["Manrope"], "body": ["Inter"] },
+          borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; vertical-align: middle; }
+    body { font-family: 'Inter', sans-serif; background: #f8f9fa; }
+    .font-headline { font-family: 'Manrope', sans-serif; }
+  </style>
+</head>
+<body class="text-on-surface min-h-screen">
+<div id="layout-root">
+<header class="bg-white border-b border-slate-200 sticky-nav h-16 flex items-center shadow-sm">
+  <div class="max-w-7xl mx-auto px-6 w-full flex justify-between items-center h-full">
+    <div class="flex items-center gap-8 h-full">
+      <img src="assets/images/logo.png" alt="SLIIT Events Hub" class="h-10 object-contain">
+      <nav class="hidden md:flex items-center gap-6 font-['Manrope'] font-semibold tracking-tight h-full">
+        <a class="nav-link h-full flex items-center text-slate-500 hover:text-primary transition-colors" href="admin-dashboard.html">Dashboard</a>
+        <a class="nav-link h-full flex items-center text-slate-500 hover:text-primary transition-colors" href="admin-user.html">Users</a>
+        <a class="nav-link h-full flex items-center text-slate-500 hover:text-primary transition-colors" href="admin-events.html">Events</a>
+        <a class="nav-link h-full flex items-center text-slate-500 hover:text-primary transition-colors" href="admin-clubs.html">Clubs</a>
+        <a class="nav-link h-full flex items-center text-slate-500 hover:text-primary transition-colors" href="admin-venue.html">Venues</a>
+        <a class="nav-link h-full flex items-center text-slate-500 hover:text-primary transition-colors" href="admin-feedback.html">Feedback</a>
+      </nav>
+    </div>
+    <div class="flex items-center gap-4 h-full">
+      <button class="p-2 text-slate-500 hover:bg-slate-100 rounded-lg relative">
+        <span class="material-symbols-outlined">notifications</span>
+        <span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+      </button>
+      <div class="flex items-center gap-3 pl-3 border-l border-slate-200 relative cursor-pointer group h-full" onclick="document.getElementById('profileDropdown').classList.toggle('hidden')">
+        <div class="h-9 w-9 rounded-full overflow-hidden border border-slate-200 bg-slate-100 flex items-center justify-center">
+          <span class="material-symbols-outlined text-slate-500">person</span>
+        </div>
+        <span id="userName" class="text-sm font-semibold text-slate-700 hidden lg:block">Admin User</span>
+        <span class="material-symbols-outlined text-sm text-slate-400">expand_more</span>
+        <div id="profileDropdown" class="hidden absolute top-full right-0 mt-4 w-48 bg-white rounded-xl shadow-lg border border-slate-200 py-2 z-50">
+            <a href="javascript:void(0)" onclick="logout()" class="flex items-center gap-2 px-4 py-2 text-sm text-error hover:bg-error/5 transition-colors font-semibold">
+                <span class="material-symbols-outlined text-[18px]">logout</span>
+                Logout
+            </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="page-transition-enter">
+    <div class="max-w-7xl mx-auto px-6 py-12 w-full">
+<div>
+<h1 class="text-3xl font-extrabold font-headline text-primary tracking-tight">Feedback Management</h1>
+<p class="text-on-surface-variant">Monitor student satisfaction and review feedback across all events.</p>
+</div>
+<!-- Summary Stats -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/20 p-6 text-center">
+<p id="statOverallRating" class="text-4xl font-extrabold font-headline text-primary">0.0</p>
+<div class="flex justify-center mt-1 mb-2">
+<span class="material-symbols-outlined text-tertiary text-lg" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-tertiary text-lg" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-tertiary text-lg" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-tertiary text-lg" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-outline text-lg">star_half</span>
+</div>
+<p class="text-xs text-outline font-bold uppercase tracking-wider">Overall Rating</p>
+</div>
+<div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/20 p-6 text-center">
+<p id="statTotalResponses" class="text-4xl font-extrabold font-headline text-secondary">0</p>
+<p class="text-xs text-outline font-bold uppercase tracking-wider mt-3">Total Responses</p>
+</div>
+<div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/20 p-6 text-center">
+<p id="statSatisfactionRate" class="text-4xl font-extrabold font-headline text-tertiary">0%</p>
+<p class="text-xs text-outline font-bold uppercase tracking-wider mt-3">Satisfaction Rate</p>
+</div>
+<div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/20 p-6 text-center">
+<p id="statEventsReviewed" class="text-4xl font-extrabold font-headline text-on-surface">0</p>
+<p class="text-xs text-outline font-bold uppercase tracking-wider mt-3">Events Reviewed</p>
+</div>
+</div>
+<!-- Search & Filter -->
+<div class="flex flex-col md:flex-row gap-4">
+<div class="flex-1 bg-surface-container-lowest rounded-lg border border-outline-variant/20 flex items-center px-4 gap-3">
+<span class="material-symbols-outlined text-outline">search</span>
+<input id="searchInput" oninput="renderTable()" class="w-full bg-transparent border-none focus:ring-0 text-sm py-3" placeholder="Search events by name or organizer..." type="text"/>
+</div>
+<div class="flex gap-2">
+<button onclick="setFilter('All Time', this)" class="filter-btn px-4 py-2 bg-primary-fixed text-on-primary-fixed rounded-full text-sm font-semibold">All Time</button>
+<button onclick="setFilter('This Month', this)" class="filter-btn px-4 py-2 bg-surface-container text-outline rounded-full text-sm font-semibold hover:bg-surface-container-high transition-all">This Month</button>
+<button onclick="setFilter('This Semester', this)" class="filter-btn px-4 py-2 bg-surface-container text-outline rounded-full text-sm font-semibold hover:bg-surface-container-high transition-all">This Semester</button>
+</div>
+</div>
+<!-- Feedback Table -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant/20 shadow-sm overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-surface-container-low/50">
+<tr class="text-xs font-bold text-outline uppercase tracking-wider border-b border-outline-variant/20">
+<th class="px-6 py-4">Event Name</th>
+<th class="px-6 py-4">Date</th>
+<th class="px-6 py-4">Organizer</th>
+<th class="px-6 py-4 text-center">Responses</th>
+<th class="px-6 py-4 text-center">Avg. Rating</th>
+<th class="px-6 py-4 text-center">Actions</th>
+</tr>
+</thead>
+<tbody id="feedbackTableBody" class="divide-y divide-outline-variant/10">
+<tr><td colspan="6" class="px-6 py-5 text-center text-sm text-outline italic">Loading feedback data...</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+    </div>
+</main>
+<footer class="bg-slate-900 text-slate-400 py-12 border-t border-slate-800 mt-auto">
+  <div class="max-w-[1400px] mx-auto px-12 flex flex-col md:flex-row justify-between items-center gap-4">
+    <p class="text-xs">© 2024 Scholar Hub Admin. University Event Management System.</p>
+    <div class="flex gap-6 text-xs uppercase tracking-widest font-bold">
+      <a class="hover:text-white transition-colors" href="#">Privacy Policy</a>
+      <a class="hover:text-white transition-colors" href="#">Terms of Service</a>
+      <a class="hover:text-white transition-colors" href="#">Help Desk</a>
+    </div>
+  </div>
+</footer>
+</div>
+
+<script>
+  let eventStatsMap = new Map();
+
+  function logout() {
+      localStorage.clear();
+      sessionStorage.clear();
+      window.location.href = 'landing-page.html';
+  }
+  let pastEventsList = [];
+  let currentFilter = 'All Time';
+
+  document.addEventListener('DOMContentLoaded', async () => {
+      // Setup filter buttons
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+              document.querySelectorAll('.filter-btn').forEach(b => {
+                  b.classList.remove('bg-primary-fixed', 'text-on-primary-fixed');
+                  b.classList.add('bg-surface-container', 'text-outline');
+              });
+              e.target.classList.remove('bg-surface-container', 'text-outline');
+              e.target.classList.add('bg-primary-fixed', 'text-on-primary-fixed');
+              currentFilter = e.target.textContent.trim();
+              renderTable();
+          });
+      });
+
+      document.getElementById('searchInput').addEventListener('input', renderTable);
+
+      try {
+          const eventsRes = await fetch('/api/events');
+          if (!eventsRes.ok) throw new Error("Failed to fetch events");
+          const events = await eventsRes.json();
+          // Filter only PAST events
+          pastEventsList = events.filter(e => e.eventStatus === 'PAST' || new Date(e.startTime) < new Date());
+
+          let totalResponses = 0;
+          let totalRatingSum = 0;
+          let totalEventsWithFeedback = 0;
+
+          // Process each event sequentially for now (or Promise.all)
+          await Promise.all(pastEventsList.map(async (ev) => {
+              try {
+                  const statRes = await fetch(`/api/feedback/admin/event/${ev.id}/analytics`);
+                  if (statRes.ok) {
+                      const stats = await statRes.json();
+                      eventStatsMap.set(ev.id, stats);
+                      
+                      const responses = stats.totalFeedback || 0;
+                      totalResponses += responses;
+                      if (responses > 0) {
+                          totalRatingSum += (stats.averageRating * responses);
+                          totalEventsWithFeedback++;
+                      }
+                  }
+              } catch (err) {
+                  // ignore failing stats
+              }
+          }));
+
+          // Update Summary Stats
+          let overallAvg = totalResponses > 0 ? (totalRatingSum / totalResponses).toFixed(1) : "0.0";
+          if(document.getElementById('statOverallRating')) document.getElementById('statOverallRating').textContent = overallAvg;
+          if(document.getElementById('statTotalResponses')) document.getElementById('statTotalResponses').textContent = totalResponses;
+          
+          let satRate = totalResponses > 0 ? Math.round((totalRatingSum / (totalResponses * 5)) * 100) : 0;
+          if(document.getElementById('statSatisfactionRate')) document.getElementById('statSatisfactionRate').textContent = satRate + "%";
+          if(document.getElementById('statEventsReviewed')) document.getElementById('statEventsReviewed').textContent = totalEventsWithFeedback;
+
+          renderTable();
+      } catch (e) {
+          console.error(e);
+          document.getElementById('feedbackTableBody').innerHTML = '<tr><td colspan="6" class="px-6 py-5 text-center text-sm text-error font-bold">Error loading feedback data</td></tr>';
+      }
+  });
+
+  function renderTable() {
+      const tbody = document.getElementById('feedbackTableBody');
+      tbody.innerHTML = '';
+      
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      
+      const now = new Date();
+      
+      let filtered = pastEventsList.filter(ev => {
+          if (query && !ev.title.toLowerCase().includes(query) && (!ev.organizer || !(typeof ev.organizer === 'object' ? ev.organizer.name : ev.organizer).toLowerCase().includes(query))) {
+              return false;
+          }
+          const evDate = new Date(ev.startTime);
+          if (currentFilter === 'This Month') {
+              if (evDate.getMonth() !== now.getMonth() || evDate.getFullYear() !== now.getFullYear()) return false;
+          } else if (currentFilter === 'This Semester') {
+              // rough approximation 6 months
+              const sixMonthsAgo = new Date();
+              sixMonthsAgo.setMonth(now.getMonth() - 6);
+              if (evDate < sixMonthsAgo) return false;
+          }
+          return true;
+      });
+
+      if (filtered.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="6" class="px-6 py-5 text-center text-sm text-outline italic">No matching events found.</td></tr>';
+          return;
+      }
+
+      filtered.forEach(ev => {
+          const stats = eventStatsMap.get(ev.id) || { totalFeedback: 0, averageRating: 0.0 };
+          
+          const tr = document.createElement('tr');
+          tr.className = "hover:bg-surface-container-low/50 transition-colors";
+          
+          tr.innerHTML = `
+              <td class="px-6 py-5 font-semibold text-on-surface text-sm">${ev.title}</td>
+              <td class="px-6 py-5 text-sm text-on-surface-variant">${new Date(ev.startTime).toLocaleDateString()}</td>
+              <td class="px-6 py-5 text-sm text-on-surface-variant">${ev.organizer ? (typeof ev.organizer === 'object' ? ev.organizer.name : ev.organizer) : 'N/A'}</td>
+              <td class="px-6 py-5 text-center text-sm font-semibold">${stats.totalFeedback}</td>
+              <td class="px-6 py-5 text-center">
+                  <div class="flex items-center justify-center gap-1">
+                      <span class="material-symbols-outlined text-tertiary text-base" style="font-variation-settings: 'FILL' 1;">star</span>
+                      <span class="text-sm font-bold">${stats.totalFeedback > 0 ? stats.averageRating.toFixed(1) : '-'}</span>
+                  </div>
+              </td>
+              <td class="px-6 py-5 text-center">
+                  <a class="px-3 py-1.5 bg-primary text-on-primary rounded-lg text-xs font-bold hover:opacity-90 transition-all shadow-sm" href="admin-feedbackanalytics.html?id=${ev.id}">View Analytics</a>
+              </td>
+          `;
+          tbody.appendChild(tr);
+      });
+  }
+</script>
+</main>
+
+<footer class="bg-slate-900 text-slate-400 py-8 border-t border-slate-800 mt-auto">
+    <div class="max-w-[1400px] mx-auto px-12 flex flex-col md:flex-row justify-between items-center gap-4">
+        <p class="text-xs">© 2024 Scholar Hub Admin. University Event Management System.</p>
+        <div class="flex gap-6 text-xs uppercase tracking-widest font-bold">
+            <a class="hover:text-white transition-colors" href="#">Privacy Policy</a>
+            <a class="hover:text-white transition-colors" href="#">Terms of Service</a>
+            <a class="hover:text-white transition-colors" href="#">Help Desk</a>
+        </div>
+    </div>
+</footer>
+    <script src="assets/js/transitions.js"></script>
+</body> 
+</html>

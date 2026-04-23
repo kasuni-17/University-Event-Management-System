@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Uni Event Portal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#21417f",
+                        "on-surface": "#191c1d",
+                        "on-surface-variant": "#444650",
+                        "surface-container-high": "#e7e8e9",
+                        "surface-container-highest": "#e1e3e4",
+                        "surface-container-low": "#f3f4f5",
+                        "surface-container-lowest": "#ffffff"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        body { font-family: 'Inter', sans-serif; background-color: #f8f9fa; color: #191c1d; }
+        .font-headline { font-family: 'Manrope', sans-serif; }
+        .primary-gradient { background: linear-gradient(135deg, #21417f 0%, #3b5998 100%); }
+    </style>
+</head>
+<body class="bg-surface text-on-surface">
+<div id="layout-root">
+<header class="bg-white border-b border-slate-200 sticky-nav h-16 flex items-center shadow-sm">
+    <div class="max-w-7xl mx-auto px-6 w-full flex justify-between items-center h-full">
+        <div class="flex items-center gap-12 h-full">
+            <div class="flex items-center gap-2 cursor-pointer" onclick="window.location.href='clubadmin-dashboard.html'">
+                <img src="assets/images/logo.png" alt="Scholar Hub" class="h-8 md:h-10">
+            </div>
+            <nav class="hidden md:flex items-center h-full space-x-8">
+                <a class="nav-link text-sm font-medium text-slate-500 hover:text-primary h-full flex items-center" href="clubadmin-dashboard.html">Dashboard</a>
+                <a class="nav-link text-sm font-medium text-slate-500 hover:text-primary h-full flex items-center" href="clubadmin-myclub.html">My Club</a>
+                <a class="nav-link text-sm font-medium text-slate-500 hover:text-primary h-full flex items-center" href="clubadmin-events.html">Events</a>
+                <a class="nav-link text-sm font-medium text-slate-500 hover:text-primary h-full flex items-center" href="clubadmin-clubs.html">Clubs</a>
+                <a class="nav-link text-sm font-medium text-slate-500 hover:text-primary h-full flex items-center" href="clubadmin-venue.html">Venues</a>
+                <a class="nav-link text-sm font-medium text-slate-500 hover:text-primary h-full flex items-center" href="clubadmin-feedback.html">Feedback</a>
+            </nav>
+        </div>
+        <div class="flex items-center gap-4 h-full">
+            <button class="relative p-1 text-slate-500 hover:text-primary transition-colors">
+                <span class="material-symbols-outlined align-middle" style="font-variation-settings: 'FILL' 1">notifications</span>
+            </button>
+            <div class="flex items-center gap-3 pl-3 border-l border-slate-200 relative cursor-pointer group" onclick="document.getElementById('profileDropdown').classList.toggle('hidden')">
+                <div class="h-9 w-9 rounded-full overflow-hidden border border-slate-200 bg-slate-100 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-slate-500">person</span>
+                </div>
+                <span id="userName" class="text-sm font-semibold text-slate-700 hidden lg:block">Club Admin</span>
+                <span class="material-symbols-outlined text-sm text-slate-400">expand_more</span>
+                
+                <div id="profileDropdown" class="hidden absolute top-full right-0 mt-4 w-48 bg-white rounded-xl shadow-lg border border-slate-200 py-2 z-50">
+                    <a href="profile.html" class="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors">
+                        <span class="material-symbols-outlined text-[18px]">person</span>
+                        My Profile
+                    </a>
+                    <div class="h-[1px] bg-slate-100 my-1 mx-2"></div>
+                    <a href="javascript:void(0)" onclick="logout()" class="flex items-center gap-2 px-4 py-2 text-sm text-error hover:bg-error/5 transition-colors font-semibold">
+                        <span class="material-symbols-outlined text-[18px]">logout</span>
+                        Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="page-transition-enter">
+    <div class="max-w-7xl mx-auto px-6 pt-12 pb-24 w-full">
+    <header class="flex flex-col space-y-8 mb-16">
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div class="space-y-2">
+                <h1 class="font-headline text-4xl font-extrabold text-on-surface tracking-tight">Discover Your Community</h1>
+                <p class="text-on-surface-variant font-body text-lg">Manage and discover 100+ active student organizations across the campus.</p>
+            </div>
+            <div class="flex gap-3">
+                <button onclick="window.location.href='my-activities.html?tab=clubs'" class="primary-gradient text-white px-6 py-3.5 rounded-2xl text-sm font-bold flex items-center gap-2 shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all">
+                    <span class="material-symbols-outlined text-lg font-bold">groups</span>
+                    My Joined Clubs
+                </button>
+                <button onclick="window.location.href='clubadmin-newclub.html'" class="bg-white text-primary border border-primary/20 px-6 py-3.5 rounded-2xl font-bold font-headline flex items-center gap-3 shadow-sm hover:scale-105 active:scale-95 transition-all magnetic-btn">
+                    <span class="material-symbols-outlined font-bold">add_circle</span>
+                    Create New Club
+                </button>
+            </div>
+        </div>
+        <div class="flex flex-col lg:flex-row items-center gap-6 w-full">
+            <div class="w-full lg:max-w-md relative group">
+                <span class="material-symbols-outlined absolute left-4 inset-y-0 flex items-center text-slate-400">search</span>
+                <input id="clubSearch" class="w-full pl-12 pr-4 py-3.5 bg-white rounded-xl border-none focus:ring-2 focus:ring-primary/20 shadow-sm text-on-surface" placeholder="Search by name, interest or mission..." type="text"/>
+            </div>
+            <div id="categoryTabs" class="flex items-center gap-3 overflow-x-auto no-scrollbar w-full lg:w-auto py-2">
+                <button class="tab-btn px-6 py-2 rounded-full bg-primary text-white font-medium text-sm transition-all shadow-md" data-category="">All</button>
+                <button class="tab-btn px-6 py-2 rounded-full bg-surface-container-high text-on-surface-variant font-medium text-sm hover:bg-surface-container-highest transition-all" data-category="Academic">Academic</button>
+                <button class="tab-btn px-6 py-2 rounded-full bg-surface-container-high text-on-surface-variant font-medium text-sm hover:bg-surface-container-highest transition-all" data-category="Tech">Technology</button>
+                <button class="tab-btn px-6 py-2 rounded-full bg-surface-container-high text-on-surface-variant font-medium text-sm hover:bg-surface-container-highest transition-all" data-category="Arts">Arts</button>
+                <button class="tab-btn px-6 py-2 rounded-full bg-surface-container-high text-on-surface-variant font-medium text-sm hover:bg-surface-container-highest transition-all" data-category="Social">Social</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- My Joined Clubs Section -->
+    <section id="myJoinedSection" class="hidden mb-12">
+        <div class="flex items-center gap-3 mb-6">
+            <span class="material-symbols-outlined text-primary text-2xl">groups</span>
+            <h2 class="font-headline font-bold text-2xl text-on-surface">My Joined Clubs</h2>
+            <span id="joinedCount" class="bg-primary text-white text-xs font-bold px-2.5 py-1 rounded-full">0</span>
+        </div>
+        <div id="myJoinedGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-8"></div>
+        <div class="h-px bg-slate-200 mb-8"></div>
+    </section>
+
+    <h2 class="font-headline font-bold text-2xl text-on-surface mb-6">All Clubs</h2>
+    <section id="clubGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Data populated via JS -->
+         <p class="text-slate-500">Loading clubs...</p>
+    </section>
+    </div>
+</main>
+</div>
+
+<script>
+    let allClubs = [];
+    let activeCategory = "";
+    let pollingInterval = null;
+    let joinedClubIds = new Set();
+
+    function logout() {
+        localStorage.clear();
+        sessionStorage.clear();
+        window.location.href = 'landing-page.html';
+    }
+
+    function logout() {
+        sessionStorage.clear();
+        localStorage.removeItem('user');
+        window.location.href = 'login.html';
+    }
+
+    async function fetchMyMemberships(userId) {
+        try {
+            const resp = await fetch(`/api/membership/student/${userId}/approved?t=${Date.now()}`);
+            const memberships = await resp.json();
+            joinedClubIds = new Set(memberships.map(m => m.club ? m.club.id : null).filter(Boolean));
+            renderMyJoinedClubs(memberships);
+        } catch (e) {
+            console.error('Failed to load memberships', e);
+        }
+    }
+
+    function renderMyJoinedClubs(memberships) {
+        const section = document.getElementById('myJoinedSection');
+        const grid = document.getElementById('myJoinedGrid');
+        const count = document.getElementById('joinedCount');
+
+        const validMemberships = memberships.filter(m => m.club);
+        if (validMemberships.length === 0) {
+            section.classList.add('hidden');
+            return;
+        }
+
+        section.classList.remove('hidden');
+        count.textContent = validMemberships.length;
+        grid.innerHTML = '';
+
+        validMemberships.forEach(mem => {
+            const club = mem.club;
+            const joinDate = new Date(mem.joinDate).toLocaleDateString();
+            const card = `
+                <div class="bg-white rounded-xl overflow-hidden shadow-sm border-l-4 border-primary flex">
+                    <div class="w-20 h-20 flex-shrink-0 m-4 rounded-lg overflow-hidden bg-slate-100">
+                        <img alt="${club.name}" class="w-full h-full object-cover" src="${club.logoUrl || 'https://images.unsplash.com/photo-1540575861501-7ad05823c94b?auto=format&fit=crop&q=80&w=2070'}"/>
+                    </div>
+                    <div class="p-4 flex-1 flex flex-col justify-center">
+                        <div class="flex items-center gap-2 mb-1">
+                            <h4 class="font-headline font-bold text-sm text-on-surface line-clamp-1">${club.name}</h4>
+                            <span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full text-[9px] font-bold uppercase">Member</span>
+                        </div>
+                        <p class="text-xs text-slate-500 line-clamp-1">${club.description || ''}</p>
+                        <span class="text-[10px] text-slate-400 mt-1">Joined ${joinDate}</span>
+                    </div>
+                    <div class="flex items-center pr-4">
+                        <button onclick="window.location.href='student-viewclubdetails.html?id=${club.id}'" class="text-primary text-xs font-bold hover:underline">View</button>
+                    </div>
+                </div>
+            `;
+            grid.innerHTML += card;
+        });
+    }
+
+    async function loadClubs() {
+        try {
+            const resp = await fetch(`/api/clubs/admin/approved?t=${Date.now()}`);
+            allClubs = await resp.json();
+            filterClubs();
+        } catch (e) {
+            console.error("Failed to load clubs", e);
+        }
+    }
+
+    function renderClubs(clubs) {
+        const grid = document.getElementById('clubGrid');
+        grid.innerHTML = '';
+        
+        const user = JSON.parse(localStorage.getItem('user'));
+
+        if (clubs.length === 0) {
+            grid.innerHTML = '<p class="col-span-full text-center text-slate-500">No clubs found.</p>';
+            return;
+        }
+
+        clubs.forEach(club => {
+            const isMyClub = user && user.role === 'CLUB_ADMIN' && club.organizerId === user.id;
+            const isJoined = joinedClubIds.has(club.id);
+            const profileUrl = isMyClub ? 'clubadmin-myclub.html' : `student-viewclubdetails.html?id=${club.id}`;
+
+            let joinButton;
+            if (isMyClub) {
+                joinButton = `<span class="py-2.5 px-4 rounded-lg bg-indigo-50 text-indigo-700 font-bold text-sm flex items-center justify-center gap-1"><span class="material-symbols-outlined text-sm">star</span>My Club</span>`;
+            } else if (isJoined) {
+                joinButton = `<span class="py-2.5 px-4 rounded-lg bg-emerald-50 text-emerald-700 font-bold text-sm flex items-center justify-center gap-1"><span class="material-symbols-outlined text-sm">check_circle</span>Member</span>`;
+            } else {
+                joinButton = `<button onclick="window.location.href='student-joinclubform.html?id=${club.id}'" class="py-2.5 px-4 rounded-lg primary-gradient text-white font-bold text-sm shadow-md hover:opacity-95">Join Club</button>`;
+            }
+            
+            const card = `
+                <div class="bg-surface-container-lowest p-8 rounded-xl shadow-sm flex flex-col justify-between group hover:-translate-y-1 transition-transform duration-300 ${isMyClub ? 'ring-2 ring-indigo-300' : ''} ${isJoined ? 'ring-2 ring-emerald-200' : ''}">
+                    <div class="space-y-6">
+                        <div class="flex justify-between items-start">
+                            <div class="w-16 h-16 rounded-xl bg-slate-100 flex items-center justify-center overflow-hidden">
+                                <img src="${club.logoUrl || 'https://images.unsplash.com/photo-1540575861501-7ad05823c94b?auto=format&fit=crop&q=80&w=2070'}" alt="${club.name}" class="w-full h-full object-cover">
+                            </div>
+                            <div class="flex gap-2">
+                                <span class="px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container text-[0.6875rem] font-bold uppercase tracking-wider">${club.category || 'Development'}</span>
+                                ${isMyClub ? '<span class="px-2 py-1 rounded-full bg-indigo-100 text-indigo-700 text-[0.6875rem] font-bold uppercase tracking-wider">Owner</span>' : ''}
+                                ${isJoined && !isMyClub ? '<span class="px-2 py-1 rounded-full bg-emerald-100 text-emerald-700 text-[0.6875rem] font-bold uppercase tracking-wider">Joined</span>' : ''}
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="font-headline text-xl font-bold text-on-surface mb-2">${club.name}</h3>
+                            <p class="text-on-surface-variant text-sm line-clamp-2 leading-relaxed">${club.description}</p>
+                        </div>
+                        <div class="flex items-center gap-2 text-slate-400 text-sm">
+                            <span class="material-symbols-outlined text-sm">groups</span>
+                            <span class="font-medium">Active Member Program</span>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3 mt-8">
+                        <button onclick="window.location.href='${profileUrl}'" class="py-2.5 px-4 rounded-lg border border-slate-200 text-primary font-bold text-sm hover:bg-slate-50 transition-colors">Profile</button>
+                        ${joinButton}
+                    </div>
+                </div>
+            `;
+            grid.innerHTML += card;
+        });
+    }
+
+    function filterClubs() {
+        const search = document.getElementById('clubSearch').value.toLowerCase();
+        const filtered = allClubs.filter(club => {
+            const matchesSearch = (club.name && club.name.toLowerCase().includes(search)) || 
+                               (club.description && club.description.toLowerCase().includes(search));
+            const matchesCategory = activeCategory === "" || (club.category && club.category === activeCategory);
+            return matchesSearch && matchesCategory;
+        });
+        renderClubs(filtered);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (user) {
+            document.getElementById('userName').textContent = user.name;
+            fetchMyMemberships(user.id);
+        }
+
+        loadClubs();
+        pollingInterval = setInterval(loadClubs, 15000);
+        
+        document.getElementById('clubSearch').addEventListener('input', filterClubs);
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('bg-primary', 'text-white', 'shadow-md'));
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.add('bg-surface-container-high', 'text-on-surface-variant'));
+                
+                btn.classList.add('bg-primary', 'text-white', 'shadow-md');
+                btn.classList.remove('bg-surface-container-high', 'text-on-surface-variant');
+                
+                activeCategory = btn.getAttribute('data-category');
+                filterClubs();
+            });
+        });
+    });
+</script>
+    <script src="assets/js/transitions.js"></script>
+</body></html>

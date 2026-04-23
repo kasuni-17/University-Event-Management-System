@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container": "#edeeef","on-secondary-container": "#007327","on-tertiary-fixed": "#261a00","on-surface-variant": "#444650","background": "#f8f9fa","surface-container-high": "#e7e8e9","outline-variant": "#c4c6d2","surface-bright": "#f8f9fa","primary-fixed-dim": "#afc6ff","on-secondary": "#ffffff","surface-tint": "#3f5d9c","on-surface": "#191c1d","error-container": "#ffdad6","primary-container": "#3b5998","on-tertiary-container": "#ffcc55","on-primary-container": "#c2d2ff","inverse-surface": "#2e3132","surface-container-highest": "#e1e3e4","on-secondary-fixed": "#002106","on-primary-fixed": "#001944","error": "#ba1a1a","on-primary": "#ffffff","outline": "#747781","tertiary-fixed-dim": "#fabd00","secondary": "#006e25","on-tertiary": "#ffffff","surface-container-low": "#f3f4f5","on-primary-fixed-variant": "#254583","surface-variant": "#e1e3e4","tertiary-container": "#745600","tertiary": "#574000","primary-fixed": "#d9e2ff","surface-dim": "#d9dadb","secondary-fixed-dim": "#66df75","secondary-container": "#80f98b","on-error": "#ffffff","on-error-container": "#93000a","on-background": "#191c1d","inverse-on-surface": "#f0f1f2","on-tertiary-fixed-variant": "#5b4300","surface-container-lowest": "#ffffff","secondary-fixed": "#83fc8e","inverse-primary": "#afc6ff","on-secondary-fixed-variant": "#00531a","primary": "#21417f","surface": "#f8f9fa","tertiary-fixed": "#ffdf9e"
+            },
+            fontFamily: {"headline": ["Manrope"],"body": ["Inter"],"label": ["Inter"]},
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; vertical-align: middle; }
+        .glass-effect { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
+<header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+  <div class="flex justify-between items-center w-full px-8 py-4 max-w-full">
+    <div class="flex items-center gap-8">
+      <img src="assets/images/logo.png" alt="SLIIT Events Hub" class="h-10 object-contain">
+      <nav class="hidden md:flex items-center gap-6 font-['Manrope'] font-semibold tracking-tight">
+        <a class="text-slate-500 hover:text-primary transition-colors" href="admin-dashboard.html">Dashboard</a>
+        <a class="text-slate-500 hover:text-primary transition-colors" href="admin-user.html">Users</a>
+        <a class="text-primary border-b-2 border-primary pb-1" href="admin-events.html">Events</a>
+        <a class="text-slate-500 hover:text-primary transition-colors" href="admin-clubs.html">Clubs</a>
+        <a class="text-slate-500 hover:text-primary transition-colors" href="admin-venue.html">Venues</a>
+        <a class="text-slate-500 hover:text-primary transition-colors" href="admin-feedback.html">Feedback</a>
+      </nav>
+    </div>
+    <div class="flex items-center gap-4">
+      <div class="relative hidden lg:block">
+        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+        <input class="bg-slate-50 border border-slate-200 rounded-lg pl-10 pr-4 py-2 text-sm w-64 focus:ring-primary focus:border-primary transition-all" placeholder="Search resources..." type="text"/>
+      </div>
+      <button class="p-2 text-slate-500 hover:bg-slate-100 rounded-lg relative">
+        <span class="material-symbols-outlined">notifications</span>
+        <span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+      </button>
+      <div class="flex items-center gap-2 pl-2 border-l border-slate-200 relative cursor-pointer" onclick="document.getElementById('profileDropdown').classList.toggle('hidden')">
+        <div class="h-9 w-9 rounded-full overflow-hidden border border-slate-200 bg-slate-100 flex items-center justify-center">
+          <span class="material-symbols-outlined text-slate-500">person</span>
+        </div>
+        <span class="text-sm font-semibold text-slate-700 hidden lg:block">Admin User</span>
+        <div id="profileDropdown" class="hidden absolute top-full right-0 mt-4 w-48 bg-white rounded-xl shadow-lg border border-slate-200 py-2 z-50">
+            <a href="login.html" class="flex items-center gap-2 px-4 py-2 text-sm text-error hover:bg-error/5 transition-colors font-semibold">
+                <span class="material-symbols-outlined text-[18px]">logout</span>
+                Logout
+            </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+<main class="max-w-[1440px] mx-auto px-8 py-12">
+<div class="mb-8">
+<a class="inline-flex items-center gap-2 text-primary font-semibold hover:gap-3 transition-all group" href="admin-events.html">
+<span class="material-symbols-outlined group-hover:-translate-x-1 transition-transform">arrow_back</span>
+<span class="font-label text-sm tracking-wide uppercase">Back to Events</span>
+</a>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+<!-- Left Column -->
+<div class="lg:col-span-8 space-y-10">
+<!-- Hero -->
+<section class="relative rounded-xl overflow-hidden aspect-[21/9] shadow-sm bg-surface-container-highest">
+<img id="eventImage" alt="Event Cover" class="w-full h-full object-cover grayscale-[0.3]" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDH4EXZ2RWFesnxJs7KUGEqiqiJNa4HcxSl0dZSEYyIAiDqK_WmP7uAgIT6uzjKHXSA-35J8bgs4g5jbNqfEtViEZzmekGlgdU76zDGmQ3tFcVflfFMx-dnyWIAn73hE978TSXG4-vfwrgZ_uBe0hU944f9KkQeQy1say78c72RvEL5UAQ6Py4vgsJfpUZQNBG1sR3tVqKB1__UQ4mOYsybUKDLsfSjlQ2IHXpUF-cOnZBDnw7wqbPXZ_7aJtBH80xOh1EHlrjDx36U"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+<div class="absolute top-6 right-6">
+<span id="eventType" class="glass-effect bg-white/20 text-white px-4 py-2 rounded-full font-label text-xs font-bold tracking-widest flex items-center gap-2 uppercase"><span class="material-symbols-outlined text-sm">verified</span>Event Concluded</span>
+</div>
+<div class="absolute bottom-8 left-8 text-white">
+<h1 id="eventTitle" class="font-headline text-4xl md:text-5xl font-extrabold mb-4 tracking-tight uppercase">Loading...</h1>
+<div class="flex flex-wrap gap-6 font-label text-sm opacity-90">
+<div class="flex items-center gap-2"><span class="material-symbols-outlined text-primary-fixed">calendar_today</span><span id="eventDate">Loading...</span></div>
+<div class="flex items-center gap-2"><span class="material-symbols-outlined text-primary-fixed">schedule</span><span id="eventTime">Loading...</span></div>
+<div class="flex items-center gap-2"><span class="material-symbols-outlined text-primary-fixed">location_on</span><span id="eventLocation">Loading...</span></div>
+</div>
+</div>
+</section>
+<!-- About -->
+<section class="bg-surface-container-lowest p-10 rounded-xl">
+<h2 class="font-headline text-2xl font-bold mb-6 text-primary">About this Event</h2>
+<div class="space-y-6 text-on-surface-variant leading-relaxed font-body">
+<p id="eventDescription">Loading description...</p>
+</div>
+</section>
+</div>
+<!-- Right Sidebar -->
+<aside class="lg:col-span-4 space-y-6">
+<div class="bg-surface-container-lowest p-8 rounded-xl border-l-4 border-primary shadow-sm">
+<h3 class="font-headline text-xl font-bold mb-6 text-on-surface">Management Actions</h3>
+<div class="space-y-4">
+<button onclick="deleteEvent()" class="w-full flex items-center justify-center gap-3 bg-error-container text-on-error-container py-3.5 px-6 rounded-lg font-semibold hover:opacity-80 transition-all"><span class="material-symbols-outlined">delete</span>Remove Event</button>
+</div>
+</div>
+<div class="bg-secondary-container/20 p-6 rounded-xl border border-secondary/10">
+<div class="flex items-center gap-4 mb-4">
+<div class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container"><span class="material-symbols-outlined text-2xl">event_available</span></div>
+<div><p class="font-label text-[10px] uppercase tracking-wider text-on-secondary-container font-bold">Current Status</p><h4 class="font-headline font-bold text-secondary text-lg">Event Concluded</h4></div>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm">
+<h4 class="font-headline font-bold mb-4 text-sm text-outline uppercase tracking-widest">Organized By</h4>
+<div class="flex items-center gap-4">
+<div class="w-14 h-14 rounded-lg bg-primary-fixed flex items-center justify-center"><span class="material-symbols-outlined text-3xl text-primary">groups</span></div>
+<div>
+<h5 id="eventOrganizerName" class="font-headline font-extrabold text-on-surface">Loading...</h5>
+<p class="text-xs text-on-surface-variant font-body mb-2">Host</p>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<footer class="mt-20 border-t border-outline-variant/15 py-10 px-8">
+<div class="max-w-[1440px] mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="text-center md:text-left"><span class="font-headline font-bold text-xl text-primary">Scholar Hub</span><p class="text-xs text-outline mt-1 font-body">Academic Administration &amp; Event Management System</p></div>
+</div>
+</footer>
+
+<script>
+    let currentEventId = null;
+
+    document.addEventListener('DOMContentLoaded', async () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        currentEventId = urlParams.get('id');
+        
+        if (!currentEventId) {
+            alert('No event ID provided.');
+            window.location.href = 'admin-events.html';
+            return;
+        }
+
+        try {
+            const res = await fetch(`/api/events/${currentEventId}`);
+            if (!res.ok) throw new Error('Failed to load event');
+            const event = await res.json();
+            
+            document.getElementById('eventTitle').textContent = event.title || 'Untitled Event';
+            
+            if(event.posterUrl) document.getElementById('eventImage').src = event.posterUrl;
+            
+            const startDate = new Date(event.startTime);
+            document.getElementById('eventDate').textContent = startDate.toLocaleDateString();
+            document.getElementById('eventTime').textContent = startDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            
+            document.getElementById('eventType').innerHTML = `<span class="material-symbols-outlined text-sm">verified</span>${event.eventStatus || 'PAST'}`;
+            document.getElementById('eventLocation').textContent = event.location || 'TBD';
+            document.getElementById('eventDescription').textContent = event.description || 'No description provided.';
+            document.getElementById('eventOrganizerName').textContent = event.organizer ? event.organizer.name : 'System User';
+            
+        } catch (err) {
+            console.error(err);
+            alert('Error loading event data.');
+        }
+    });
+
+    async function deleteEvent() {
+        if (!currentEventId) return;
+        openDeleteModal({
+            title: 'Remove Past Event',
+            message: 'Are you sure you want to permanently remove this past event record? This action cannot be undone.',
+            icon: 'delete',
+            iconColor: 'text-error',
+            iconBg: 'bg-error/10',
+            confirmText: 'Remove Record',
+            confirmBtnClass: 'bg-error',
+            onConfirm: async () => {
+                const res = await fetch(`/api/events/${currentEventId}`, { method: 'DELETE' });
+                if(res.ok) window.location.href = 'admin-events.html';
+                else alert('Error deleting the event.');
+            }
+        });
+    }
+</script>
+
+<!-- Confirmation Modal -->
+<div id="deleteModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full overflow-hidden transform animate-in zoom-in-95 duration-200">
+        <div class="p-8 text-center">
+            <div class="w-20 h-20 bg-error/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                <span id="modalIcon" class="material-symbols-outlined text-4xl text-error">warning</span>
+            </div>
+            <h3 id="modalTitle" class="text-2xl font-bold text-slate-900 mb-2">Are you sure?</h3>
+            <p id="modalMessage" class="text-slate-500 leading-relaxed mb-8">This action cannot be undone. Please confirm you want to proceed.</p>
+            <div class="flex gap-3">
+                <button onclick="closeDeleteModal()" class="flex-1 px-6 py-3.5 rounded-xl font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 transition-all border border-slate-200">Cancel</button>
+                <button id="confirmDeleteBtn" class="flex-1 px-6 py-3.5 rounded-xl font-bold text-white bg-error hover:bg-error/90 shadow-lg shadow-error/20 transition-all">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openDeleteModal(config) {
+        const modal = document.getElementById('deleteModal');
+        const icon = document.getElementById('modalIcon');
+        const title = document.getElementById('modalTitle');
+        const message = document.getElementById('modalMessage');
+        const confirmBtn = document.getElementById('confirmDeleteBtn');
+
+        icon.textContent = config.icon || 'warning';
+        icon.className = `material-symbols-outlined text-4xl ${config.iconColor || 'text-error'}`;
+        icon.parentElement.className = `w-20 h-20 ${config.iconBg || 'bg-error/10'} rounded-full flex items-center justify-center mx-auto mb-6`;
+        title.textContent = config.title;
+        message.textContent = config.message;
+        confirmBtn.textContent = config.confirmText || 'Confirm';
+        confirmBtn.className = `flex-1 px-6 py-3.5 rounded-xl font-bold text-white ${config.confirmBtnClass || 'bg-error'} hover:opacity-90 transition-all shadow-lg`;
+        
+        confirmBtn.onclick = async () => {
+            await config.onConfirm();
+            closeDeleteModal();
+        };
+
+        modal.classList.remove('hidden');
+    }
+
+    function closeDeleteModal() {
+        document.getElementById('deleteModal').classList.add('hidden');
+    }
+</script>
+</body> 
+</html>

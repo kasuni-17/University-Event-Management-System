@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Scholar Hub Admin - Add New User</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-bright": "#f8f9fa","surface-container-low": "#f3f4f5","inverse-surface": "#2e3132","surface-dim": "#d9dadb","surface-tint": "#3f5d9c","tertiary": "#574000","on-secondary-fixed": "#002106","background": "#f8f9fa","on-background": "#191c1d","tertiary-fixed": "#ffdf9e","outline": "#747781","secondary": "#006e25","outline-variant": "#c4c6d2","on-error": "#ffffff","on-tertiary-fixed": "#261a00","secondary-fixed": "#83fc8e","on-primary-fixed": "#001944","surface-container-highest": "#e1e3e4","error-container": "#ffdad6","on-tertiary-container": "#ffcc55","on-primary": "#ffffff","tertiary-fixed-dim": "#fabd00","inverse-on-surface": "#f0f1f2","surface-container-lowest": "#ffffff","inverse-primary": "#afc6ff","surface-container-high": "#e7e8e9","primary": "#21417f","on-tertiary-fixed-variant": "#5b4300","surface-variant": "#e1e3e4","on-secondary-fixed-variant": "#00531a","surface": "#f8f9fa","on-secondary-container": "#007327","on-primary-fixed-variant": "#254583","tertiary-container": "#745600","on-surface": "#191c1d","on-error-container": "#93000a","secondary-container": "#80f98b","on-tertiary": "#ffffff","on-surface-variant": "#444650","error": "#ba1a1a","on-primary-container": "#c2d2ff","secondary-fixed-dim": "#66df75","surface-container": "#edeeef","primary-fixed-dim": "#afc6ff","primary-container": "#3b5998","primary-fixed": "#d9e2ff","on-secondary": "#ffffff"
+                    },
+                    fontFamily: {"headline": ["Manrope"],"body": ["Inter"],"label": ["Inter"]},
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; vertical-align: middle; }
+        body { font-family: 'Inter', sans-serif; background-color: #f8f9fa; }
+        h1, h2, h3 { font-family: 'Manrope', sans-serif; }
+    </style>
+    <link rel="stylesheet" href="assets/css/transitions.css">
+</head>
+<body class="bg-background text-on-surface min-h-screen">
+<div id="layout-root">
+<header class="bg-white border-b border-slate-200 sticky-nav h-16 flex items-center shadow-sm">
+  <div class="flex justify-between items-center w-full px-8 max-w-7xl mx-auto h-full">
+    <div class="flex items-center gap-8 h-full">
+      <img src="assets/images/logo.png" alt="SLIIT Events Hub" class="h-10 object-contain">
+      <nav class="hidden md:flex items-center gap-6 font-['Manrope'] font-semibold tracking-tight h-full">
+        <a class="nav-link text-slate-500 hover:text-primary transition-colors h-full flex items-center" href="admin-dashboard.html">Dashboard</a>
+        <a class="nav-link text-slate-500 hover:text-primary transition-colors h-full flex items-center" href="admin-user.html">Users</a>
+        <a class="nav-link text-slate-500 hover:text-primary transition-colors h-full flex items-center" href="admin-events.html">Events</a>
+        <a class="nav-link text-slate-500 hover:text-primary transition-colors h-full flex items-center" href="admin-clubs.html">Clubs</a>
+        <a class="nav-link text-slate-500 hover:text-primary transition-colors h-full flex items-center" href="admin-venue.html">Venues</a>
+        <a class="nav-link text-slate-500 hover:text-primary transition-colors h-full flex items-center" href="admin-feedback.html">Feedback</a>
+      </nav>
+    </div>
+    <div class="flex items-center gap-4 h-full">
+      <button class="p-2 text-slate-500 hover:bg-slate-100 rounded-lg relative">
+        <span class="material-symbols-outlined">notifications</span>
+        <span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+      </button>
+      <div class="flex items-center gap-2 pl-2 border-l border-slate-200 relative cursor-pointer group h-full" onclick="document.getElementById('profileDropdown').classList.toggle('hidden')">
+        <div class="h-9 w-9 rounded-full overflow-hidden border border-slate-200 bg-slate-100 flex items-center justify-center">
+          <span class="material-symbols-outlined text-slate-500">person</span>
+        </div>
+        <span class="text-sm font-semibold text-slate-700 hidden lg:block">Admin User</span>
+        <div id="profileDropdown" class="hidden absolute top-full right-0 mt-4 w-48 bg-white rounded-xl shadow-lg border border-slate-200 py-2 z-50">
+            <a href="javascript:void(0)" onclick="logout()" class="flex items-center gap-2 px-4 py-2 text-sm text-error hover:bg-error/5 transition-colors font-semibold">
+                <span class="material-symbols-outlined text-[18px]">logout</span>
+                Logout
+            </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="page-transition-enter p-6 md:p-12 flex items-center justify-center">
+    <div class="w-full bg-white rounded-2xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] p-8 md:p-12 overflow-hidden relative border border-outline-variant/30 max-w-4xl">
+<form id="newUserForm" class="space-y-10">
+<!-- Personal Information -->
+<section class="bg-surface-container-low/30 rounded-xl p-6 md:p-8 border border-outline-variant/10">
+<div class="flex items-center gap-3 mb-8">
+<div class="w-1.5 h-6 bg-primary rounded-full"></div>
+<h2 class="text-xl font-bold text-on-surface">Personal Information</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+<div class="flex flex-col gap-2">
+<label class="text-xs font-bold uppercase tracking-wider text-outline px-1">Full Name</label>
+<input id="fullName" required class="bg-white border border-outline-variant rounded-lg p-3 focus:ring-2 focus:ring-primary/20 transition-all text-on-surface placeholder:text-outline/40 text-sm outline-none" placeholder="e.g. Julian Montgomery" type="text"/>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-xs font-bold uppercase tracking-wider text-outline px-1">Email Address</label>
+<input id="email" required class="bg-white border border-outline-variant rounded-lg p-3 focus:ring-2 focus:ring-primary/20 transition-all text-on-surface placeholder:text-outline/40 text-sm outline-none" placeholder="j.montgomery@university.edu" type="email"/>
+</div>
+<div class="flex flex-col gap-2 md:col-span-2">
+<label class="text-xs font-bold uppercase tracking-wider text-outline px-1">Password</label>
+<input id="password" required class="bg-white border border-outline-variant rounded-lg p-3 focus:ring-2 focus:ring-primary/20 transition-all text-on-surface placeholder:text-outline/40 text-sm outline-none" placeholder="••••••••" type="password"/>
+</div>
+</div>
+</section>
+<!-- Academic Details -->
+<section class="bg-surface-container-low/30 rounded-xl p-6 md:p-8 border border-outline-variant/10">
+<div class="flex items-center gap-3 mb-8">
+<div class="w-1.5 h-6 bg-primary rounded-full"></div>
+<h2 class="text-xl font-bold text-on-surface">Academic/Professional Details</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+<div class="flex flex-col gap-2">
+<label class="text-xs font-bold uppercase tracking-wider text-outline px-1">Student/Staff ID</label>
+<input id="universityId" required class="bg-white border border-outline-variant rounded-lg p-3 focus:ring-2 focus:ring-primary/20 transition-all text-on-surface placeholder:text-outline/40 text-sm outline-none" placeholder="ID-2024-XXXX" type="text"/>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-xs font-bold uppercase tracking-wider text-outline px-1">Confirm Password</label>
+<input id="confirmPassword" required class="w-full bg-white border border-outline-variant rounded-lg p-3 focus:ring-2 focus:ring-primary/20 transition-all text-on-surface text-sm outline-none" placeholder="••••••••" type="password"/>
+</div>
+</div>
+</section>
+<!-- Account Role -->
+<section class="bg-surface-container-low/30 rounded-xl p-6 md:p-8 border border-outline-variant/10">
+<div class="flex items-center gap-3 mb-6">
+<div class="w-1.5 h-6 bg-primary rounded-full"></div>
+<h2 class="text-xl font-bold text-on-surface">Account Role</h2>
+</div>
+<p class="text-sm text-on-surface-variant mb-6">Assigning a role determines the user's access level across the Scholar Hub ecosystem.</p>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<label class="group relative flex flex-col p-5 bg-white rounded-xl cursor-pointer border-2 border-transparent shadow-sm transition-all hover:bg-surface-container-low has-[:checked]:border-primary has-[:checked]:bg-primary/[0.03]">
+<input checked class="sr-only" name="role" type="radio" value="STUDENT"/>
+<span class="material-symbols-outlined text-primary mb-3 text-2xl">school</span>
+<span class="font-bold text-on-surface text-sm mb-1">Student</span>
+<span class="text-xs text-on-surface-variant leading-relaxed">Standard portal access and record viewing.</span>
+</label>
+<label class="group relative flex flex-col p-5 bg-white rounded-xl cursor-pointer border-2 border-transparent shadow-sm transition-all hover:bg-surface-container-low has-[:checked]:border-primary has-[:checked]:bg-primary/[0.03]">
+<input class="sr-only" name="role" type="radio" value="CLUB_ADMIN"/>
+<span class="material-symbols-outlined text-primary mb-3 text-2xl">groups</span>
+<span class="font-bold text-on-surface text-sm mb-1">Club Admin</span>
+<span class="text-xs text-on-surface-variant leading-relaxed">Manage organization members and events.</span>
+</label>
+<label class="group relative flex flex-col p-5 bg-white rounded-xl cursor-pointer border-2 border-transparent shadow-sm transition-all hover:bg-surface-container-low has-[:checked]:border-primary has-[:checked]:bg-primary/[0.03]">
+<input class="sr-only" name="role" type="radio" value="ADMIN"/>
+<span class="material-symbols-outlined text-primary mb-3 text-2xl">admin_panel_settings</span>
+<span class="font-bold text-on-surface text-sm mb-1">System Admin</span>
+<span class="text-xs text-on-surface-variant leading-relaxed">Full control over institutional settings.</span>
+</label>
+</div>
+</section>
+<!-- Actions Bar -->
+<footer class="pt-10 flex flex-col sm:flex-row items-center justify-end gap-4 border-t border-outline-variant/20">
+<button type="button" class="w-full sm:w-auto px-8 py-3 rounded-lg text-primary font-bold hover:bg-surface-container-high transition-colors text-center" onclick="window.location.href='admin-user.html'">Cancel</button>
+<button type="submit" class="w-full sm:w-auto px-10 py-3 bg-primary text-on-primary rounded-lg font-bold shadow-lg shadow-primary/10 hover:bg-primary/90 transition-all active:scale-95">Create User</button>
+</footer>
+</form>
+
+<script>
+    document.getElementById('newUserForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        
+        if(password !== confirmPassword) {
+            alert('Passwords do not match');
+            return;
+        }
+
+        // Password complexity validation
+        const hasUpper = /[A-Z]/.test(password);
+        const hasLower = /[a-z]/.test(password);
+        const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+        if (password.length < 8 || !hasUpper || !hasLower || !hasSpecial) {
+            alert("Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one special character.");
+            return;
+        }
+
+        const role = document.querySelector('input[name="role"]:checked').value;
+        const email = document.getElementById('email').value;
+
+        // University email validation
+        if (role === 'STUDENT' || role === 'CLUB_ADMIN') {
+            if (!email.toLowerCase().endsWith('@my.sliit.lk')) {
+                alert("Please use a university email (@my.sliit.lk) for Student and Club Admin roles.");
+                return;
+            }
+        }
+
+        const payload = {
+            name: document.getElementById('fullName').value,
+            email: email,
+            universityId: document.getElementById('universityId').value,
+            password: password,
+            role: role,
+            approvalStatus: 'APPROVED',
+            active: true
+        };
+
+        try {
+            const response = await fetch('/api/users', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (response.ok) {
+                alert('User created successfully!');
+                window.location.href = 'admin-user.html';
+            } else {
+                alert('Failed to create user. Please check credentials or try again.');
+            }
+        } catch (error) {
+            console.error('Error creating user:', error);
+            alert('Error creating user.');
+        }
+    });
+
+    function logout() {
+        localStorage.clear();
+        sessionStorage.clear();
+        window.location.href = 'landing-page.html';
+    }
+</script>
+<script src="assets/js/transitions.js"></script>
+    </div>
+</main>
+</div>
+</body></html>

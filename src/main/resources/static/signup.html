@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sign Up | Scholar Hub</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="assets/css/transitions.css">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container-low": "#f3f4f5",
+              "surface": "#f8f9fa",
+              "primary-fixed-dim": "#afc6ff",
+              "on-tertiary-fixed-variant": "#5b4300",
+              "primary-container": "#3b5998",
+              "surface-tint": "#3f5d9c",
+              "on-tertiary-fixed": "#261a00",
+              "on-secondary-fixed-variant": "#00531a",
+              "on-error-container": "#93000a",
+              "primary-fixed": "#d9e2ff",
+              "error-container": "#ffdad6",
+              "inverse-primary": "#afc6ff",
+              "outline": "#747781",
+              "on-tertiary-container": "#ffcc55",
+              "on-tertiary": "#ffffff",
+              "inverse-surface": "#2e3132",
+              "tertiary-container": "#745600",
+              "secondary-container": "#80f98b",
+              "on-secondary": "#ffffff",
+              "surface-container-highest": "#e1e3e4",
+              "background": "#f8f9fa",
+              "secondary": "#006e25",
+              "on-primary-fixed-variant": "#254583",
+              "on-primary": "#ffffff",
+              "on-primary-fixed": "#001944",
+              "tertiary": "#574000",
+              "secondary-fixed-dim": "#66df75",
+              "on-primary-container": "#c2d2ff",
+              "inverse-on-surface": "#f0f1f2",
+              "tertiary-fixed-dim": "#fabd00",
+              "surface-bright": "#f8f9fa",
+              "surface-container-high": "#e7e8e9",
+              "surface-dim": "#d9dadb",
+              "on-error": "#ffffff",
+              "outline-variant": "#c4c6d2",
+              "on-surface": "#191c1d",
+              "on-surface-variant": "#444650",
+              "tertiary-fixed": "#ffdf9e",
+              "surface-container": "#edeeef",
+              "secondary-fixed": "#83fc8e",
+              "primary": "#21417f",
+              "on-secondary-container": "#007327",
+              "surface-variant": "#e1e3e4",
+              "on-secondary-fixed": "#002106",
+              "error": "#ba1a1a",
+              "surface-container-lowest": "#ffffff",
+              "on-background": "#191c1d"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .bg-auth-pattern {
+            background-color: #f8f9fa;
+            background-image: radial-gradient(#d9e2ff 0.5px, transparent 0.5px), radial-gradient(#d9e2ff 0.5px, #f8f9fa 0.5px);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+        }
+    </style>
+</head>
+<body class="bg-auth-pattern font-body text-on-surface min-h-screen flex flex-col">
+<div id="layout-root">
+<main class="page-transition-enter flex-grow flex items-center justify-center px-4 py-12 md:py-20">
+    <div class="w-full max-w-lg bg-surface-container-lowest rounded-xl shadow-[0_12px_40px_rgba(25,28,29,0.06)] overflow-hidden">
+        <div class="px-8 pt-10 pb-6 text-center relative">
+            <!-- Back Button -->
+            <a href="landing-page.html" class="absolute top-6 left-6 flex items-center gap-1 text-slate-400 hover:text-primary transition-colors text-xs font-bold group">
+                <span class="material-symbols-outlined text-[18px] group-hover:-translate-x-1 transition-transform">arrow_back</span>
+                Back
+            </a>
+            <div class="flex flex-col items-center gap-3 mb-6">
+                <img src="assets/images/logo.png" alt="SLIIT Event Hub" class="h-16 w-auto object-contain">
+            </div>
+            <h2 class="font-headline text-xl font-bold text-on-surface">Create Account</h2>
+            <p class="text-on-surface-variant text-sm mt-1">Join the community of academic excellence.</p>
+        </div>
+        <!-- Toast Notification Container -->
+        <div id="signupToast" class="fixed top-6 right-6 z-[9999] transform translate-x-[150%] transition-transform duration-500 ease-out">
+            <div class="bg-surface-container-lowest border-l-4 border-error rounded-xl shadow-2xl p-4 flex items-center gap-4 min-w-[320px]">
+                <div class="bg-error/10 p-2 rounded-full">
+                    <span class="material-symbols-outlined text-error" id="toastIcon">error</span>
+                </div>
+                <div>
+                    <p class="text-sm font-bold text-on-surface" id="toastTitle">Registration Notice</p>
+                    <p id="toastMsg" class="text-xs text-on-surface-variant">Check your details.</p>
+                </div>
+                <button type="button" onclick="hideToast()" class="ml-auto text-outline hover:text-on-surface transition-colors p-2 rounded-full hover:bg-surface-container-low">
+                    <span class="material-symbols-outlined text-[18px]">close</span>
+                </button>
+            </div>
+        </div>
+
+        <form id="signupForm" class="px-8 pb-10 space-y-5 stagger-grid revealed">
+            <!-- Role Selection -->
+            <div class="space-y-3">
+                <label class="font-label text-xs font-semibold uppercase tracking-wider text-outline block">I am a...</label>
+                <div class="flex p-1 bg-surface-container-low rounded-lg gap-1">
+                    <button type="button" onclick="setRole('STUDENT')" id="studentRoleBtn" class="flex-1 py-2 text-sm font-medium rounded-md bg-surface-container-lowest text-primary shadow-sm ring-1 ring-black/5 interactive-spring">Student</button>
+                    <button type="button" onclick="setRole('CLUB_ADMIN')" id="clubRoleBtn" class="flex-1 py-2 text-sm font-medium rounded-md text-on-surface-variant hover:bg-surface-container-high transition-colors interactive-spring">Club Admin</button>
+                </div>
+                <input type="hidden" id="role" value="STUDENT">
+            </div>
+            <!-- Fields -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="space-y-1.5">
+                    <label class="font-label text-xs font-semibold uppercase tracking-wider text-outline ml-1">Full Name</label>
+                    <input id="fullName" required oninput="this.value = this.value.replace(/[^a-zA-Z\s]/g, '')" class="w-full bg-surface-container-low border-none rounded-lg py-3 px-4 text-sm focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-outline/60" placeholder="John Doe" type="text"/>
+                </div>
+                <div class="space-y-1.5">
+                    <label class="font-label text-xs font-semibold uppercase tracking-wider text-outline ml-1">University ID</label>
+                    <input id="universityId" required class="w-full bg-surface-container-low border-none rounded-lg py-3 px-4 text-sm focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-outline/60" placeholder="S123456" type="text"/>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="space-y-1.5" id="studentEmailContainer">
+                    <label class="font-label text-xs font-semibold uppercase tracking-wider text-outline ml-1">Student Email</label>
+                    <input id="email" required class="w-full bg-surface-container-low border-none rounded-lg py-3 px-4 text-sm focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-outline/60" placeholder="name@my.sliit.lk" type="email"/>
+                </div>
+                <div class="space-y-1.5" id="personalEmailContainer">
+                    <label class="font-label text-xs font-semibold uppercase tracking-wider text-outline ml-1">Personal Gmail</label>
+                    <input id="personalEmail" class="w-full bg-surface-container-low border-none rounded-lg py-3 px-4 text-sm focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-outline/60" placeholder="name@gmail.com" type="email"/>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="space-y-1.5 flex flex-col">
+                    <label class="font-label text-xs font-semibold uppercase tracking-wider text-outline ml-1">Password</label>
+                    <input id="password" required class="w-full bg-surface-container-low border-none rounded-lg py-3 px-4 text-sm focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-outline/60" placeholder="••••••••" type="password"/>
+                </div>
+                <div class="space-y-1.5 flex flex-col">
+                    <label class="font-label text-xs font-semibold uppercase tracking-wider text-outline ml-1">Confirm Password</label>
+                    <input id="confirmPassword" required class="w-full bg-surface-container-low border-none rounded-lg py-3 px-4 text-sm focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-outline/60" placeholder="••••••••" type="password"/>
+                </div>
+            </div>
+
+            <!-- Password Validation UI (Moved below the grid for better alignment) -->
+            <div id="passwordValidation" class="max-h-0 overflow-hidden opacity-0 pointer-events-none transition-all duration-300 space-y-2 px-2">
+                <div class="grid grid-cols-2 gap-x-4 gap-y-2">
+                    <div id="val-length" class="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-error transition-colors">
+                        <span class="status-dot w-2 h-2 rounded-full bg-error transition-colors"></span>
+                        8+ Characters
+                    </div>
+                    <div id="val-upper" class="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-error transition-colors">
+                        <span class="status-dot w-2 h-2 rounded-full bg-error transition-colors"></span>
+                        Uppercase
+                    </div>
+                    <div id="val-lower" class="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-error transition-colors">
+                        <span class="status-dot w-2 h-2 rounded-full bg-error transition-colors"></span>
+                        Lowercase
+                    </div>
+                    <div id="val-special" class="flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-error transition-colors">
+                        <span class="status-dot w-2 h-2 rounded-full bg-error transition-colors"></span>
+                        Special Char
+                    </div>
+                </div>
+            </div>
+            <!-- Checkbox -->
+            <div class="flex items-start gap-3 pt-2">
+                <input required class="mt-1 rounded bg-surface-container-low border-outline-variant text-primary focus:ring-primary" id="terms" type="checkbox"/>
+                <label class="text-xs text-on-surface-variant leading-relaxed" for="terms">
+                    I agree to the <a class="text-primary font-medium hover:underline" href="#">Terms of Service</a> and <a class="text-primary font-medium hover:underline" href="#">Privacy Policy</a>.
+                </label>
+            </div>
+            <!-- Action Button -->
+            <button class="w-full bg-gradient-to-br from-primary to-primary-container text-on-primary font-headline font-bold py-4 rounded-xl shadow-lg shadow-primary/20 hover:scale-[0.98] active:scale-95 transition-all duration-150 magnetic-btn" type="submit">
+                Create Account
+            </button>
+        </form>
+
+        <script>
+            function setRole(role) {
+                document.getElementById('role').value = role;
+                const studentBtn = document.getElementById('studentRoleBtn');
+                const clubBtn = document.getElementById('clubRoleBtn');
+                const activeClass = "flex-1 py-2 text-sm font-medium rounded-md bg-surface-container-lowest text-primary shadow-sm ring-1 ring-black/5";
+                const inactiveClass = "flex-1 py-2 text-sm font-medium rounded-md text-on-surface-variant hover:bg-surface-container-high transition-colors";
+                
+                if (role === 'STUDENT') {
+                    studentBtn.className = activeClass;
+                    clubBtn.className = inactiveClass;
+                } else {
+                    studentBtn.className = inactiveClass;
+                    clubBtn.className = activeClass;
+                }
+            }
+
+            function showToast(message, type = 'error') {
+                const toast = document.getElementById('signupToast');
+                const toastMsg = document.getElementById('toastMsg');
+                const toastTitle = document.getElementById('toastTitle');
+                const toastIcon = document.getElementById('toastIcon');
+                const toastContainer = toast.querySelector('div');
+                
+                toastMsg.innerText = message;
+                
+                if (type === 'success') {
+                   toastTitle.innerText = "Success";
+                   toastIcon.innerText = "check_circle";
+                   toastContainer.classList.remove('border-error');
+                   toastContainer.classList.add('border-green-500');
+                   toastIcon.classList.remove('text-error');
+                   toastIcon.classList.add('text-green-500');
+                } else {
+                   toastTitle.innerText = "Registration Notice";
+                   toastIcon.innerText = "error";
+                   toastContainer.classList.remove('border-green-500');
+                   toastContainer.classList.add('border-error');
+                   toastIcon.classList.remove('text-green-500');
+                   toastIcon.classList.add('text-error');
+                }
+                
+                toast.classList.remove('translate-x-[150%]');
+                toast.classList.add('translate-x-0');
+                setTimeout(hideToast, 5000);
+            }
+
+            function hideToast() {
+                const toast = document.getElementById('signupToast');
+                toast.classList.remove('translate-x-0');
+                toast.classList.add('translate-x-[150%]');
+            }
+
+            const passwordInput = document.getElementById('password');
+            const validationUI = document.getElementById('passwordValidation');
+
+            passwordInput.addEventListener('focus', () => {
+                validationUI.classList.remove('opacity-0', 'pointer-events-none');
+                validationUI.classList.add('opacity-100', 'max-h-[100px]');
+            });
+
+            passwordInput.addEventListener('input', () => {
+                const val = passwordInput.value;
+                
+                const checks = {
+                    length: val.length >= 8,
+                    upper: /[A-Z]/.test(val),
+                    lower: /[a-z]/.test(val),
+                    special: /[!@#$%^&*(),.?":{}|<>]/.test(val)
+                };
+
+                updateValStatus('val-length', checks.length);
+                updateValStatus('val-upper', checks.upper);
+                updateValStatus('val-lower', checks.lower);
+                updateValStatus('val-special', checks.special);
+            });
+
+            function updateValStatus(id, isValid) {
+                const el = document.getElementById(id);
+                const dot = el.querySelector('.status-dot');
+                if (isValid) {
+                    el.classList.remove('text-error');
+                    el.classList.add('text-green-600');
+                    dot.classList.remove('bg-error');
+                    dot.classList.add('bg-green-600');
+                } else {
+                    el.classList.remove('text-green-600');
+                    el.classList.add('text-error');
+                    dot.classList.remove('bg-green-600');
+                    dot.classList.add('bg-error');
+                }
+            }
+
+            document.getElementById('signupForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const fullName = document.getElementById('fullName').value.trim();
+                const universityId = document.getElementById('universityId').value.trim();
+                const email = document.getElementById('email').value.trim().toLowerCase();
+                const personalEmail = document.getElementById('personalEmail').value.trim().toLowerCase();
+                const password = document.getElementById('password').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                const role = document.getElementById('role').value;
+
+                if (!email.endsWith("@my.sliit.lk")) {
+                    showToast("Please use your SLIIT student email (@my.sliit.lk)");
+                    return;
+                }
+
+                if (!personalEmail.endsWith("@gmail.com")) {
+                    showToast("Please provide a personal Gmail address");
+                    return;
+                }
+                
+                if (password !== confirmPassword) {
+                    showToast("Passwords do not match");
+                    return;
+                }
+
+                // Password complexity check
+                const hasUpper = /[A-Z]/.test(password);
+                const hasLower = /[a-z]/.test(password);
+                const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+                
+                if (password.length < 8 || !hasUpper || !hasLower || !hasSpecial) {
+                    showToast("Password must fulfill all security requirements.");
+                    return;
+                }
+
+                const payload = {
+                    name: fullName,
+                    universityId: universityId,
+                    email: email,
+                    personalEmail: personalEmail,
+                    password: password,
+                    role: role
+                };
+
+                try {
+                    // Send OTP request to student email
+                    const otpRes = await fetch('/api/users/request-otp', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({ email: email })
+                    });
+                    
+                    if (otpRes.ok) {
+                        // Store data temporarily and redirect
+                        localStorage.setItem('pendingEmail', email);
+                        localStorage.setItem('signupData', JSON.stringify(payload));
+                        
+                        showToast("OTP sent to " + email + ". Redirecting...", "success");
+                        setTimeout(() => window.location.href = 'otp-verification.html', 1500);
+                    } else {
+                        const errorText = await otpRes.text();
+                        console.error("OTP Request Failed:", errorText);
+                        showToast(errorText || "Could not send verification code. Please try again.");
+                    }
+                } catch (err) {
+                    console.error(err);
+                    showToast("Server error. Please try again later.");
+                }
+            });
+        </script>
+<!-- Footer link -->
+<div class="bg-surface-container-low/50 py-6 px-8 text-center border-t border-outline-variant/10">
+<p class="text-sm text-on-surface-variant">
+Already have an account? <a class="text-primary font-bold hover:underline" href="login.html">Sign in</a>
+</p>
+</div>
+</div>
+</main>
+<footer class="bg-[#f8f9fa] w-full py-8 border-t border-slate-200/15">
+<div class="w-full max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center px-8 gap-4">
+<p class="font-inter text-xs text-slate-500">© 2024 Scholar Hub Portal. All rights reserved.</p>
+<div class="flex gap-6">
+<a class="font-inter text-xs text-slate-400 hover:text-[#21417f] transition-opacity duration-200" href="#">Privacy Policy</a>
+<a class="font-inter text-xs text-slate-400 hover:text-[#21417f] transition-opacity duration-200" href="#">Terms of Service</a>
+<a class="font-inter text-xs text-slate-400 hover:text-[#21417f] transition-opacity duration-200" href="#">Help Center</a>
+<a class="font-inter text-xs text-slate-400 hover:text-[#21417f] transition-opacity duration-200" href="#">Contact</a>
+</div>
+</div>
+</footer>
+</div>
+    <script src="assets/js/transitions.js"></script>
+</body></html>

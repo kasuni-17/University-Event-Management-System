@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Event Registration - Scholar Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@700;800&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#21417f",
+              "primary-container": "#3b5998",
+              "on-primary": "#ffffff",
+              "surface": "#f8f9fa",
+              "surface-container-lowest": "#ffffff",
+              "surface-container-low": "#f3f4f5",
+              "surface-container": "#edeeef",
+              "surface-container-high": "#e7e8e9",
+              "on-surface": "#191c1d",
+              "on-surface-variant": "#444650",
+              "outline": "#747781",
+              "outline-variant": "#c4c6d2",
+              "on-background": "#191c1d",
+              "secondary": "#006e25",
+              "secondary-container": "#80f98b",
+              "on-secondary-container": "#007327"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+    <style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface">
+
+<!-- Background Simulation Layer (Blurred) -->
+<div class="fixed inset-0 overflow-hidden pointer-events-none grayscale-[0.2] opacity-50">
+    <header class="bg-white border-b border-slate-200 h-16 flex items-center px-8">
+        <div class="text-xl font-bold text-primary">Scholar Hub</div>
+    </header>
+    <main class="max-w-7xl mx-auto p-8 pt-12">
+        <div class="h-8 w-64 bg-slate-200 rounded mb-8"></div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="h-64 bg-slate-100 rounded-xl"></div>
+            <div class="h-64 bg-slate-100 rounded-xl"></div>
+            <div class="h-64 bg-slate-100 rounded-xl"></div>
+        </div>
+    </main>
+</div>
+
+<!-- Modal Overlay -->
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <!-- Backdrop with strong blur -->
+    <div class="absolute inset-0 bg-on-background/40 backdrop-blur-md"></div>
+    
+    <!-- Modal Container -->
+    <div class="relative w-full max-w-xl bg-surface-container-lowest rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-300">
+        <!-- Scrollable content area -->
+        <div class="max-h-[90vh] overflow-y-auto">
+            <!-- Header Section -->
+            <div class="p-8 bg-surface-container-low">
+                <div class="flex justify-between items-start mb-6">
+                    <div>
+                        <span class="text-primary font-bold text-xs uppercase tracking-widest block mb-1">Secure Your Spot</span>
+                        <h2 id="eventTitle" class="font-headline text-2xl font-extrabold text-on-background tracking-tight">---</h2>
+                    </div>
+                    <button onclick="history.back()" class="text-outline hover:text-on-surface-variant transition-colors p-1 rounded-lg hover:bg-white">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="flex items-center gap-3 bg-white p-3 rounded-xl border border-slate-100">
+                        <div class="w-10 h-10 rounded-lg bg-primary/5 flex items-center justify-center text-primary">
+                            <span class="material-symbols-outlined text-xl">calendar_today</span>
+                        </div>
+                        <div>
+                            <p class="text-[9px] text-slate-400 uppercase font-black tracking-tighter">Event Date</p>
+                            <p id="eventDate" class="text-sm font-bold text-slate-700">---</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 bg-white p-3 rounded-xl border border-slate-100">
+                        <div class="w-10 h-10 rounded-lg bg-primary/5 flex items-center justify-center text-primary">
+                            <span class="material-symbols-outlined text-xl">schedule</span>
+                        </div>
+                        <div>
+                            <p class="text-[9px] text-slate-400 uppercase font-black tracking-tighter">Start Time</p>
+                            <p id="eventTime" class="text-sm font-bold text-slate-700">---</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Section -->
+            <form id="registrationForm" class="p-8 space-y-6">
+                <div class="space-y-5">
+                    <!-- Full Name -->
+                    <div class="space-y-2">
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest">Full Name</label>
+                        <input id="studentName" required type="text" 
+                               class="w-full px-4 py-3 bg-slate-50 border-none rounded-xl text-sm focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-slate-300" 
+                               placeholder="e.g. John Doe">
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <!-- Student ID -->
+                        <div class="space-y-2">
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest">Student ID</label>
+                            <input id="studentId" required type="text" 
+                                   class="w-full px-4 py-3 bg-slate-50 border-none rounded-xl text-sm focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-slate-300" 
+                                   placeholder="e.g. IT21xxxx">
+                        </div>
+                        <!-- Email -->
+                        <div class="space-y-2">
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest">University Email</label>
+                            <input id="studentEmail" required type="email" 
+                                   class="w-full px-4 py-3 bg-slate-50 border-none rounded-xl text-sm focus:ring-2 focus:ring-primary/20 transition-all placeholder:text-slate-300" 
+                                   placeholder="name@sliit.lk">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Terms -->
+                <label class="flex items-start gap-3 cursor-pointer group">
+                    <input required class="mt-1 h-5 w-5 rounded-md border-slate-200 text-primary focus:ring-primary/20 transition-all" type="checkbox">
+                    <span class="text-xs text-slate-500 leading-relaxed group-hover:text-slate-700 transition-colors">
+                        I confirm that all information provided is accurate and I agree to the <span class="text-primary font-bold hover:underline">Event Code of Conduct</span>.
+                    </span>
+                </label>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-col gap-3 pt-4">
+                    <button type="submit" class="w-full py-4 bg-gradient-to-br from-primary to-primary-container text-white font-headline font-bold text-sm rounded-xl shadow-lg shadow-primary/20 active:scale-[0.98] transition-all">
+                        Confirm Registration
+                    </button>
+                    <button type="button" onclick="history.back()" class="w-full py-2 text-slate-500 font-bold text-sm hover:text-primary transition-colors">
+                        Go Back
+                    </button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Bottom Flare -->
+        <div class="h-1.5 w-full bg-gradient-to-r from-primary via-primary-container to-secondary"></div>
+    </div>
+</div>
+
+<script>
+    let currentEventId = null;
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        currentEventId = urlParams.get('eventId');
+        
+        // Load User Info
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (user) {
+            document.getElementById('studentName').value = user.name || '';
+            document.getElementById('studentEmail').value = user.email || '';
+        }
+
+        if (currentEventId) {
+            fetchEventDetails(currentEventId);
+        }
+
+        document.getElementById('registrationForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            submitRegistration();
+        });
+    });
+
+    async function fetchEventDetails(id) {
+        try {
+            const resp = await fetch(`/api/events/${id}`);
+            const ev = await resp.json();
+            
+            document.getElementById('eventTitle').textContent = ev.title;
+            document.getElementById('eventDate').textContent = new Date(ev.startTime).toLocaleDateString(undefined, {
+                month: 'short', day: 'numeric', year: 'numeric'
+            });
+            document.getElementById('eventTime').textContent = new Date(ev.startTime).toLocaleTimeString([], {
+                hour: '2-digit', minute: '2-digit'
+            });
+        } catch (e) {
+            console.error("Failed to load event context", e);
+        }
+    }
+
+    async function submitRegistration() {
+        const payload = {
+            eventId: currentEventId,
+            studentName: document.getElementById('studentName').value,
+            studentId: document.getElementById('studentId').value,
+            studentEmail: document.getElementById('studentEmail').value
+        };
+
+        // Simulated API call
+        console.log("Submitting Registration:", payload);
+        
+        // Success experience
+        alert("Registration Successful! Redirecting to events...");
+        window.location.href = 'student-event.html';
+    }
+</script>
+</body>
+</html>

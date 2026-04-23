@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Join Club | Scholar Hub Student</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="assets/css/transitions.css">
+    <script id="tailwind-config">
+          tailwind.config = {
+            darkMode: "class",
+            theme: {
+              extend: {
+                colors: {
+                  "primary": "#4F46E5",
+                  "primary-hover": "#4338CA",
+                  "surface": "#F9FAFB",
+                  "on-surface": "#111827",
+                  "slate-custom": "#6B7280"
+                },
+                fontFamily: {
+                  "headline": ["Manrope"],
+                  "body": ["Inter"]
+                },
+                borderRadius: {"DEFAULT": "0.125rem", "lg": "0.5rem", "xl": "1rem", "2xl": "1.5rem"},
+              },
+            },
+          }
+    </script>
+    <style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+        .modal-shadow { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15); }
+    </style>
+</head>
+<body class="text-on-surface min-h-screen flex items-center justify-center p-4">
+
+    <!-- Modal Container -->
+    <div class="w-full max-w-[500px] bg-white rounded-[2rem] modal-shadow overflow-hidden motion-fade-scale">
+        
+        <!-- Modal Header -->
+        <div class="px-8 pt-8 pb-4 flex justify-between items-center">
+            <h1 id="modalTitle" class="text-2xl font-extrabold font-headline text-on-surface">Join Club</h1>
+            <button onclick="history.back()" class="text-slate-custom hover:text-on-surface transition-colors">
+                <span class="material-symbols-outlined text-2xl">close</span>
+            </button>
+        </div>
+
+        <div class="px-8 pb-10">
+            <!-- Club Info Badge -->
+            <div id="clubSummary" class="flex items-center gap-4 mb-8 p-4 bg-[#F5F8FF] rounded-2xl border border-[#EEF2FF]">
+                <div class="w-14 h-14 bg-white rounded-full shadow-sm flex items-center justify-center overflow-hidden">
+                    <img id="clubLogo" src="" alt="Club Logo" class="w-full h-full object-cover hidden">
+                    <span id="clubLogoFallback" class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1">group</span>
+                </div>
+                <div>
+                    <h2 id="clubName" class="text-lg font-bold font-headline text-on-surface">Loading Club...</h2>
+                    <p id="clubMeta" class="text-sm text-slate-custom font-medium">350+ Members • Technology</p>
+                </div>
+            </div>
+
+            <!-- Form -->
+            <form id="joinClubForm" class="space-y-6">
+                <div class="space-y-2">
+                    <label class="block text-[0.9375rem] font-bold text-on-surface font-headline">Full Name</label>
+                    <input id="fullName" required readonly class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-[0.9375rem] focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-slate-custom cursor-not-allowed" placeholder="Enter your full name" type="text"/>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="block text-[0.9375rem] font-bold text-on-surface font-headline">Student ID</label>
+                    <input id="universityId" required readonly class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-[0.9375rem] focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-slate-custom cursor-not-allowed" placeholder="e.g. IT21xxxxxx" type="text"/>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="block text-[0.9375rem] font-bold text-on-surface font-headline">Why do you want to join?</label>
+                    <textarea id="reason" required class="w-full h-32 px-4 py-3 bg-white border border-slate-200 rounded-xl text-[0.9375rem] focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-none placeholder:text-slate-400" placeholder="Tell us about your interest..."></textarea>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex gap-4 pt-4">
+                    <button type="button" onclick="history.back()" class="flex-1 py-4 px-6 border border-slate-200 rounded-xl font-bold text-slate-custom hover:bg-slate-50 hover:text-on-surface transition-all active:scale-95">
+                        Cancel
+                    </button>
+                    <button type="submit" id="submitBtn" class="flex-1 py-4 px-6 bg-[#4F46E5] text-white rounded-xl font-bold hover:bg-[#4338CA] transition-all active:scale-95 shadow-lg shadow-primary/20 magnetic-btn">
+                        Submit Application
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Success Message (Overlay style) -->
+    <div id="successOverlay" class="hidden fixed inset-0 flex items-center justify-center bg-black/20 backdrop-blur-sm z-50 p-4">
+        <div class="bg-white rounded-[2rem] p-10 max-w-sm w-full text-center shadow-2xl motion-fade-scale">
+            <div class="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                <span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1">check_circle</span>
+            </div>
+            <h2 class="text-2xl font-extrabold font-headline text-on-surface mb-2">Success!</h2>
+            <p class="text-slate-custom mb-8">Your application has been submitted to the club administrator.</p>
+            <button onclick="window.location.href='student-clubs.html'" class="w-full py-4 bg-primary text-white rounded-xl font-bold hover:brightness-110 transition-all active:scale-95">
+                Go to Clubs
+            </button>
+        </div>
+    </div>
+
+    <script src="assets/js/transitions.js"></script>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const clubId = urlParams.get('id');
+        const user = JSON.parse(localStorage.getItem('user'));
+
+        if (!user) window.location.href = 'login.html';
+        if (!clubId) window.location.href = 'student-clubs.html';
+
+        // Pre-fill user data
+        document.getElementById('fullName').value = user.name || '';
+        document.getElementById('universityId').value = user.universityId || '';
+
+        async function fetchClubDetails() {
+            try {
+                const resp = await fetch(`/api/clubs/${clubId}`);
+                if (resp.ok) {
+                    const club = await resp.json();
+                    document.getElementById('modalTitle').textContent = `Join ${club.name}`;
+                    document.getElementById('clubName').textContent = club.name;
+                    document.getElementById('clubMeta').textContent = `${club.category || 'Organization'} • Active Community`;
+                    
+                    if (club.logoUrl) {
+                        document.getElementById('clubLogo').src = club.logoUrl;
+                        document.getElementById('clubLogo').classList.remove('hidden');
+                        document.getElementById('clubLogoFallback').classList.add('hidden');
+                    }
+                }
+            } catch (e) {
+                console.error("Failed to load club details", e);
+            }
+        }
+
+        document.getElementById('joinClubForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            const reason = document.getElementById('reason').value;
+            
+            btn.disabled = true;
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin mr-2">sync</span> Sending...';
+
+            try {
+                // Correctly passing reason as a URL parameter to match @RequestParam
+                const resp = await fetch(`/api/membership/join/${user.id}/${clubId}?reason=${encodeURIComponent(reason)}`, {
+                    method: 'POST'
+                });
+
+                if (resp.ok) {
+                    document.getElementById('successOverlay').classList.remove('hidden');
+                } else {
+                    const errorText = await resp.text();
+                    alert("Submission failed: " + (errorText || "Please check your network connection and try again."));
+                    btn.disabled = false;
+                    btn.innerHTML = 'Submit Application';
+                }
+            } catch (err) {
+                console.error("Fetch error:", err);
+                alert("Network error occurred. Please try again.");
+                btn.disabled = false;
+                btn.innerHTML = 'Submit Application';
+            }
+        });
+
+        fetchClubDetails();
+    </script>
+</body>
+</html>

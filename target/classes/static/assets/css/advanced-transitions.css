@@ -1,0 +1,591 @@
+/**
+ * ============================================================================
+ * ADVANCED TRANSITIONS CSS
+ * Premium Page Transitions & Micro-Interactions
+ * ============================================================================
+ */
+
+/* ============================================================================
+   1. ROOT VARIABLES & FOUNDATION
+   ============================================================================ */
+
+:root {
+    /* Timing */
+    --transition-duration-fast: 150ms;
+    --transition-duration-normal: 300ms;
+    --transition-duration-page: 400ms;
+    --transition-duration-modal: 350ms;
+    --transition-duration-shared: 600ms;
+
+    /* Easing */
+    --easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
+    --easing-accelerate: cubic-bezier(0.4, 0, 1, 1);
+    --easing-decelerate: cubic-bezier(0, 0, 0.2, 1);
+    --easing-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    /* Shadows for depth */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.15);
+    --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* ============================================================================
+   2. TRANSITION OVERLAY STYLES
+   ============================================================================ */
+
+.transition-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    pointer-events: none;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%);
+    will-change: opacity;
+}
+
+/* ============================================================================
+   3. PAGE TRANSITION CONTAINER
+   ============================================================================ */
+
+.page-transition-container {
+    position: relative;
+    overflow: hidden;
+    will-change: transform, opacity;
+}
+
+/* Animation state classes */
+.page-transitioning-out {
+    pointer-events: none;
+}
+
+.page-transitioning-in {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* ============================================================================
+   4. SHARED ELEMENT STYLES
+   ============================================================================ */
+
+[data-shared-element] {
+    will-change: transform, opacity;
+    position: relative; /* Required for FLIP transforms */
+}
+
+/* Example: Shared avatar */
+[data-shared-element="avatar"] {
+    border-radius: 50%;
+}
+
+/* Example: Shared header */
+[data-shared-element="header"] {
+    z-index: 100;
+}
+
+/* Example: Shared card */
+[data-shared-element="card"] {
+    /* Will be transformed during transition */
+}
+
+/* ============================================================================
+   5. SKELETON LOADING STYLES
+   ============================================================================ */
+
+.skeleton {
+    background: linear-gradient(
+        90deg,
+        rgba(0, 0, 0, 0.05) 25%,
+        rgba(0, 0, 0, 0.1) 50%,
+        rgba(0, 0, 0, 0.05) 75%
+    );
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* Skeleton elements */
+.skeleton-header {
+    height: 60px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+
+.skeleton-card {
+    height: 200px;
+    border-radius: 12px;
+    margin-bottom: 16px;
+}
+
+.skeleton-text {
+    height: 16px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.skeleton-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+/* Content to be revealed */
+.content {
+    opacity: 0;
+    /* Will be animated in by JavaScript */
+}
+
+/* ============================================================================
+   6. MODAL & DRAWER STYLES
+   ============================================================================ */
+
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9998;
+    backdrop-filter: blur(0px);
+    will-change: backdrop-filter, opacity;
+    transition: opacity var(--transition-duration-modal) var(--easing-standard);
+}
+
+.modal-wrapper {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    max-height: 90vh;
+    overflow-y: auto;
+    width: 90%;
+    max-width: 600px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: var(--shadow-xl);
+    will-change: transform, opacity;
+
+    /* Smooth scroller styling */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 0, 0, 0.1) transparent;
+
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0.1);
+        border-radius: 3px;
+
+        &:hover {
+            background: rgba(0, 0, 0, 0.2);
+        }
+    }
+}
+
+/* Drawer styles */
+.drawer-bottom {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    background: white;
+    border-radius: 12px 12px 0 0;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.15);
+    max-height: 80vh;
+    overflow-y: auto;
+    will-change: transform;
+}
+
+.drawer-side {
+    position: fixed;
+    top: 0;
+    right: 0; /* or left: 0 for left drawer */
+    height: 100%;
+    width: 400px;
+    background: white;
+    box-shadow: -4px 0 12px rgba(0, 0, 0, 0.15);
+    z-index: 9999;
+    overflow-y: auto;
+    will-change: transform;
+
+    @media (max-width: 640px) {
+        width: 100%;
+    }
+}
+
+/* ============================================================================
+   7. BUTTON MICRO-INTERACTIONS
+   ============================================================================ */
+
+button,
+[role="button"],
+.btn {
+    position: relative;
+    will-change: transform;
+    transition: all var(--transition-duration-fast) var(--easing-standard);
+
+    /* Disable default active state */
+    &:active {
+        transform: scale(0.96);
+    }
+
+    /* Ripple effect */
+    &::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.5);
+        transform: translate(-50%, -50%) scale(0);
+        pointer-events: none;
+        will-change: transform;
+    }
+
+    &:active::after {
+        animation: ripple-effect 0.6s ease-out;
+    }
+}
+
+@keyframes ripple-effect {
+    from {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 1;
+    }
+    to {
+        transform: translate(-50%, -50%) scale(4);
+        opacity: 0;
+    }
+}
+
+/* Primary button specific */
+.btn-primary {
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba(99, 102, 241, 0.3);
+    }
+
+    &:active {
+        transform: translateY(0) scale(0.96);
+        box-shadow: 0 4px 8px rgba(99, 102, 241, 0.2);
+    }
+}
+
+/* ============================================================================
+   8. CARD MICRO-INTERACTIONS
+   ============================================================================ */
+
+.card,
+.card-hover,
+[data-shared-element="card"] {
+    position: relative;
+    will-change: transform, box-shadow;
+    transition: all var(--transition-duration-normal) var(--easing-standard);
+    box-shadow: var(--shadow-sm);
+
+    &:hover {
+        transform: translateY(-6px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    &:active {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+    }
+}
+
+/* ============================================================================
+   9. INPUT MICRO-INTERACTIONS
+   ============================================================================ */
+
+input,
+textarea,
+select {
+    will-change: box-shadow, border-color;
+    transition: all var(--transition-duration-fast) var(--easing-standard);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+
+    &:focus {
+        outline: none;
+        border-color: rgba(99, 102, 241, 0.5);
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1), 0 0 0 1px rgba(99, 102, 241, 0.5);
+    }
+
+    &.error {
+        border-color: #ef4444;
+        box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+    }
+
+    &.input-shake {
+        animation: input-shake 0.4s ease-in-out;
+    }
+}
+
+@keyframes input-shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+/* ============================================================================
+   10. NAVIGATION TRANSITIONS
+   ============================================================================ */
+
+/* Sidebar */
+.sidebar {
+    will-change: width;
+    transition: width var(--transition-duration-normal) var(--easing-spring);
+    background: white;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-icon {
+    will-change: opacity, transform;
+    transition: all var(--transition-duration-normal) var(--easing-spring);
+    opacity: 1;
+
+    .sidebar.collapsed & {
+        opacity: 0.7;
+    }
+}
+
+.sidebar-label {
+    will-change: opacity;
+    transition: opacity var(--transition-duration-fast) var(--easing-standard);
+    opacity: 1;
+
+    .sidebar.collapsed & {
+        opacity: 0;
+        position: absolute;
+        pointer-events: none;
+    }
+}
+
+/* Tabs */
+.tab-bar {
+    position: relative;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.tab-underline {
+    position: absolute;
+    bottom: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #6366f1, #3b82f6);
+    will-change: left, width;
+    transition: all var(--transition-duration-normal) var(--easing-spring);
+}
+
+.tab-link {
+    will-change: color;
+    transition: color var(--transition-duration-fast) var(--easing-standard);
+    padding-bottom: 12px;
+    color: rgba(0, 0, 0, 0.6);
+
+    &:hover {
+        color: rgba(0, 0, 0, 0.8);
+    }
+
+    &.active {
+        color: #6366f1;
+    }
+}
+
+/* ============================================================================
+   11. SCROLL-BASED ANIMATIONS
+   ============================================================================ */
+
+[data-scroll-animate] {
+    opacity: 0;
+    transform: translateY(20px);
+    will-change: opacity, transform;
+}
+
+/* ============================================================================
+   12. ACCESSIBILITY: REDUCED MOTION
+   ============================================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    .skeleton {
+        animation: none;
+        background: rgba(0, 0, 0, 0.1);
+    }
+
+    [data-scroll-animate] {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ============================================================================
+   13. PERFORMANCE OPTIMIZATIONS
+   ============================================================================ */
+
+/* GPU acceleration for frequently animated elements */
+.card,
+.modal-wrapper,
+.drawer-bottom,
+.drawer-side,
+button,
+[data-shared-element],
+[data-scroll-animate] {
+    transform: translateZ(0); /* GPU acceleration */
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+/* Disable animations on low-end devices */
+@media (max-width: 480px) {
+    /* Reduce animation complexity on mobile */
+    .skeleton {
+        animation-duration: 2s; /* Slower on mobile */
+    }
+
+    .card {
+        &:hover {
+            transform: translateY(-3px); /* Less dramatic */
+        }
+    }
+}
+
+/* ============================================================================
+   14. VARIANT ANIMATIONS
+   ============================================================================ */
+
+/* Slide from right */
+.animate-slide-right {
+    animation: slide-right var(--transition-duration-page) var(--easing-decelerate) forwards;
+}
+
+@keyframes slide-right {
+    from {
+        transform: translateX(40px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Slide from left */
+.animate-slide-left {
+    animation: slide-left var(--transition-duration-page) var(--easing-decelerate) forwards;
+}
+
+@keyframes slide-left {
+    from {
+        transform: translateX(-40px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Fade in */
+.animate-fade-in {
+    animation: fade-in var(--transition-duration-page) var(--easing-decelerate) forwards;
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Scale up */
+.animate-scale-up {
+    animation: scale-up var(--transition-duration-page) var(--easing-decelerate) forwards;
+}
+
+@keyframes scale-up {
+    from {
+        transform: scale(0.95);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* ============================================================================
+   15. UTILITY CLASSES
+   ============================================================================ */
+
+.transition-fast {
+    transition: all var(--transition-duration-fast) var(--easing-standard);
+}
+
+.transition-normal {
+    transition: all var(--transition-duration-normal) var(--easing-standard);
+}
+
+.transition-page {
+    transition: all var(--transition-duration-page) var(--easing-standard);
+}
+
+.transition-modal {
+    transition: all var(--transition-duration-modal) var(--easing-standard);
+}
+
+/* Will-change utilities (use sparingly) */
+.will-animate {
+    will-change: transform, opacity;
+}
+
+.will-scroll {
+    will-change: scroll-position;
+}
+
+/* ============================================================================
+   16. PRINT STYLES (Disable animations)
+   ============================================================================ */
+
+@media print {
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+}

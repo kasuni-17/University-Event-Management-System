@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Scholar Hub | Event Feedback</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="assets/css/transitions.css">
+    <script id="tailwind-config">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#21417f",
+                        "on-primary": "#ffffff",
+                        "on-surface": "#191c1d",
+                        "on-surface-variant": "#444650",
+                        "surface-container-low": "#f3f4f5",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-container": "#c2d2ff",
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"]
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .star-rating .material-symbols-outlined { cursor: pointer; transition: all 0.2s; }
+        .star-rating .material-symbols-outlined:hover, 
+        .star-rating .material-symbols-outlined.active { font-variation-settings: 'FILL' 1; color: #fbbf24; }
+        .tab-active { background-color: #eff6ff; color: #21417f; border: 1px solid #dbeafe; }
+        body { background-color: #f8fafc; }
+    </style>
+</head>
+<body class="font-body text-on-surface antialiased">
+<header class="bg-white border-b border-slate-200 sticky top-0 z-50 h-16 flex items-center shadow-sm">
+    <div class="max-w-7xl mx-auto px-6 w-full flex justify-between items-center">
+        <div class="flex items-center gap-12" id="navContainer">
+            <!-- Nav populated via roles -->
+        </div>
+        <div class="flex items-center gap-4">
+            <button class="relative p-2 text-slate-500 hover:text-primary transition-colors">
+                <span class="material-symbols-outlined">notifications</span>
+                <span class="absolute top-2.5 right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+            </button>
+            <div class="flex items-center gap-3 pl-3 border-l border-slate-200 relative cursor-pointer group" onclick="document.getElementById('profileDropdown').classList.toggle('hidden')">
+                <div class="h-9 w-9 rounded-full overflow-hidden border border-slate-200 bg-slate-100 flex items-center justify-center" data-flip-id="user-profile">
+                    <span class="material-symbols-outlined text-slate-500">person</span>
+                </div>
+                <span id="userName" class="text-sm font-semibold text-slate-700 hidden lg:block">Student User</span>
+                <span class="material-symbols-outlined text-sm text-slate-400">expand_more</span>
+                
+                <div id="profileDropdown" class="hidden absolute top-full right-0 mt-4 w-48 bg-white rounded-xl shadow-lg border border-slate-200 py-2 z-50">
+                    <div class="px-4 py-2 border-b border-slate-100 mb-1">
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Account</p>
+                    </div>
+                    <a href="profile.html" class="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors">
+                        <span class="material-symbols-outlined text-[18px]">person</span>
+                        My Profile
+                    </a>
+                    <div class="h-[1px] bg-slate-100 my-1 mx-2"></div>
+                    <a href="javascript:void(0)" onclick="logout()" class="flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors font-semibold">
+                        <span class="material-symbols-outlined text-[18px]">logout</span>
+                        Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-6 py-12 motion-fade-scale">
+    <div class="text-center mb-12">
+        <h1 class="text-4xl font-extrabold font-headline text-slate-900 mb-2">Event Feedback</h1>
+        <p class="text-slate-500">Share your experience or read what others have to say</p>
+    </div>
+
+    <!-- Standard Tabs -->
+    <div class="flex justify-center mb-12">
+        <div id="feedbackTabs" class="inline-flex p-1 bg-white rounded-2xl shadow-sm border border-slate-200">
+            <button onclick="switchTab('submit')" id="tab-submit" class="px-6 py-3 text-sm font-bold rounded-xl tab-active">Submit Feedback</button>
+            <button onclick="switchTab('all')" id="tab-all" class="px-6 py-3 text-sm font-semibold rounded-xl text-slate-500 hover:bg-slate-50 transition-colors">All Feedbacks</button>
+            <button onclick="switchTab('mysent')" id="tab-mysent" class="px-6 py-3 text-sm font-semibold rounded-xl text-slate-500 hover:bg-slate-50 transition-colors">My Sent Feedbacks <span id="mySentCount"></span></button>
+            <button id="analyticsTabBtn" onclick="switchTab('analytics')" class="hidden px-6 py-3 text-sm font-semibold rounded-xl text-slate-500 hover:bg-slate-50 transition-colors">Club Event Analytics</button>
+        </div>
+    </div>
+
+    <!-- Submit Feedback Section -->
+    <div id="submitSection" class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+        <!-- Dashboard Left: Eligible Events -->
+        <div class="lg:col-span-5 space-y-6">
+            <div class="flex items-center justify-between px-2">
+                <h2 class="text-2xl font-bold font-headline text-slate-800">Eligible Events</h2>
+                <div class="flex gap-2">
+                    <button onclick="setEligibilityFilter('ALL')" class="eligibility-filter-btn active-eligibility px-3 py-1 bg-primary text-white text-[10px] font-bold uppercase rounded-lg transition-all" data-type="ALL">All</button>
+                    <button onclick="setEligibilityFilter('REGISTERED')" class="eligibility-filter-btn px-3 py-1 bg-white text-slate-500 text-[10px] font-bold uppercase rounded-lg border border-slate-200 hover:bg-slate-50 transition-all" data-type="REGISTERED">Registered</button>
+                    <button onclick="setEligibilityFilter('PUBLIC')" class="eligibility-filter-btn px-3 py-1 bg-white text-slate-500 text-[10px] font-bold uppercase rounded-lg border border-slate-200 hover:bg-slate-50 transition-all" data-type="PUBLIC">Public</button>
+                </div>
+            </div>
+            <div id="eligibleEventsList" class="space-y-4">
+                <!-- Data populated via JS -->
+                 <div class="animate-pulse space-y-4">
+                    <div class="h-24 bg-white rounded-2xl border border-slate-100"></div>
+                 </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Right: Rating Form -->
+        <div class="lg:col-span-7">
+            <div id="ratingFormContainer" class="bg-white rounded-3xl p-8 shadow-xl shadow-slate-200/50 border border-slate-100 sticky top-24">
+                <div id="placeholderView" class="text-center py-20 space-y-4">
+                    <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto text-slate-300">
+                        <span class="material-symbols-outlined text-4xl">rate_review</span>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-800">Select an event</h3>
+                        <p class="text-slate-500">Click the 'Rate' button on an eligible event to share your thoughts.</p>
+                    </div>
+                </div>
+
+                <div id="formView" class="hidden space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                    <h3 id="formEventTitle" class="text-2xl font-bold font-headline text-slate-900">Rate Event Name</h3>
+                    <div class="space-y-4">
+                        <p class="text-sm font-semibold text-slate-600">How would you rate your experience?</p>
+                        <div class="star-rating flex gap-2">
+                            <span class="material-symbols-outlined text-4xl text-slate-200 hover:text-amber-400" data-value="1">star</span>
+                            <span class="material-symbols-outlined text-4xl text-slate-200 hover:text-amber-400" data-value="2">star</span>
+                            <span class="material-symbols-outlined text-4xl text-slate-200 hover:text-amber-400" data-value="3">star</span>
+                            <span class="material-symbols-outlined text-4xl text-slate-200 hover:text-amber-400" data-value="4">star</span>
+                            <span class="material-symbols-outlined text-4xl text-slate-200 hover:text-amber-400" data-value="5">star</span>
+                        </div>
+                    </div>
+                    <div class="space-y-3">
+                        <label class="text-sm font-semibold text-slate-600">Comments & Suggestions</label>
+                        <textarea id="comment" rows="6" class="w-full rounded-2xl border-slate-200 focus:border-primary focus:ring-primary/20 p-4 text-slate-900 placeholder:text-slate-400 bg-slate-50/50" placeholder="What did you like? What could be improved?"></textarea>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <label class="flex items-center gap-3 cursor-pointer group">
+                            <input type="checkbox" id="anonymous" class="rounded border-slate-300 text-primary focus:ring-primary h-5 w-5 transition-all">
+                            <span class="text-sm font-medium text-slate-500 group-hover:text-slate-700 transition-colors">Submit Anonymously</span>
+                        </label>
+                        <button onclick="submitFeedback()" class="bg-primary hover:bg-[#1a3465] text-white px-8 py-3.5 rounded-2xl font-bold shadow-lg shadow-primary/20 active:scale-95 transition-all">
+                            Submit Feedback
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- All Feedbacks Section -->
+    <div id="allSection" class="hidden space-y-8 animate-in fade-in duration-500">
+        <h2 class="text-2xl font-bold font-headline text-slate-900">Public Feedbacks</h2>
+        <div id="allFeedbackList" class="space-y-6">
+            <p class="text-center text-slate-400 py-10">Loading community feedback...</p>
+        </div>
+    </div>
+
+    <!-- My Sent Feedbacks Section -->
+    <div id="mysentSection" class="hidden space-y-8 animate-in fade-in duration-500">
+        <h2 class="text-2xl font-bold font-headline text-slate-900">My Feedback History</h2>
+        <div id="myFeedbackList" class="space-y-6">
+            <p class="text-center text-slate-400 py-10">Loading your history...</p>
+        </div>
+    </div>
+</main>
+
+<script>
+    let selectedEventId = null;
+    let currentRating = 0;
+    let allEligibleEvents = [];
+    let currentEligibilityFilter = 'ALL';
+    let user = null;
+    let feedbackPollingInterval = null;
+    let currentTab = 'submit';
+
+    document.addEventListener('DOMContentLoaded', () => {
+        user = JSON.parse(localStorage.getItem('user'));
+        if (!user) { window.location.href = 'login.html'; return; }
+        
+        document.getElementById('userName').textContent = user.name;
+        if (user.avatar) document.getElementById('userAvatar').src = user.avatar;
+        renderNavBar();
+        renderFeedbackTabs();
+        fetchEligibleEvents();
+        setupStarRating();
+        updateMySentCount();
+
+        restoreTab();
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            const dropdown = document.getElementById('profileDropdown');
+            const profileBtn = dropdown.parentElement;
+            if (!profileBtn.contains(e.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
+    });
+
+    function logout() {
+        sessionStorage.clear();
+        localStorage.removeItem('user');
+        window.location.href = 'login.html';
+    }
+
+    function saveTab(tab) {
+        sessionStorage.setItem('feedbackTab', tab);
+    }
+
+    function restoreTab() {
+        const saved = sessionStorage.getItem('feedbackTab');
+        if (saved) {
+            switchTab(saved);
+        }
+    }
+
+    function renderFeedbackTabs() {
+        if (user.role === 'CLUB_ADMIN') {
+            document.getElementById('analyticsTabBtn').classList.remove('hidden');
+        }
+    }
+
+    function switchTab(tab) {
+        currentTab = tab;
+        saveTab(tab);
+        const sections = ['submitSection', 'allSection', 'mysentSection'];
+        const tabs = ['tab-submit', 'tab-all', 'tab-mysent'];
+        
+        sections.forEach(s => document.getElementById(s).classList.add('hidden'));
+        tabs.forEach(t => {
+            const el = document.getElementById(t);
+            if (el) {
+                el.classList.remove('tab-active', 'font-bold');
+                el.classList.add('text-slate-500');
+            }
+        });
+
+        const activeSec = tab === 'submit' ? 'submitSection' : (tab === 'all' ? 'allSection' : 'mysentSection');
+        const activeTab = 'tab-' + tab;
+        
+        document.getElementById(activeSec).classList.remove('hidden');
+        if (document.getElementById(activeTab)) {
+            document.getElementById(activeTab).classList.add('tab-active', 'font-bold');
+            document.getElementById(activeTab).classList.remove('text-slate-500');
+        }
+
+        // Clear existing interval
+        if (feedbackPollingInterval) {
+            clearInterval(feedbackPollingInterval);
+            feedbackPollingInterval = null;
+        }
+
+        if (tab === 'all') {
+            fetchAllFeedback();
+            // Start polling for live updates
+            feedbackPollingInterval = setInterval(fetchAllFeedback, 5000);
+        }
+        if (tab === 'mysent') fetchMyFeedback();
+        if (tab === 'analytics') window.location.href = 'clubadmin-feedback.html';
+    }
+
+    async function fetchAllFeedback() {
+        try {
+            const resp = await fetch('/api/feedback/all');
+            const data = await resp.json();
+            const list = document.getElementById('allFeedbackList');
+            list.innerHTML = '';
+            if (data.length === 0) {
+                list.innerHTML = '<p class="text-center text-slate-400 py-10">No public feedback yet.</p>';
+                return;
+            }
+            data.forEach(f => {
+                const card = `
+                    <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm flex flex-col gap-4">
+                        <div class="flex justify-between items-start">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center"><span class="material-symbols-outlined text-slate-300">person</span></div>
+                                <div>
+                                    <p class="font-bold text-sm">${f.student ? f.student.name : 'Anonymous'}</p>
+                                    <p class="text-[10px] text-slate-400 uppercase font-black tracking-widest">${new Date(f.submittedAt).toLocaleDateString()}</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-1 text-amber-400 font-bold">${f.rating} ★</div>
+                        </div>
+                        <p class="text-sm text-slate-600 italic">"${f.comment || 'No comment'}"</p>
+                        <p class="text-[10px] font-bold text-primary uppercase tracking-widest leading-none">${f.event.title}</p>
+                    </div>
+                `;
+                list.innerHTML += card;
+            });
+        } catch (e) { console.error(e); }
+    }
+
+    async function fetchMyFeedback() {
+        try {
+            const resp = await fetch(`/api/feedback/student/${user.id}`);
+            const data = await resp.json();
+            const list = document.getElementById('myFeedbackList');
+            list.innerHTML = '';
+            if (data.length === 0) {
+                list.innerHTML = '<p class="text-center text-slate-400 py-10">You haven\'t sent any feedback yet.</p>';
+                return;
+            }
+            data.forEach(f => {
+                const card = `
+                    <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm flex flex-col gap-4">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="font-bold text-sm">Sent for ${f.event.title}</p>
+                                <p class="text-[10px] text-slate-400 uppercase font-black tracking-widest">${new Date(f.submittedAt).toLocaleDateString()}</p>
+                            </div>
+                            <div class="flex items-center gap-1 text-primary font-bold">${f.rating}/5</div>
+                        </div>
+                        <p class="text-sm text-slate-600">${f.comment}</p>
+                    </div>
+                `;
+                list.innerHTML += card;
+            });
+        } catch (e) { console.error(e); }
+    }
+
+    async function updateMySentCount() {
+        try {
+            const resp = await fetch(`/api/feedback/student/${user.id}`);
+            const data = await resp.json();
+            document.getElementById('mySentCount').textContent = `(${data.length})`;
+        } catch (e) { console.error(e); }
+    }
+
+    function renderNavBar() {
+        const nav = document.getElementById('navContainer');
+        const role = user.role;
+        const logo = `<div class="flex items-center gap-2 cursor-pointer" onclick="window.location.href='${role.toLowerCase() === 'admin' ? 'admin' : 'student'}-dashboard.html'">
+            <img src="assets/images/logo.png" alt="Scholar Hub" class="h-8 md:h-10">
+        </div>`;
+        
+        let links = '';
+        if (role === 'STUDENT') {
+            links = `
+                <nav class="hidden md:flex items-center space-x-8 text-sm font-semibold">
+                    <a class="text-slate-500 hover:text-primary transition-colors" href="student-dashboard.html">Dashboard</a>
+                    <a class="text-slate-500 hover:text-primary transition-colors" href="student-event.html">Events</a>
+                    <a class="text-slate-500 hover:text-primary transition-colors" href="student-clubs.html">Clubs</a>
+                    <a class="text-slate-500 hover:text-primary transition-colors" href="student-venues.html">Venues</a>
+                    <a class="text-primary border-b-2 border-primary pb-1 font-bold" href="student-feedback.html">Feedback</a>
+                </nav>
+            `;
+        } else if (role === 'CLUB_ADMIN') {
+            links = `
+                <nav class="hidden md:flex items-center space-x-8 text-sm font-semibold">
+                    <a class="text-slate-500 hover:text-primary transition-colors" href="clubadmin-dashboard.html">Dashboard</a>
+                    <a class="text-slate-500 hover:text-primary transition-colors" href="clubadmin-myclub.html">My Club</a>
+                    <a class="text-slate-500 hover:text-primary transition-colors" href="clubadmin-events.html">Events</a>
+                    <a class="text-slate-500 hover:text-primary transition-colors" href="clubadmin-clubs.html">Clubs</a>
+                    <a class="text-slate-500 hover:text-primary transition-colors" href="clubadmin-venue.html">Venues</a>
+                    <a class="text-primary border-b-2 border-primary pb-1 font-bold" href="student-feedback.html">Feedback</a>
+                </nav>
+            `;
+        }
+        
+        nav.innerHTML = logo + links;
+    }
+
+    function setupStarRating() {
+        const stars = document.querySelectorAll('.star-rating span');
+        stars.forEach(star => {
+            star.addEventListener('click', () => {
+                const val = parseInt(star.getAttribute('data-value'));
+                currentRating = val;
+                stars.forEach((s, i) => {
+                    if (i < val) {
+                        s.classList.add('active');
+                    } else {
+                        s.classList.remove('active');
+                    }
+                });
+            });
+        });
+    }
+
+    async function fetchEligibleEvents() {
+        try {
+            const resp = await fetch(`/api/events/student/${user.id}/eligible-feedback`);
+            allEligibleEvents = await resp.json();
+            applyEligibilityFilter();
+        } catch (e) {
+            console.error("Failed to load eligible events", e);
+        }
+    }
+
+    function setEligibilityFilter(type) {
+        currentEligibilityFilter = type;
+        const btns = document.querySelectorAll('.eligibility-filter-btn');
+        btns.forEach(btn => {
+            if (btn.dataset.type === type) {
+                btn.className = "eligibility-filter-btn active-eligibility px-3 py-1 bg-primary text-white text-[10px] font-bold uppercase rounded-lg transition-all";
+            } else {
+                btn.className = "eligibility-filter-btn px-3 py-1 bg-white text-slate-500 text-[10px] font-bold uppercase rounded-lg border border-slate-200 hover:bg-slate-50 transition-all";
+            }
+        });
+        applyEligibilityFilter();
+    }
+
+    function applyEligibilityFilter() {
+        let filtered = allEligibleEvents;
+        if (currentEligibilityFilter === 'REGISTERED') {
+            filtered = allEligibleEvents.filter(ev => ev.registrationRequired);
+        } else if (currentEligibilityFilter === 'PUBLIC') {
+            filtered = allEligibleEvents.filter(ev => !ev.registrationRequired);
+        }
+        renderEligibleEvents(filtered);
+    }
+
+    function renderEligibleEvents(events) {
+        const list = document.getElementById('eligibleEventsList');
+        list.innerHTML = '';
+        
+        if (events.length === 0) {
+            list.innerHTML = '<p class="text-center text-slate-500 py-10 bg-white rounded-3xl border border-slate-100">No events found to rate.</p>';
+            return;
+        }
+
+        events.forEach(ev => {
+            const card = document.createElement('div');
+            card.id = `event-card-${ev.id}`;
+            card.className = "bg-white p-5 rounded-3xl border border-slate-100 shadow-sm flex items-center gap-5 hover:shadow-md transition-all cursor-pointer group animate-in fade-in duration-300";
+            card.innerHTML = `
+                <div class="w-16 h-16 rounded-2xl overflow-hidden flex-shrink-0 shadow-sm">
+                    <img alt="${ev.title}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="${ev.posterUrl || 'https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?auto=format&fit=crop&q=80&w=2070'}"/>
+                </div>
+                <div class="flex-grow">
+                    <h3 class="font-bold text-slate-800 text-base leading-tight group-hover:text-primary transition-colors">${ev.title}</h3>
+                    <div class="flex items-center gap-3 mt-1.5 text-slate-400 text-[11px] font-bold tracking-tight">
+                        <span>${new Date(ev.startTime).toLocaleDateString()}</span>
+                        <span>•</span>
+                        <span>${ev.registrationRequired ? 'Registered' : 'Public'}</span>
+                    </div>
+                </div>
+                <button class="rate-btn px-6 py-2.5 bg-slate-50 text-slate-600 text-xs font-bold rounded-xl border border-slate-100 group-hover:bg-slate-100 transition-all">
+                    Rate
+                </button>
+            `;
+            
+            card.onclick = () => selectEvent(ev);
+            list.appendChild(card);
+        });
+    }
+
+    function selectEvent(ev) {
+        selectedEventId = ev.id;
+        
+        // Update UI state
+        document.querySelectorAll('.rate-btn').forEach(btn => {
+            btn.textContent = 'Rate';
+            btn.className = "rate-btn px-6 py-2.5 bg-slate-50 text-slate-600 text-xs font-bold rounded-xl border border-slate-100 transition-all";
+        });
+        
+        const card = document.getElementById(`event-card-${ev.id}`);
+        const btn = card.querySelector('.rate-btn');
+        btn.textContent = 'Selected';
+        btn.className = "rate-btn px-6 py-2.5 bg-primary text-white text-xs font-bold rounded-xl shadow-lg shadow-primary/20 transition-all";
+        
+        // Show Form
+        document.getElementById('placeholderView').classList.add('hidden');
+        const formView = document.getElementById('formView');
+        formView.classList.remove('hidden');
+        document.getElementById('formEventTitle').textContent = `Rate ${ev.title}`;
+        
+        // Reset form inputs
+        currentRating = 0;
+        document.querySelectorAll('.star-rating span').forEach(s => s.classList.remove('active'));
+        document.getElementById('comment').value = '';
+        document.getElementById('anonymous').checked = false;
+        
+        // Scroll form into view for mobile
+        if (window.innerWidth < 1024) {
+            formView.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+
+    async function submitFeedback() {
+        if (!selectedEventId) return;
+        if (currentRating === 0) {
+            alert("Please provide a star rating.");
+            return;
+        }
+
+        const feedback = {
+            eventId: selectedEventId,
+            rating: currentRating,
+            comment: document.getElementById('comment').value,
+            anonymous: document.getElementById('anonymous').checked,
+            userId: user.id
+        };
+
+        try {
+            const resp = await fetch('/api/feedback', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(feedback)
+            });
+
+            if (resp.ok) {
+                showSuccessPopup("Thank you for your feedback! Your contribution helps us improve our campus events.", "back");
+            } else {
+                alert("Failed to submit feedback.");
+            }
+        } catch (e) {
+            console.error(e);
+            alert("Error submitting feedback.");
+        }
+    }
+
+    function showSuccessPopup(message, action) {
+        const popup = document.getElementById('successPopup');
+        document.getElementById('successPopupMessage').textContent = message;
+        
+        const btn = document.getElementById('successPopupButton');
+        if (action === 'back') {
+            btn.textContent = 'Back to Feedbacks';
+            btn.onclick = () => {
+                popup.classList.add('hidden');
+                switchTab('all');
+            };
+        }
+
+        popup.classList.remove('hidden');
+    }
+</script>
+
+    <!-- Success Popup -->
+    <div id="successPopup" class="hidden fixed inset-0 z-[200] flex items-center justify-center bg-slate-900/60 backdrop-blur-md p-4 animate-in fade-in duration-300">
+        <div class="bg-white rounded-[2rem] shadow-2xl max-w-sm w-full overflow-hidden transform animate-in zoom-in-95 duration-500">
+            <div class="p-10 text-center">
+                <div class="mb-8">
+                    <div class="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto">
+                        <span class="material-symbols-outlined text-5xl text-green-600">check_circle</span>
+                    </div>
+                </div>
+                <h3 class="text-3xl font-extrabold text-slate-900 mb-3 font-headline">Success!</h3>
+                <p id="successPopupMessage" class="text-slate-500 leading-relaxed mb-10">Your submission was successful.</p>
+                <button id="successPopupButton" class="w-full px-8 py-4 rounded-2xl font-bold text-white bg-primary hover:bg-[#1a3465] shadow-xl shadow-primary/20 active:scale-95 transition-all text-lg">
+                    Done
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="assets/js/transitions.js"></script>
+    <script src="assets/js/transitions.js"></script>
+</body>
+</html>

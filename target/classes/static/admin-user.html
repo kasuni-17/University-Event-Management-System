@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Uni Event Portal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="assets/css/transitions.css">
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "on-tertiary-container": "#ffcc55","on-secondary-fixed-variant": "#00531a","tertiary-fixed-dim": "#fabd00","on-primary-fixed": "#001944","inverse-on-surface": "#f0f1f2","surface-tint": "#3f5d9c","on-secondary-fixed": "#002106","on-error": "#ffffff","on-primary-fixed-variant": "#254583","tertiary-fixed": "#ffdf9e","inverse-surface": "#2e3132","surface-dim": "#d9dadb","surface-container-high": "#e7e8e9","primary-fixed": "#d9e2ff","surface-container-lowest": "#ffffff","error-container": "#ffdad6","background": "#f8f9fa","secondary-fixed": "#83fc8e","outline": "#747781","surface-container": "#edeeef","on-tertiary-fixed-variant": "#5b4300","secondary-fixed-dim": "#66df75","on-primary-container": "#c2d2ff","surface-bright": "#f8f9fa","on-tertiary-fixed": "#261a00","on-primary": "#ffffff","on-error-container": "#93000a","on-surface": "#191c1d","surface": "#f8f9fa","tertiary-container": "#745600","secondary": "#006e25","on-secondary-container": "#007327","primary-fixed-dim": "#afc6ff","on-background": "#191c1d","inverse-primary": "#afc6ff","primary": "#21417f","secondary-container": "#80f98b","primary-container": "#3b5998","on-surface-variant": "#444650","on-secondary": "#ffffff","on-tertiary": "#ffffff","surface-container-low": "#f3f4f5","tertiary": "#574000","outline-variant": "#c4c6d2","surface-variant": "#e1e3e4","error": "#ba1a1a","surface-container-highest": "#e1e3e4"
+              },
+              fontFamily: {"headline": ["Manrope"],"body": ["Inter"],"label": ["Inter"]},
+              borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+            },
+          },
+        }
+    </script>
+<style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; vertical-align: middle; }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, .font-headline { font-family: 'Manrope', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen">
+<div id="layout-root">
+<header class="bg-white border-b border-slate-200 sticky-nav h-16 flex items-center shadow-sm">
+  <div class="max-w-7xl mx-auto px-6 w-full flex justify-between items-center h-full">
+    <div class="flex items-center gap-8 h-full">
+      <img src="assets/images/logo.png" alt="SLIIT Events Hub" class="h-10 object-contain">
+      <nav class="hidden md:flex items-center gap-6 font-['Manrope'] font-semibold tracking-tight h-full">
+        <a class="nav-link h-full flex items-center text-slate-500 hover:text-primary transition-colors" href="admin-dashboard.html">Dashboard</a>
+        <a class="nav-link h-full flex items-center text-slate-500 hover:text-primary transition-colors" href="admin-user.html">Users</a>
+        <a class="nav-link h-full flex items-center text-slate-500 hover:text-primary transition-colors" href="admin-events.html">Events</a>
+        <a class="nav-link h-full flex items-center text-slate-500 hover:text-primary transition-colors" href="admin-clubs.html">Clubs</a>
+        <a class="nav-link h-full flex items-center text-slate-500 hover:text-primary transition-colors" href="admin-venue.html">Venues</a>
+        <a class="nav-link h-full flex items-center text-slate-500 hover:text-primary transition-colors" href="admin-feedback.html">Feedback</a>
+      </nav>
+    </div>
+    <div class="flex items-center gap-4 h-full">
+      <button class="p-2 text-slate-500 hover:bg-slate-100 rounded-lg relative">
+        <span class="material-symbols-outlined">notifications</span>
+        <span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+      </button>
+      <div class="flex items-center gap-3 pl-3 border-l border-slate-200 relative cursor-pointer group h-full" onclick="document.getElementById('profileDropdown').classList.toggle('hidden')">
+        <div class="h-9 w-9 rounded-full overflow-hidden border border-slate-200 bg-slate-100 flex items-center justify-center">
+          <span class="material-symbols-outlined text-slate-500">person</span>
+        </div>
+        <span class="text-sm font-semibold text-slate-700 hidden lg:block">Admin User</span>
+        <span class="material-symbols-outlined text-sm text-slate-400">expand_more</span>
+        <div id="profileDropdown" class="hidden absolute top-full right-0 mt-4 w-48 bg-white rounded-xl shadow-lg border border-slate-200 py-2 z-50">
+            <a href="javascript:void(0)" onclick="logout()" class="flex items-center gap-2 px-4 py-2 text-sm text-error hover:bg-error/5 transition-colors font-semibold">
+                <span class="material-symbols-outlined text-[18px]">logout</span>
+                Logout
+            </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="page-transition-enter">
+    <div class="max-w-7xl mx-auto px-6 py-12 w-full">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+<div>
+<h1 class="text-4xl font-extrabold text-on-surface tracking-tight mb-2 font-headline">User Management</h1>
+<p class="text-outline font-medium">Oversee academic staff, students, and club organizers within the ecosystem.</p>
+</div>
+<button class="bg-gradient-to-br from-primary to-primary-container text-on-primary px-6 py-3 rounded-xl font-semibold flex items-center gap-2 shadow-lg shadow-primary/10 hover:opacity-90 active:scale-95 transition-all magnetic-btn" onclick="window.location.href='admin-newuserform.html'">
+<span class="material-symbols-outlined">person_add</span>
+<span>Add New User</span>
+</button>
+</div>
+<!-- Controls -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6 mb-8">
+<div class="md:col-span-7 bg-surface-container-lowest p-1 rounded-2xl shadow-sm border border-outline-variant/15 flex items-center px-4 gap-3 focus-within:border-primary/60 transition-colors">
+<span class="material-symbols-outlined text-outline">search</span>
+<input id="searchInput" class="w-full bg-transparent border-none focus:ring-0 text-sm py-4 text-on-surface placeholder:text-outline/60" placeholder="Search users by name, email or ID..." type="text"/>
+</div>
+<div class="md:col-span-5 flex items-center gap-2 overflow-x-auto pb-2 md:pb-0">
+<button class="filter-btn px-5 py-2.5 rounded-full text-sm font-semibold bg-primary-fixed text-on-primary-fixed border border-primary/10">All</button>
+<button class="filter-btn px-5 py-2.5 rounded-full text-sm font-semibold text-outline hover:bg-surface-container-high transition-all">Student</button>
+<button class="filter-btn px-5 py-2.5 rounded-full text-sm font-semibold text-outline hover:bg-surface-container-high transition-all">Club Admin</button>
+<button class="filter-btn px-5 py-2.5 rounded-full text-sm font-semibold text-outline hover:bg-surface-container-high transition-all">Admin</button>
+</div>
+</div>
+<!-- User Table -->
+<div class="bg-surface-container-lowest rounded-3xl overflow-hidden shadow-[0_12px_40px_rgba(25,28,29,0.06)] border border-outline-variant/15">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low/50">
+<th class="px-6 py-5 text-[0.6875rem] font-bold uppercase tracking-widest text-outline text-right">Last Login</th>
+<th class="px-8 py-5 text-[0.6875rem] font-bold uppercase tracking-widest text-outline text-right">Actions</th>
+</tr>
+</thead>
+<tbody id="usersTableBody" class="divide-y divide-transparent">
+    <!-- Rendered Dynamically -->
+</tbody>
+</table>
+</div>
+<div class="px-8 py-6 border-t border-outline-variant/10 flex items-center justify-between bg-surface-container-low/30">
+<span id="showingCount" class="text-xs font-medium text-outline">Showing 0 users</span>
+<div class="flex gap-2">
+<button class="p-2 rounded-lg hover:bg-surface-container-high text-outline transition-colors"><span class="material-symbols-outlined">chevron_left</span></button>
+<button class="p-2 rounded-lg hover:bg-surface-container-high text-outline transition-colors"><span class="material-symbols-outlined">chevron_right</span></button>
+</div>
+</div>
+</div>
+    </div>
+</main>
+<footer class="bg-slate-900 text-slate-400 py-12 border-t border-slate-800 mt-auto">
+  <div class="max-w-[1400px] mx-auto px-12 flex flex-col md:flex-row justify-between items-center gap-4">
+    <p class="text-xs">© 2024 Uni Event Portal. University Event Management System.</p>
+    <div class="flex gap-6 text-xs uppercase tracking-widest font-bold">
+      <a class="hover:text-white transition-colors" href="#">Privacy Policy</a>
+      <a class="hover:text-white transition-colors" href="#">Terms of Service</a>
+      <a class="hover:text-white transition-colors" href="#">Help Desk</a>
+    </div>
+  </div>
+</footer>
+</div>
+<script>
+let allUsers = [];
+
+async function logout() {
+    localStorage.clear();
+    sessionStorage.clear();
+    window.location.href = 'landing-page.html';
+}
+
+async function loadUsers() {
+    try {
+        const response = await fetch('/api/users');
+        allUsers = await response.json();
+        renderUsers(allUsers);
+    } catch (e) {
+        console.error("Failed to fetch users", e);
+    }
+}
+
+function renderUsers(usersList) {
+    const tbody = document.getElementById('usersTableBody');
+    tbody.innerHTML = '';
+    
+    document.getElementById('showingCount').textContent = `Showing ${usersList.length} users`;
+
+    usersList.forEach(user => {
+        let isPending = user.approvalStatus === 'PENDING';
+        
+        let actionsHtml = '';
+        if (isPending) {
+            actionsHtml = `
+            <div class="flex justify-end gap-2">
+                <button onclick="approveUser(${user.id})" class="px-3 py-1.5 flex items-center gap-1.5 text-[0.6875rem] font-bold text-secondary border border-secondary/20 hover:bg-secondary/5 rounded-lg transition-colors"><span class="material-symbols-outlined text-[18px]">check_circle</span>Approve</button>
+                <button onclick="rejectUser(${user.id})" class="px-3 py-1.5 flex items-center gap-1.5 text-[0.6875rem] font-bold text-error border border-error/20 hover:bg-error/5 rounded-lg transition-colors"><span class="material-symbols-outlined text-[18px]">cancel</span>Reject</button>
+            </div>`;
+        } else {
+            actionsHtml = `
+            <div class="flex justify-end gap-2 transition-opacity">
+                <button onclick="console.log('Edit', ${user.id}); openEditModal(${user.id})" class="p-2 text-primary hover:bg-primary/10 rounded-lg transition-colors"><span class="material-symbols-outlined text-[20px]">edit</span></button>
+                <button onclick="console.log('Delete', ${user.id}); deleteUser(${user.id})" class="p-2 text-error hover:bg-error/10 rounded-lg transition-colors"><span class="material-symbols-outlined text-[20px]">delete</span></button>
+            </div>`;
+        }
+
+        let statusHtml = isPending 
+            ? `<span class="flex items-center gap-2 px-3 py-1 rounded-full w-fit text-[0.6875rem] font-bold bg-tertiary-fixed text-on-tertiary-fixed-variant"><span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>Pending Approval</span>`
+            : (user.approvalStatus === 'APPROVED' ? `<span class="flex items-center gap-2 px-3 py-1 rounded-full w-fit text-[0.6875rem] font-bold bg-secondary-container text-on-secondary-container"><span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>Active</span>` : `<span class="flex items-center gap-2 px-3 py-1 rounded-full w-fit text-[0.6875rem] font-bold bg-red-100 text-red-800"><span class="w-1.5 h-1.5 rounded-full bg-red-600"></span>Rejected</span>`);
+            
+        let role = user.role.replace('_', ' ');
+
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-surface-container-low transition-colors group";
+        const lastLogin = user.lastLogin ? new Date(user.lastLogin).toLocaleString() : 'Never';
+        tr.innerHTML = `
+            <td class="px-8 py-5">
+                <div class="flex items-center gap-4">
+                    <div class="h-11 w-11 rounded-full overflow-hidden bg-slate-200 flex items-center justify-center border border-slate-100 shadow-sm">
+                        ${user.avatarUrl ? `<img src="${user.avatarUrl}" class="w-full h-full object-cover">` : `<span class="font-bold text-primary">${user.name.charAt(0)}</span>`}
+                    </div>
+                    <span class="font-semibold text-on-surface text-sm">${user.name}</span>
+                </div>
+            </td>
+            <td class="px-6 py-5 text-sm text-on-surface-variant font-medium">${user.email}</td>
+            <td class="px-6 py-5"><span class="px-3 py-1 rounded-full text-[0.6875rem] font-bold bg-surface-container-highest text-on-surface-variant">${role}</span></td>
+            <td class="px-6 py-5">${statusHtml}</td>
+            <td class="px-6 py-5 text-right text-xs text-outline font-medium">${lastLogin}</td>
+            <td class="px-8 py-5 text-right">${actionsHtml}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+function filterUsers(type) {
+    if (type === 'All') renderUsers(allUsers);
+    else if (type === 'Student') renderUsers(allUsers.filter(u => u.role === 'STUDENT'));
+    else if (type === 'Club Admin') renderUsers(allUsers.filter(u => u.role === 'CLUB_ADMIN'));
+    else if (type === 'Admin') renderUsers(allUsers.filter(u => u.role === 'ADMIN'));
+}
+</script>
+
+<!-- Confirmation Modal -->
+<div id="deleteModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full overflow-hidden transform animate-in zoom-in-95 duration-200">
+        <div class="p-8 text-center">
+            <div class="w-20 h-20 bg-error/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                <span id="modalIcon" class="material-symbols-outlined text-4xl text-error">warning</span>
+            </div>
+            <h3 id="modalTitle" class="text-2xl font-bold text-slate-900 mb-2">Are you sure?</h3>
+            <p id="modalMessage" class="text-slate-500 leading-relaxed mb-8">This action cannot be undone. Please confirm you want to proceed.</p>
+            <div class="flex gap-3">
+                <button onclick="closeDeleteModal()" class="flex-1 px-6 py-3.5 rounded-xl font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 transition-all border border-slate-200">Cancel</button>
+                <button id="confirmDeleteBtn" class="flex-1 px-6 py-3.5 rounded-xl font-bold text-white bg-error hover:bg-error/90 shadow-lg shadow-error/20 transition-all">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openDeleteModal(config) {
+        const modal = document.getElementById('deleteModal');
+        const icon = document.getElementById('modalIcon');
+        const title = document.getElementById('modalTitle');
+        const message = document.getElementById('modalMessage');
+        const confirmBtn = document.getElementById('confirmDeleteBtn');
+
+        icon.textContent = config.icon || 'warning';
+        icon.className = `material-symbols-outlined text-4xl ${config.iconColor || 'text-error'}`;
+        icon.parentElement.className = `w-20 h-20 ${config.iconBg || 'bg-error/10'} rounded-full flex items-center justify-center mx-auto mb-6`;
+        title.textContent = config.title;
+        message.textContent = config.message;
+        confirmBtn.textContent = config.confirmText || 'Confirm';
+        confirmBtn.className = `flex-1 px-6 py-3.5 rounded-xl font-bold text-white ${config.confirmBtnClass || 'bg-error'} hover:opacity-90 transition-all shadow-lg`;
+        
+        confirmBtn.onclick = async () => {
+            await config.onConfirm();
+            closeDeleteModal();
+        };
+
+        modal.classList.remove('hidden');
+    }
+
+    function closeDeleteModal() {
+        document.getElementById('deleteModal').classList.add('hidden');
+    }
+
+    async function approveUser(id) {
+        openDeleteModal({
+            title: 'Approve User',
+            message: 'Are you sure you want to approve this user registration?',
+            icon: 'check_circle',
+            iconColor: 'text-secondary',
+            iconBg: 'bg-secondary/10',
+            confirmText: 'Approve',
+            confirmBtnClass: 'bg-secondary',
+            onConfirm: async () => {
+                await fetch('/api/users/' + id + '/approve', { method: 'POST' });
+                loadUsers();
+            }
+        });
+    }
+
+    async function rejectUser(id) {
+        openDeleteModal({
+            title: 'Reject User',
+            message: 'Are you sure you want to reject this user registration?',
+            icon: 'cancel',
+            iconColor: 'text-error',
+            iconBg: 'bg-error/10',
+            confirmText: 'Reject',
+            confirmBtnClass: 'bg-error',
+            onConfirm: async () => {
+                await fetch('/api/users/' + id + '/reject', { method: 'POST' });
+                loadUsers();
+            }
+        });
+    }
+
+    async function deleteUser(id) {
+        openDeleteModal({
+            title: 'Confirm Deletion',
+            message: 'Are you sure you want to completely delete this user? This action cannot be undone.',
+            icon: 'delete',
+            iconColor: 'text-error',
+            iconBg: 'bg-error/10',
+            confirmText: 'Delete',
+            confirmBtnClass: 'bg-error',
+            onConfirm: async () => {
+                try {
+                    const resp = await fetch('/api/users/' + id, { method: 'DELETE' });
+                    if(resp.ok) {
+                        loadUsers();
+                    } else {
+                        const txt = await resp.text();
+                        alert('Failed to delete user: ' + txt);
+                    }
+                } catch(e) {
+                    console.error(e);
+                    alert('Error during deletion');
+                }
+            }
+        });
+    }
+
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+        const term = e.target.value.toLowerCase();
+        const filtered = allUsers.filter(u => 
+            u.name.toLowerCase().includes(term) || 
+            u.email.toLowerCase().includes(term)
+        );
+        renderUsers(filtered);
+    });
+
+    // Setup filter buttons
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            // ui update
+            document.querySelectorAll('.filter-btn').forEach(b => {
+                 b.className = 'filter-btn px-5 py-2.5 rounded-full text-sm font-semibold text-outline hover:bg-surface-container-high transition-all';
+            });
+            btn.className = 'filter-btn px-5 py-2.5 rounded-full text-sm font-semibold bg-primary-fixed text-on-primary-fixed border border-primary/10';
+            filterUsers(btn.textContent.trim());
+        });
+    });
+
+    function openEditModal(id) {
+        const user = allUsers.find(u => u.id === id);
+        if(user) {
+            document.getElementById('editUserId').value = user.id;
+            document.getElementById('editName').value = user.name;
+            document.getElementById('editEmail').value = user.email;
+            document.getElementById('editUnivId').value = user.universityId || '';
+            document.getElementById('editRole').value = user.role;
+            document.getElementById('editUserModal').classList.remove('hidden');
+        }
+    }
+
+    function closeEditModal() {
+        document.getElementById('editUserModal').classList.add('hidden');
+        document.getElementById('editUserForm').reset();
+    }
+
+    async function submitEditUser(e) {
+        e.preventDefault();
+        const id = document.getElementById('editUserId').value;
+        const user = allUsers.find(u => u.id == id);
+        if(!user) return;
+        
+        const updatedUser = {
+            ...user,
+            name: document.getElementById('editName').value,
+            email: document.getElementById('editEmail').value,
+            universityId: document.getElementById('editUnivId').value,
+            role: document.getElementById('editRole').value
+        };
+
+        try {
+            const response = await fetch('/api/users/' + id, {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(updatedUser)
+            });
+            if(response.ok) {
+                closeEditModal();
+                loadUsers();
+            } else {
+                alert('Failed to update user');
+            }
+        } catch(err) {
+            console.error(err);
+            alert('Error updating user');
+        }
+    }
+
+    loadUsers();
+    // Auto refresh every 30 seconds
+    setInterval(loadUsers, 30000);
+</script>
+
+<div id="editUserModal" class="hidden fixed inset-0 z-[100] bg-on-surface/50 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-surface-container-lowest w-full max-w-md rounded-2xl shadow-2xl p-6 border border-slate-200">
+        <h3 class="text-xl font-bold font-headline text-on-surface mb-4">Edit User</h3>
+        <form id="editUserForm" class="flex flex-col gap-4" onsubmit="submitEditUser(event)">
+            <input type="hidden" id="editUserId">
+            <div>
+                <label class="text-xs font-bold uppercase text-outline">Name</label>
+                <input id="editName" required class="w-full mt-1 bg-surface border border-outline-variant rounded-lg p-2.5 text-sm focus:ring-primary/20 transition-all text-on-surface" type="text"/>
+            </div>
+            <div>
+                <label class="text-xs font-bold uppercase text-outline">Email</label>
+                <input id="editEmail" required class="w-full mt-1 bg-surface border border-outline-variant rounded-lg p-2.5 text-sm focus:ring-primary/20 transition-all text-on-surface" type="email"/>
+            </div>
+            <div>
+                <label class="text-xs font-bold uppercase text-outline">Student/Staff ID</label>
+                <input id="editUnivId" required class="w-full mt-1 bg-surface border border-outline-variant rounded-lg p-2.5 text-sm focus:ring-primary/20 transition-all text-on-surface" type="text"/>
+            </div>
+            <div>
+                <label class="text-xs font-bold uppercase text-outline">Role</label>
+                <select id="editRole" class="w-full mt-1 bg-surface border border-outline-variant rounded-lg p-2.5 text-sm focus:ring-primary/20 text-on-surface">
+                    <option value="STUDENT">Student</option>
+                    <option value="CLUB_ADMIN">Club Admin</option>
+                    <option value="ADMIN">System Admin</option>
+                </select>
+            </div>
+            <div class="flex justify-end gap-3 mt-4">
+                <button type="button" onclick="closeEditModal()" class="px-5 py-2 rounded-lg font-semibold text-outline hover:bg-surface-variant transition-colors">Cancel</button>
+                <button type="submit" class="px-5 py-2 rounded-lg font-semibold bg-primary text-on-primary hover:bg-primary/90 transition-colors">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+    <script src="assets/js/transitions.js"></script>
+</body>
+</html>

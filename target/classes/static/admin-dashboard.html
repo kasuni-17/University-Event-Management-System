@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Uni Event Portal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="assets/css/transitions.css">
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "on-tertiary-container": "#ffcc55","on-secondary-fixed-variant": "#00531a","tertiary-fixed-dim": "#fabd00","on-primary-fixed": "#001944","inverse-on-surface": "#f0f1f2","surface-tint": "#3f5d9c","on-secondary-fixed": "#002106","on-error": "#ffffff","on-primary-fixed-variant": "#254583","tertiary-fixed": "#ffdf9e","inverse-surface": "#2e3132","surface-dim": "#d9dadb","surface-container-high": "#e7e8e9","primary-fixed": "#d9e2ff","surface-container-lowest": "#ffffff","error-container": "#ffdad6","background": "#f8f9fa","secondary-fixed": "#83fc8e","outline": "#747781","surface-container": "#edeeef","on-tertiary-fixed-variant": "#5b4300","secondary-fixed-dim": "#66df75","on-primary-container": "#c2d2ff","surface-bright": "#f8f9fa","on-tertiary-fixed": "#261a00","on-primary": "#ffffff","on-error-container": "#93000a","on-surface": "#191c1d","surface": "#f8f9fa","tertiary-container": "#745600","secondary": "#006e25","on-secondary-container": "#007327","primary-fixed-dim": "#afc6ff","on-background": "#191c1d","inverse-primary": "#afc6ff","primary": "#21417f","secondary-container": "#80f98b","primary-container": "#3b5998","on-surface-variant": "#444650","on-secondary": "#ffffff","on-tertiary": "#ffffff","surface-container-low": "#f3f4f5","tertiary": "#574000","outline-variant": "#c4c6d2","surface-variant": "#e1e3e4","error": "#ba1a1a","surface-container-highest": "#e1e3e4"
+              },
+              fontFamily: {"headline": ["Manrope"],"body": ["Inter"],"label": ["Inter"]},
+              borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+            },
+          },
+        }
+    </script>
+<style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, .font-headline { font-family: 'Manrope', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-50 text-on-surface min-h-screen">
+<div id="layout-root">
+<!-- TopNavBar Shell -->
+<header class="bg-white border-b border-slate-200 sticky-nav h-16 flex items-center shadow-sm">
+  <div class="max-w-7xl mx-auto px-6 w-full flex justify-between items-center h-full">
+    <div class="flex items-center gap-8 h-full">
+      <img src="assets/images/logo.png" alt="SLIIT Events Hub" class="h-10 object-contain">
+      <nav class="hidden md:flex items-center gap-6 font-['Manrope'] font-semibold tracking-tight h-full">
+        <a class="nav-link h-full flex items-center text-slate-500 hover:text-primary transition-colors" href="admin-dashboard.html">Dashboard</a>
+        <a class="nav-link h-full flex items-center text-slate-500 hover:text-primary transition-colors" href="admin-user.html">Users</a>
+        <a class="nav-link h-full flex items-center text-slate-500 hover:text-primary transition-colors" href="admin-events.html">Events</a>
+        <a class="nav-link h-full flex items-center text-slate-500 hover:text-primary transition-colors" href="admin-clubs.html">Clubs</a>
+        <a class="nav-link h-full flex items-center text-slate-500 hover:text-primary transition-colors" href="admin-venue.html">Venues</a>
+        <a class="nav-link h-full flex items-center text-slate-500 hover:text-primary transition-colors" href="admin-feedback.html">Feedback</a>
+      </nav>
+    </div>
+    <div class="flex items-center gap-4 h-full">
+      <button class="p-2 text-slate-500 hover:bg-slate-100 rounded-lg relative">
+        <span class="material-symbols-outlined">notifications</span>
+        <span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+      </button>
+      <div class="flex items-center gap-3 pl-3 border-l border-slate-200 relative cursor-pointer group h-full" onclick="document.getElementById('profileDropdown').classList.toggle('hidden')">
+        <div class="h-9 w-9 rounded-full overflow-hidden border border-slate-200 bg-slate-100 flex items-center justify-center">
+          <span class="material-symbols-outlined text-slate-500">person</span>
+        </div>
+        <span id="userName" class="text-sm font-semibold text-slate-700 hidden lg:block">Admin User</span>
+        <span class="material-symbols-outlined text-sm text-slate-400">expand_more</span>
+        <div id="profileDropdown" class="hidden absolute top-full right-0 mt-4 w-48 bg-white rounded-xl shadow-lg border border-slate-200 py-2 z-50">
+            <a href="javascript:void(0)" onclick="logout()" class="flex items-center gap-2 px-4 py-2 text-sm text-error hover:bg-error/5 transition-colors font-semibold">
+                <span class="material-symbols-outlined text-[18px]">logout</span>
+                Logout
+            </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="page-transition-enter">
+    <div class="max-w-7xl mx-auto px-6 py-12 w-full">
+<!-- Header with Publish Button -->
+<section class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div>
+<h1 class="text-3xl font-headline font-extrabold text-slate-900 tracking-tight">Admin Dashboard</h1>
+<p class="text-slate-500 font-medium">System overview and management</p>
+</div>
+<button class="flex items-center gap-2 px-6 py-2.5 bg-[#4B69FF] text-white rounded-lg font-semibold shadow-sm hover:shadow-md transition-all active:scale-95 magnetic-btn" onclick="window.location.href='admin-events.html'">
+<span class="material-symbols-outlined text-[20px]">add</span>
+<span>Publish Event</span>
+</button>
+</section>
+<!-- Stats Cards -->
+<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 stagger-grid">
+<div class="bg-white p-6 rounded-xl border border-slate-100 shadow-sm flex items-center justify-between stagger-item">
+<div><p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Total Users</p><h3 id="statTotalUsers" class="text-3xl font-headline font-extrabold text-slate-900">0</h3></div>
+<div class="bg-blue-50 p-3 rounded-lg"><span class="material-symbols-outlined text-[#4B69FF]">group</span></div>
+</div>
+<div class="bg-white p-6 rounded-xl border border-slate-100 shadow-sm flex items-center justify-between stagger-item">
+<div><p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Active Events</p><h3 id="statActiveEvents" class="text-3xl font-headline font-extrabold text-slate-900">0</h3></div>
+<div class="bg-green-50 p-3 rounded-lg"><span class="material-symbols-outlined text-green-500">calendar_today</span></div>
+</div>
+<div class="bg-white p-6 rounded-xl border border-slate-100 shadow-sm flex items-center justify-between stagger-item">
+<div><p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Pending Approvals</p><h3 id="statPendingApprovals" class="text-3xl font-headline font-extrabold text-slate-900">0</h3></div>
+<div class="bg-orange-50 p-3 rounded-lg"><span class="material-symbols-outlined text-orange-500">warning</span></div>
+</div>
+<div class="bg-white p-6 rounded-xl border border-slate-100 shadow-sm flex items-center justify-between stagger-item">
+<div><p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">System Health</p><h3 id="statSystemHealth" class="text-3xl font-headline font-extrabold text-slate-900">98%</h3></div>
+<div class="bg-purple-50 p-3 rounded-lg"><span class="material-symbols-outlined text-purple-500">pulse_alert</span></div>
+</div>
+</section>
+<!-- Chart and Activity -->
+<section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<div class="lg:col-span-2 bg-white p-8 rounded-xl border border-slate-100 shadow-sm">
+<div class="flex items-center justify-between mb-10"><h2 class="text-lg font-bold text-slate-900">Event Trends</h2></div>
+<div class="relative h-[300px] flex items-end justify-between px-4 pb-8 border-b border-slate-100">
+<div class="absolute inset-x-0 top-0 h-full flex flex-col justify-between pointer-events-none">
+<div class="w-full border-t border-slate-50 flex items-center"><span class="text-[10px] text-slate-400 -ml-8">8</span></div>
+<div class="w-full border-t border-slate-50 flex items-center"><span class="text-[10px] text-slate-400 -ml-8">6</span></div>
+<div class="w-full border-t border-slate-50 flex items-center"><span class="text-[10px] text-slate-400 -ml-8">4</span></div>
+<div class="w-full border-t border-slate-50 flex items-center"><span class="text-[10px] text-slate-400 -ml-8">2</span></div>
+<div class="w-full flex items-center"><span class="text-[10px] text-slate-400 -ml-8">0</span></div>
+</div>
+<div class="flex-1 flex flex-col items-center gap-2 group z-10"><div class="w-10 bg-[#4B69FF]/80 rounded-sm h-[50%] hover:bg-[#4B69FF] transition-all"></div><span class="text-xs font-medium text-slate-500">Jan</span></div>
+<div class="flex-1 flex flex-col items-center gap-2 group z-10"><div class="w-10 bg-[#4B69FF]/80 rounded-sm h-[35%] hover:bg-[#4B69FF] transition-all"></div><span class="text-xs font-medium text-slate-500">Feb</span></div>
+<div class="flex-1 flex flex-col items-center gap-2 group z-10"><div class="w-10 bg-[#4B69FF]/80 rounded-sm h-[25%] hover:bg-[#4B69FF] transition-all"></div><span class="text-xs font-medium text-slate-500">Mar</span></div>
+<div class="flex-1 flex flex-col items-center gap-2 group z-10"><div class="w-10 bg-[#4B69FF]/80 rounded-sm h-[75%] hover:bg-[#4B69FF] transition-all"></div><span class="text-xs font-medium text-slate-500">Apr</span></div>
+<div class="flex-1 flex flex-col items-center gap-2 group z-10"><div class="w-10 bg-[#4B69FF]/80 rounded-sm h-[100%] hover:bg-[#4B69FF] transition-all"></div><span class="text-xs font-medium text-slate-500">May</span></div>
+<div class="flex-1 flex flex-col items-center gap-2 group z-10"><div class="w-10 bg-[#4B69FF]/80 rounded-sm h-[60%] hover:bg-[#4B69FF] transition-all"></div><span class="text-xs font-medium text-slate-500">Jun</span></div>
+</div>
+</div>
+<div class="bg-white p-8 rounded-xl border border-slate-100 shadow-sm flex flex-col">
+<h2 class="text-lg font-bold text-slate-900 mb-6">Recent Activity</h2>
+<div class="space-y-6 flex-grow">
+<div class="flex gap-4"><div class="w-1.5 h-1.5 rounded-full bg-green-500 mt-2 shrink-0"></div><div><p class="text-sm text-slate-700 font-medium"><span class="font-bold">John Smith</span> created event <span class="text-primary">Tech Fest 2024</span></p><p class="text-[11px] text-slate-400 mt-1">2024-10-01 09:30 AM</p></div></div>
+<div class="flex gap-4"><div class="w-1.5 h-1.5 rounded-full bg-green-500 mt-2 shrink-0"></div><div><p class="text-sm text-slate-700 font-medium"><span class="font-bold">Jane Doe</span> registered <span class="text-primary">Tech Fest 2024</span></p><p class="text-[11px] text-slate-400 mt-1">2024-10-01 10:15 AM</p></div></div>
+<div class="flex gap-4"><div class="w-1.5 h-1.5 rounded-full bg-green-500 mt-2 shrink-0"></div><div><p class="text-sm text-slate-700 font-medium"><span class="font-bold">Admin User</span> approved club <span class="text-primary">Robotics Society</span></p><p class="text-[11px] text-slate-400 mt-1">2024-09-28 02:00 PM</p></div></div>
+<div class="flex gap-4"><div class="w-1.5 h-1.5 rounded-full bg-orange-500 mt-2 shrink-0"></div><div><p class="text-sm text-slate-700 font-medium"><span class="font-bold">John Smith</span> login failed <span class="text-primary">System</span></p><p class="text-[11px] text-slate-400 mt-1">2024-10-02 08:00 PM</p></div></div>
+<div class="flex gap-4"><div class="w-1.5 h-1.5 rounded-full bg-green-500 mt-2 shrink-0"></div><div><p class="text-sm text-slate-700 font-medium"><span class="font-bold">Admin User</span> deleted user <span class="text-primary">Test Account</span></p><p class="text-[11px] text-slate-400 mt-1">2024-09-25 11:45 AM</p></div></div>
+</div>
+<button class="mt-8 text-sm font-semibold text-slate-500 hover:text-primary transition-colors text-center w-full">View All Logs</button>
+</div>
+</section>
+<!-- Quick Management Action Cards -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<button class="flex items-center gap-4 p-5 bg-white rounded-xl border border-slate-100 shadow-sm border-l-4 border-l-blue-500 hover:bg-slate-50 transition-all text-left group" onclick="window.location.href='admin-events.html'">
+<div class="bg-blue-50 p-3 rounded-lg text-blue-500 group-hover:bg-blue-100"><span class="material-symbols-outlined">calendar_month</span></div>
+<div><h4 class="font-bold text-slate-900">Manage Events</h4><p class="text-xs text-slate-500">3 pending approval</p></div>
+</button>
+<button class="flex items-center gap-4 p-5 bg-white rounded-xl border border-slate-100 shadow-sm border-l-4 border-l-green-500 hover:bg-slate-50 transition-all text-left group" onclick="window.location.href='admin-clubs.html'">
+<div class="bg-green-50 p-3 rounded-lg text-green-500 group-hover:bg-green-100"><span class="material-symbols-outlined">account_balance</span></div>
+<div><h4 class="font-bold text-slate-900">Manage Clubs</h4><p class="text-xs text-slate-500">2 pending approval</p></div>
+</button>
+<button class="flex items-center gap-4 p-5 bg-white rounded-xl border border-slate-100 shadow-sm border-l-4 border-l-purple-500 hover:bg-slate-50 transition-all text-left group" onclick="window.location.href='admin-feedback.html'">
+<div class="bg-purple-50 p-3 rounded-lg text-purple-500 group-hover:bg-purple-100"><span class="material-symbols-outlined">forum</span></div>
+<div><h4 class="font-bold text-slate-900">View Feedback</h4><p class="text-xs text-slate-500">Analyze student feedback</p></div>
+</button>
+</section>
+  <!-- Pending Clubs section -->
+  <section id="pendingClubsSection" class="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden hidden">
+    <div class="px-8 py-6 flex items-center justify-between border-b border-slate-50">
+        <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-orange-500">pending_actions</span>
+            <h2 class="text-lg font-bold text-slate-900">Pending Club Requests</h2>
+        </div>
+        <button class="text-xs font-bold text-slate-500 border border-slate-200 px-3 py-1 rounded-lg hover:bg-slate-50" onclick="window.location.href='admin-clubs.html'">Manage All</button>
+    </div>
+    <div class="overflow-x-auto">
+        <table class="w-full text-left">
+            <tbody id="pendingClubsTableBody" class="divide-y divide-slate-50">
+                <!-- Data populated via JS -->
+            </tbody>
+        </table>
+    </div>
+  </section>
+
+  <!-- Recent Events Table -->
+<section class="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden">
+<div class="px-8 py-6 flex items-center justify-between">
+<h2 class="text-lg font-bold text-slate-900">Recent Events</h2>
+<button class="text-xs font-bold text-slate-500 border border-slate-200 px-3 py-1 rounded-lg hover:bg-slate-50" onclick="window.location.href='admin-events.html'">View All</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-slate-50/50">
+<tr class="text-[11px] uppercase tracking-widest text-slate-400 font-bold border-y border-slate-100">
+<th class="px-8 py-4">Event Name</th><th class="px-8 py-4">Organizer</th><th class="px-8 py-4">Date</th><th class="px-8 py-4">Status</th><th class="px-8 py-4 text-center">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-50">
+<tr class="hover:bg-slate-50/50 transition-colors"><td class="px-8 py-5 text-sm font-bold text-slate-800">SLIIT Tech Fest 2024</td><td class="px-8 py-5 text-sm text-slate-500">Software Engineering Club</td><td class="px-8 py-5 text-sm text-slate-500">10/15/2024</td><td class="px-8 py-5"><span class="px-2.5 py-1 bg-green-50 text-green-600 rounded-lg text-[10px] font-bold uppercase">upcoming</span></td><td class="px-8 py-5 text-center"><button class="text-red-400 hover:text-red-600 transition-colors"><span class="material-symbols-outlined text-lg">delete</span></button></td></tr>
+<tr class="hover:bg-slate-50/50 transition-colors"><td class="px-8 py-5 text-sm font-bold text-slate-800">Annual Sports Meet</td><td class="px-8 py-5 text-sm text-slate-500">Sports Council</td><td class="px-8 py-5 text-sm text-slate-500">11/2/2024</td><td class="px-8 py-5"><span class="px-2.5 py-1 bg-green-50 text-green-600 rounded-lg text-[10px] font-bold uppercase">upcoming</span></td><td class="px-8 py-5 text-center"><button class="text-red-400 hover:text-red-600 transition-colors"><span class="material-symbols-outlined text-lg">delete</span></button></td></tr>
+<tr class="hover:bg-slate-50/50 transition-colors"><td class="px-8 py-5 text-sm font-bold text-slate-800">Grand Career Fair</td><td class="px-8 py-5 text-sm text-slate-500">Career Guidance Unit</td><td class="px-8 py-5 text-sm text-slate-500">10/20/2024</td><td class="px-8 py-5"><span class="px-2.5 py-1 bg-green-50 text-green-600 rounded-lg text-[10px] font-bold uppercase">upcoming</span></td><td class="px-8 py-5 text-center"><button class="text-red-400 hover:text-red-600 transition-colors"><span class="material-symbols-outlined text-lg">delete</span></button></td></tr>
+<tr class="hover:bg-slate-50/50 transition-colors"><td class="px-8 py-5 text-sm font-bold text-slate-800">Acoustic Night</td><td class="px-8 py-5 text-sm text-slate-500">Glee Club</td><td class="px-8 py-5 text-sm text-slate-500">10/25/2024</td><td class="px-8 py-5"><span class="px-2.5 py-1 bg-green-50 text-green-600 rounded-lg text-[10px] font-bold uppercase">upcoming</span></td><td class="px-8 py-5 text-center"><button class="text-red-400 hover:text-red-600 transition-colors"><span class="material-symbols-outlined text-lg">delete</span></button></td></tr>
+<tr class="hover:bg-slate-50/50 transition-colors"><td class="px-8 py-5 text-sm font-bold text-slate-800">Robotics Workshop</td><td class="px-8 py-5 text-sm text-slate-500">Robotics Society</td><td class="px-8 py-5 text-sm text-slate-500">10/18/2024</td><td class="px-8 py-5"><span class="px-2.5 py-1 bg-green-50 text-green-600 rounded-lg text-[10px] font-bold uppercase">upcoming</span></td><td class="px-8 py-5 text-center"><button class="text-red-400 hover:text-red-600 transition-colors"><span class="material-symbols-outlined text-lg">delete</span></button></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+    </div>
+</main>
+<!-- Footer Shell -->
+<footer class="bg-slate-900 text-slate-400 py-12 border-t border-slate-800">
+<div class="max-w-[1400px] mx-auto px-12 grid grid-cols-1 md:grid-cols-4 gap-12">
+<div class="space-y-4">
+<div class="flex items-center gap-2 text-white font-bold text-xl"><span class="material-symbols-outlined text-primary">hub</span><span>Event Hub</span></div>
+<p class="text-sm leading-relaxed">The ultimate platform for university event management and coordination.</p>
+</div>
+<div class="space-y-4">
+<h5 class="text-white font-bold text-sm uppercase tracking-wider">Platform</h5>
+<ul class="space-y-2 text-sm text-slate-400">
+<li><a class="hover:text-white transition-colors" href="admin-dashboard.html">Dashboard</a></li>
+<li><a class="hover:text-white transition-colors" href="admin-events.html">Manage Events</a></li>
+<li><a class="hover:text-white transition-colors" href="admin-clubs.html">Manage Clubs</a></li>
+<li><a class="hover:text-white transition-colors" href="admin-feedback.html">Analytics</a></li>
+</ul>
+</div>
+<div class="space-y-4">
+<h5 class="text-white font-bold text-sm uppercase tracking-wider">Resources</h5>
+<ul class="space-y-2 text-sm text-slate-400">
+<li><a class="hover:text-white transition-colors" href="#">Help Desk</a></li>
+<li><a class="hover:text-white transition-colors" href="#">API Docs</a></li>
+<li><a class="hover:text-white transition-colors" href="#">System Status</a></li>
+<li><a class="hover:text-white transition-colors" href="#">Security</a></li>
+</ul>
+</div>
+<div class="space-y-4">
+<h5 class="text-white font-bold text-sm uppercase tracking-wider">Stay Updated</h5>
+<p class="text-sm">Subscribe to our admin newsletter for system updates.</p>
+<div class="flex gap-2">
+<input class="bg-slate-800 border-none rounded-lg px-4 py-2 text-sm w-full focus:ring-primary" placeholder="Email address" type="email"/>
+<button class="bg-primary text-white p-2 rounded-lg hover:bg-primary/90"><span class="material-symbols-outlined">send</span></button>
+</div>
+</div>
+</div>
+<div class="max-w-[1400px] mx-auto px-12 mt-12 pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="text-xs">© 2024 Scholar Hub Admin. University Event Management System.</p>
+<div class="flex gap-6 text-xs uppercase tracking-widest font-bold">
+<a class="hover:text-white" href="#">Privacy Policy</a>
+<a class="hover:text-white" href="#">Terms of Service</a>
+</div>
+</div>
+</footer>
+</div>
+
+<!-- Confirmation Modal -->
+<div id="deleteModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full overflow-hidden transform animate-in zoom-in-95 duration-200">
+        <div class="p-8 text-center">
+            <div class="w-20 h-20 bg-error/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                <span id="modalIcon" class="material-symbols-outlined text-4xl text-error">warning</span>
+            </div>
+            <h3 id="modalTitle" class="text-2xl font-bold text-slate-900 mb-2">Are you sure?</h3>
+            <p id="modalMessage" class="text-slate-500 leading-relaxed mb-8">This action cannot be undone. Please confirm you want to proceed.</p>
+            <div class="flex gap-3">
+                <button onclick="closeDeleteModal()" class="flex-1 px-6 py-3.5 rounded-xl font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 transition-all border border-slate-200">Cancel</button>
+                <button id="confirmDeleteBtn" class="flex-1 px-6 py-3.5 rounded-xl font-bold text-white bg-error hover:bg-error/90 shadow-lg shadow-error/20 transition-all">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    async function updateDashboardStats() {
+        try {
+            const resp = await fetch('/api/dashboard/stats');
+            if (resp.ok) {
+                const stats = await resp.json();
+                document.getElementById('statTotalUsers').textContent = stats.totalUsers || '0';
+                document.getElementById('statActiveEvents').textContent = stats.activeEvents || '0';
+                document.getElementById('statPendingApprovals').textContent = stats.pendingApprovals || '0';
+                document.getElementById('statSystemHealth').textContent = stats.systemHealth || '98%';
+                
+                // Also update the manage cards labels if they exist
+                const pendingEventsLabel = document.querySelector('button[onclick*="admin-events.html"] p');
+                if (pendingEventsLabel && stats.pendingEvents !== undefined) {
+                    pendingEventsLabel.textContent = `${stats.pendingEvents} pending approval`;
+                }
+            }
+        } catch (e) {
+            console.error("Failed to fetch dashboard stats", e);
+        }
+    }
+
+    async function updateRecentEvents() {
+        try {
+            const resp = await fetch('/api/events/admin/upcoming');
+            if (resp.ok) {
+                const events = await resp.json();
+                const tbody = document.querySelector('tbody.divide-y');
+                if (!tbody) return;
+                tbody.innerHTML = '';
+                if (events.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" class="px-8 py-10 text-center text-slate-400 italic">No recent events found.</td></tr>';
+                    return;
+                }
+                events.slice(0, 5).forEach(ev => {
+                    const orgName = ev.organizer ? (typeof ev.organizer === 'object' ? ev.organizer.name : ev.organizer) : 'System';
+                    const dateStr = new Date(ev.startTime).toLocaleDateString();
+                    const row = `
+                        <tr class="hover:bg-slate-50/50 transition-colors">
+                            <td class="px-8 py-5 text-sm font-bold text-slate-800">${ev.title || 'Untitled'}</td>
+                            <td class="px-8 py-5 text-sm text-slate-500">${orgName}</td>
+                            <td class="px-8 py-5 text-sm text-slate-500">${dateStr}</td>
+                            <td class="px-8 py-5"><span class="px-2.5 py-1 bg-green-50 text-green-600 rounded-lg text-[10px] font-bold uppercase">${ev.eventStatus || 'upcoming'}</span></td>
+                            <td class="px-8 py-5 text-center">
+                                <button onclick="deleteEvent(${ev.id})" class="text-red-400 hover:text-red-600 transition-colors">
+                                    <span class="material-symbols-outlined text-lg">delete</span>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                    tbody.insertAdjacentHTML('beforeend', row);
+                });
+            }
+        } catch (e) {
+            console.error("Failed to fetch recent events", e);
+        }
+    }
+
+    function openDeleteModal(config) {
+        const modal = document.getElementById('deleteModal');
+        const icon = document.getElementById('modalIcon');
+        const title = document.getElementById('modalTitle');
+        const message = document.getElementById('modalMessage');
+        const confirmBtn = document.getElementById('confirmDeleteBtn');
+
+        icon.textContent = config.icon || 'warning';
+        icon.className = `material-symbols-outlined text-4xl ${config.iconColor || 'text-error'}`;
+        icon.parentElement.className = `w-20 h-20 ${config.iconBg || 'bg-error/10'} rounded-full flex items-center justify-center mx-auto mb-6`;
+        title.textContent = config.title;
+        message.textContent = config.message;
+        confirmBtn.textContent = config.confirmText || 'Confirm';
+        confirmBtn.className = `flex-1 px-6 py-3.5 rounded-xl font-bold text-white ${config.confirmBtnClass || 'bg-error'} hover:opacity-90 transition-all shadow-lg`;
+        
+        confirmBtn.onclick = async () => {
+            await config.onConfirm();
+            closeDeleteModal();
+        };
+
+        modal.classList.remove('hidden');
+    }
+
+    function closeDeleteModal() {
+        document.getElementById('deleteModal').classList.add('hidden');
+    }
+
+    async function updatePendingClubs() {
+        try {
+            const resp = await fetch('/api/clubs/admin/pending');
+            if (resp.ok) {
+                const clubs = await resp.json();
+                const section = document.getElementById('pendingClubsSection');
+                const tbody = document.getElementById('pendingClubsTableBody');
+                
+                if (clubs.length > 0) {
+                    section.classList.remove('hidden');
+                    tbody.innerHTML = '';
+                    clubs.slice(0, 5).forEach(club => {
+                        const row = `
+                            <tr class="hover:bg-slate-50/50 transition-colors">
+                                <td class="px-8 py-4">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center overflow-hidden">
+                                            <img src="${club.logoUrl || 'assets/images/logo.png'}" class="w-full h-full object-cover">
+                                        </div>
+                                        <div>
+                                            <p class="text-sm font-bold text-slate-800">${club.name}</p>
+                                            <p class="text-[10px] text-slate-400 uppercase font-bold">${club.category}</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-8 py-4 text-sm text-slate-500">${club.presidentEmail}</td>
+                                <td class="px-8 py-4 text-right">
+                                    <div class="flex justify-end gap-2">
+                                        <button onclick="approveClub(${club.id})" class="p-1 px-3 bg-green-50 text-green-600 rounded-lg text-[10px] font-bold uppercase hover:bg-green-100 transition-colors">Approve</button>
+                                        <button onclick="rejectClub(${club.id})" class="p-1 px-3 bg-red-50 text-red-600 rounded-lg text-[10px] font-bold uppercase hover:bg-red-100 transition-colors">Reject</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        `;
+                        tbody.insertAdjacentHTML('beforeend', row);
+                    });
+                } else {
+                    section.classList.add('hidden');
+                }
+            }
+        } catch (e) {
+            console.error("Failed to fetch pending clubs", e);
+        }
+    }
+
+    async function approveClub(id) {
+        if(confirm("Approve this club?")) {
+            const res = await fetch(`/api/clubs/${id}/approve`, { method: 'POST' });
+            if(res.ok) {
+                updateDashboardStats();
+                updatePendingClubs();
+            }
+        }
+    }
+
+    async function rejectClub(id) {
+        if(confirm("Reject this club request?")) {
+            const res = await fetch(`/api/clubs/${id}/reject`, { method: 'POST' });
+            if(res.ok) {
+                updateDashboardStats();
+                updatePendingClubs();
+            }
+        }
+    }
+
+    async function logout() {
+        localStorage.clear();
+        sessionStorage.clear();
+        window.location.href = 'landing-page.html';
+    }
+
+    async function deleteEvent(id) {
+        openDeleteModal({
+            title: 'Delete Event',
+            message: 'Are you sure you want to permanently delete this event? This action will remove all registration data.',
+            onConfirm: async () => {
+                const res = await fetch(`/api/events/${id}`, { method: 'DELETE' });
+                if (res.ok) {
+                    updateDashboardStats();
+                    updateRecentEvents();
+                } else {
+                    alert("Failed to delete event.");
+                }
+            }
+        });
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        updateDashboardStats();
+        updateRecentEvents();
+        updatePendingClubs();
+        
+        // Polling loop
+        setInterval(() => {
+            updateDashboardStats();
+            updateRecentEvents();
+            updatePendingClubs();
+        }, 30000);
+    });
+</script>
+<script src="assets/js/transitions.js"></script>
+</body>
+</html>

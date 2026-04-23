@@ -1,0 +1,774 @@
+/* ============================================
+   SMOOTH PAGE TRANSITION ANIMATIONS
+   UniEvent - Modern Animation System
+   ============================================ */
+
+/* Import for smooth animations */
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap');
+
+/* ============================================
+   1. PAGE FADE + SLIDE TRANSITION
+   ============================================ */
+
+/* Page entry animation */
+@keyframes pageSlideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Page exit animation */
+@keyframes pageSlideOutLeft {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+}
+
+/* Page fade in animation */
+@keyframes pageFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Page fade out animation */
+@keyframes pageFadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Apply page transition to main content */
+.page-enter {
+  animation: pageSlideInRight 400ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.page-exit {
+  animation: pageSlideOutLeft 300ms ease-in-out forwards;
+}
+
+.page-fade-in {
+  animation: pageFadeIn 400ms ease-out forwards;
+}
+
+.page-fade-out {
+  animation: pageFadeOut 300ms ease-in forwards;
+}
+
+/* ============================================
+   2. ROUTE LOADING ANIMATION
+   ============================================ */
+
+/* Progress bar animation */
+@keyframes progressBarLoad {
+  0% {
+    width: 0%;
+    opacity: 1;
+  }
+  90% {
+    width: 90%;
+    opacity: 1;
+  }
+  100% {
+    width: 100%;
+    opacity: 0;
+  }
+}
+
+@keyframes progressBarIndeterminate {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100vw);
+  }
+}
+
+/* Progress bar styles */
+.progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #21417f, #3b5998, #21417f);
+  box-shadow: 0 0 15px rgba(33, 65, 127, 0.4);
+  border-radius: 2px;
+  z-index: 9999;
+  opacity: 0;
+  transform-origin: left;
+}
+
+.progress-bar.active {
+  animation: progressBarLoad 3s cubic-bezier(0.1, 0.6, 0.2, 1) infinite;
+}
+
+.progress-bar.complete {
+  animation: progressBarLoad 600ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Spinner animation */
+@keyframes spinnerRotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(33, 65, 127, 0.1);
+  border-top-color: #21417f;
+  border-radius: 50%;
+  animation: spinnerRotate 1s linear infinite;
+}
+
+.spinner.small {
+  width: 16px;
+  height: 16px;
+  border-width: 2px;
+}
+
+.spinner.large {
+  width: 40px;
+  height: 40px;
+  border-width: 4px;
+}
+
+/* Loading overlay */
+@keyframes loadingFadeIn {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(2px);
+  }
+}
+
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9998;
+  animation: loadingFadeIn 300ms ease-out forwards;
+}
+
+/* ============================================
+   3. BUTTON CLICK FEEDBACK
+   ============================================ */
+
+/* Button scale animation */
+@keyframes buttonPress {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.97);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes buttonPressSmall {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Ripple effect */
+@keyframes ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* Button interaction styles */
+button, a.btn, input[type="submit"], input[type="button"] {
+  position: relative;
+  overflow: hidden;
+  transition: all 150ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+button:active, a.btn:active {
+  animation: buttonPress 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Enhanced button with ripple */
+.btn-ripple {
+  position: relative;
+}
+
+.btn-ripple::after {
+  content: '';
+  position: absolute;
+  top: var(--ripple-x, 50%);
+  left: var(--ripple-y, 50%);
+  width: 10px;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: ripple 600ms ease-out;
+  pointer-events: none;
+}
+
+/* ============================================
+   4. CARD / COMPONENT HOVER EFFECTS
+   ============================================ */
+
+/* Card lift animation */
+@keyframes cardLift {
+  from {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+  to {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+  }
+}
+
+/* Card hover state */
+.card-hover {
+  transition: all 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: pointer;
+}
+
+.card-hover:hover {
+  animation: cardLift 200ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Subtle scale hover */
+.card-interact {
+  transition: all 200ms ease-out;
+}
+
+.card-interact:hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 20px rgba(33, 65, 127, 0.15);
+}
+
+/* Card entrance animation */
+@keyframes cardEnter {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card-enter {
+  animation: cardEnter 400ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Staggered card entrance */
+.card-enter-1 { animation-delay: 0ms; }
+.card-enter-2 { animation-delay: 50ms; }
+.card-enter-3 { animation-delay: 100ms; }
+.card-enter-4 { animation-delay: 150ms; }
+.card-enter-5 { animation-delay: 200ms; }
+.card-enter-6 { animation-delay: 250ms; }
+
+/* ============================================
+   5. MODAL / POPUP ANIMATION
+   ============================================ */
+
+/* Modal backdrop fade */
+@keyframes modalBackdropFadeIn {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(4px);
+  }
+}
+
+@keyframes modalBackdropFadeOut {
+  from {
+    opacity: 1;
+    backdrop-filter: blur(4px);
+  }
+  to {
+    opacity: 0;
+    backdrop-filter: blur(0px);
+  }
+}
+
+/* Modal content animation */
+@keyframes modalSlideUp {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes modalSlideDown {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95) translateY(20px);
+  }
+}
+
+/* Top-down modal animation */
+@keyframes modalDropDown {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Modal styles */
+.modal-enter {
+  animation: modalSlideUp 300ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.modal-exit {
+  animation: modalSlideDown 250ms ease-in forwards;
+}
+
+.modal-backdrop-enter {
+  animation: modalBackdropFadeIn 300ms ease-out forwards;
+}
+
+.modal-backdrop-exit {
+  animation: modalBackdropFadeOut 250ms ease-in forwards;
+}
+
+.modal-dropdown-enter {
+  animation: modalDropDown 250ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* ============================================
+   6. SIDEBAR / NAVIGATION TRANSITION
+   ============================================ */
+
+/* Sidebar slide animation */
+@keyframes sidebarSlideIn {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes sidebarSlideOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+}
+
+/* Sidebar item animation */
+@keyframes sidebarItemSlide {
+  from {
+    opacity: 0;
+    transform: translateX(-15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.sidebar-enter {
+  animation: sidebarSlideIn 300ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.sidebar-exit {
+  animation: sidebarSlideOut 250ms ease-in forwards;
+}
+
+.sidebar-item-enter {
+  animation: sidebarItemSlide 300ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Smooth width transition */
+.sidebar-collapse {
+  transition: width 300ms cubic-bezier(0.34, 1.56, 0.64, 1),
+              max-width 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Icon fade + slide */
+@keyframes iconSlide {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.nav-icon {
+  animation: iconSlide 300ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* ============================================
+   7. LIST & GRID ANIMATIONS
+   ============================================ */
+
+/* List item entrance */
+@keyframes listItemEnter {
+  from {
+    opacity: 0;
+    transform: translateX(-15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.list-item-enter {
+  animation: listItemEnter 300ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Staggered list items */
+.list-item-enter-1 { animation-delay: 0ms; }
+.list-item-enter-2 { animation-delay: 50ms; }
+.list-item-enter-3 { animation-delay: 100ms; }
+.list-item-enter-4 { animation-delay: 150ms; }
+.list-item-enter-5 { animation-delay: 200ms; }
+
+/* List item exit */
+@keyframes listItemExit {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(15px);
+  }
+}
+
+.list-item-exit {
+  animation: listItemExit 200ms ease-in forwards;
+}
+
+/* ============================================
+   8. DROPDOWN & EXPAND ANIMATIONS
+   ============================================ */
+
+/* Dropdown slide down */
+@keyframes dropdownOpen {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    max-height: 500px;
+  }
+}
+
+@keyframes dropdownClose {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+    max-height: 500px;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+    max-height: 0;
+  }
+}
+
+.dropdown-enter {
+  animation: dropdownOpen 250ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  overflow: hidden;
+}
+
+.dropdown-exit {
+  animation: dropdownClose 200ms ease-in forwards;
+  overflow: hidden;
+}
+
+/* Smooth height transition */
+.dropdown-smooth {
+  transition: max-height 300ms cubic-bezier(0.34, 1.56, 0.64, 1),
+              opacity 300ms ease-out,
+              padding 300ms ease-out;
+  overflow: hidden;
+}
+
+/* ============================================
+   9. TOAST / NOTIFICATION ANIMATIONS
+   ============================================ */
+
+/* Toast slide in */
+@keyframes toastSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(380px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Toast slide out */
+@keyframes toastSlideOut {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(380px);
+  }
+}
+
+.toast-enter {
+  animation: toastSlideIn 300ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.toast-exit {
+  animation: toastSlideOut 300ms ease-in forwards;
+}
+
+/* ============================================
+   10. INPUT FOCUS & VALIDATION ANIMATIONS
+   ============================================ */
+
+/* Input focus border animation */
+@keyframes inputBorderGlow {
+  from {
+    border-color: rgba(33, 65, 127, 0);
+    box-shadow: 0 0 0 0 rgba(33, 65, 127, 0.1);
+  }
+  to {
+    border-color: rgba(33, 65, 127, 0.5);
+    box-shadow: 0 0 0 3px rgba(33, 65, 127, 0.1);
+  }
+}
+
+input:focus-visible, textarea:focus-visible, select:focus-visible {
+  animation: inputBorderGlow 300ms ease-out forwards;
+}
+
+/* Input error shake */
+@keyframes inputShake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
+}
+
+.input-error {
+  animation: inputShake 300ms ease-out;
+}
+
+/* ============================================
+   11. BADGE & TAG ANIMATIONS
+   ============================================ */
+
+/* Badge pulse */
+@keyframes badgePulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(33, 65, 127, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(33, 65, 127, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(33, 65, 127, 0);
+  }
+}
+
+.badge-pulse {
+  animation: badgePulse 2s infinite;
+}
+
+/* Badge bounce */
+@keyframes badgeBounce {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-8px) scale(1.1);
+  }
+}
+
+.badge-bounce {
+  animation: badgeBounce 600ms cubic-bezier(0.34, 1.56, 0.64, 1) infinite;
+}
+
+/* ============================================
+   12. SCROLL & REVEAL ANIMATIONS
+   ============================================ */
+
+/* Fade in on scroll */
+@keyframes scrollFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.scroll-fade-in {
+  animation: scrollFadeIn 600ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  opacity: 0;
+}
+
+/* ============================================
+   13. UTILITY TRANSITION CLASSES
+   ============================================ */
+
+/* Fast transitions */
+.transition-fast {
+  transition: all 150ms ease-out;
+}
+
+/* Normal transitions */
+.transition-normal {
+  transition: all 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Slow transitions */
+.transition-slow {
+  transition: all 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Specific property transitions */
+.transition-transform { transition: transform 300ms cubic-bezier(0.34, 1.56, 0.64, 1); }
+.transition-opacity { transition: opacity 300ms ease-out; }
+.transition-colors { transition: background-color 300ms ease-out, color 300ms ease-out, border-color 300ms ease-out; }
+.transition-shadow { transition: box-shadow 300ms ease-out; }
+.transition-all { transition: all 300ms cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+/* ============================================
+   14. REDUCED MOTION SUPPORT (ACCESSIBILITY)
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================
+   15. PERFORMANCE OPTIMIZATIONS
+   ============================================ */
+
+/* Use will-change for expensive animations */
+.animate-page {
+  will-change: opacity, transform;
+}
+
+.animate-modal {
+  will-change: opacity, transform;
+}
+
+.animate-card {
+  will-change: transform, box-shadow;
+}
+
+/* GPU acceleration */
+.gpu-accelerate {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* ============================================
+   16. RESPONSIVE ANIMATION ADJUSTMENTS
+   ============================================ */
+
+@media (max-width: 768px) {
+  /* Faster animations on mobile */
+  .page-enter {
+    animation-duration: 300ms;
+  }
+
+  .modal-enter {
+    animation-duration: 250ms;
+  }
+
+  .card-enter {
+    animation-duration: 300ms;
+  }
+
+  /* Reduce motion for better performance */
+  @media (prefers-reduced-motion: no-preference) {
+    body {
+      transition: background-color 250ms ease-out;
+    }
+  }
+}

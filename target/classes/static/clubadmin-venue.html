@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Venue Discovery | Club Admin Portal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script src="assets/js/data-sync.js"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#21417f",
+                        "on-surface": "#191c1d",
+                        "surface-container": "#edeeef",
+                        "surface-container-high": "#e7e8e9",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed": "#d9e2ff",
+                        "on-primary-fixed": "#001944",
+                        "outline": "#747781",
+                        "outline-variant": "#c4c6d2"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        body { font-family: 'Inter', sans-serif; background-color: #f8f9fa; color: #191c1d; }
+        .font-headline { font-family: 'Manrope', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface">
+<div id="layout-root">
+<header class="bg-white border-b border-slate-200 sticky-nav">
+    <div class="max-w-7xl mx-auto px-6 w-full flex justify-between items-center h-full">
+        <div class="flex items-center gap-12 h-full">
+            <div class="flex items-center gap-2 cursor-pointer" onclick="window.location.href='clubadmin-dashboard.html'">
+                <img src="assets/images/logo.png" alt="Scholar Hub" class="h-8 md:h-10">
+            </div>
+            <nav class="hidden md:flex items-center h-full space-x-8">
+                <a class="nav-link text-sm font-medium text-slate-500 hover:text-primary h-full flex items-center" href="clubadmin-dashboard.html">Dashboard</a>
+                <a class="nav-link text-sm font-medium text-slate-500 hover:text-primary h-full flex items-center" href="clubadmin-myclub.html">My Club</a>
+                <a class="nav-link text-sm font-medium text-slate-500 hover:text-primary h-full flex items-center" href="clubadmin-events.html">Events</a>
+                <a class="nav-link text-sm font-medium text-slate-500 hover:text-primary h-full flex items-center" href="clubadmin-clubs.html">Clubs</a>
+                <a class="nav-link text-sm font-medium text-slate-500 hover:text-primary h-full flex items-center" href="clubadmin-venue.html">Venues</a>
+                <a class="nav-link text-sm font-medium text-slate-500 hover:text-primary h-full flex items-center" href="clubadmin-feedback.html">Feedback</a>
+            </nav>
+        </div>
+        <div class="flex items-center gap-4 h-full">
+            <button class="relative p-1 text-slate-500 hover:text-primary transition-colors">
+                <span class="material-symbols-outlined align-middle" style="font-variation-settings: 'FILL' 1">notifications</span>
+            </button>
+            <div class="flex items-center gap-3 pl-3 border-l border-slate-200 relative cursor-pointer group" onclick="document.getElementById('profileDropdown').classList.toggle('hidden')">
+                <div class="h-9 w-9 rounded-full overflow-hidden border border-slate-200 bg-slate-100 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-slate-500">person</span>
+                </div>
+                <span id="userName" class="text-sm font-semibold text-slate-700 hidden lg:block">Club Admin</span>
+                <span class="material-symbols-outlined text-sm text-slate-400">expand_more</span>
+                
+                <div id="profileDropdown" class="hidden absolute top-full right-0 mt-4 w-48 bg-white rounded-xl shadow-lg border border-slate-200 py-2 z-50">
+                    <a href="profile.html" class="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors">
+                        <span class="material-symbols-outlined text-[18px]">person</span>
+                        My Profile
+                    </a>
+                    <div class="h-[1px] bg-slate-100 my-1 mx-2"></div>
+                    <a href="javascript:void(0)" onclick="logout()" class="flex items-center gap-2 px-4 py-2 text-sm text-error hover:bg-error/5 transition-colors font-semibold">
+                        <span class="material-symbols-outlined text-[18px]">logout</span>
+                        Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="page-transition-enter">
+    <div class="max-w-7xl mx-auto pt-12 pb-24 w-full">
+        <section class="mb-10">
+            <h2 class="font-headline text-[1.75rem] font-black text-on-surface tracking-tight mb-2">Campus Venues</h2>
+            <p class="font-body text-slate-500 text-md">Browse available spaces and facilities across campus for your club's next event.</p>
+        </section>
+
+        <!-- Search & Filters -->
+        <section class="flex flex-col md:flex-row gap-4 mb-10">
+            <div class="flex-1 bg-surface-container-lowest rounded-lg border border-outline-variant/20 flex items-center px-4 gap-3">
+                <span class="material-symbols-outlined text-outline">search</span>
+                <input id="searchInput" class="w-full bg-transparent border-none focus:ring-0 text-sm py-3" placeholder="Search venues by name, location or facilities..." type="text" oninput="applyFilters()"/>
+            </div>
+            <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1" id="filterButtons">
+                <button onclick="setFilter('ALL')" class="filter-btn active-filter px-5 py-2 bg-primary-fixed text-on-primary-fixed rounded-full text-xs font-bold uppercase tracking-wide border focus:outline-none transition-all" data-type="ALL">All</button>
+                <button onclick="setFilter('HALL')" class="filter-btn px-5 py-2 bg-surface-container text-outline rounded-full text-xs font-bold uppercase tracking-wide border focus:outline-none transition-all hover:bg-surface-container-high" data-type="HALL">Lecture Hall</button>
+                <button onclick="setFilter('AUDITORIUM')" class="filter-btn px-5 py-2 bg-surface-container text-outline rounded-full text-xs font-bold uppercase tracking-wide border focus:outline-none transition-all hover:bg-surface-container-high" data-type="AUDITORIUM">Auditorium</button>
+                <button onclick="setFilter('LAB')" class="filter-btn px-5 py-2 bg-surface-container text-outline rounded-full text-xs font-bold uppercase tracking-wide border focus:outline-none transition-all hover:bg-surface-container-high" data-type="LAB">Laboratory</button>
+                <button onclick="setFilter('MEETING_ROOM')" class="filter-btn px-5 py-2 bg-surface-container text-outline rounded-full text-xs font-bold uppercase tracking-wide border focus:outline-none transition-all hover:bg-surface-container-high" data-type="MEETING_ROOM">Conference</button>
+                <button onclick="setFilter('OUTDOOR')" class="filter-btn px-5 py-2 bg-surface-container text-outline rounded-full text-xs font-bold uppercase tracking-wide border focus:outline-none transition-all hover:bg-surface-container-high" data-type="OUTDOOR">Outdoor</button>
+                <button onclick="setFilter('SPORTS_AREA')" class="filter-btn px-5 py-2 bg-surface-container text-outline rounded-full text-xs font-bold uppercase tracking-wide border focus:outline-none transition-all hover:bg-surface-container-high" data-type="SPORTS_AREA">Sports Area</button>
+            </div>
+        </section>
+
+<div id="venueGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+    <!-- Loaded via JS -->
+</div>
+</div>
+    </div>
+</main>
+</div>
+
+<script>
+    let allVenues = [];
+    let currentFilter = 'ALL';
+
+    const fallbackImage = "https://lh3.googleusercontent.com/aida-public/AB6AXuAEnvYK_IA-jsUMTPmgUtZhBJ5xRa8rEJ18OGZDcuNpWl0hN4wNnMwYPr4IBHyQFZ8h8E7dD1kLqyH_HwMqgLQZ8-0a97shV0kjbMuwyBgMzkL2ZNq_YNjkwWopTcPyz-L2M32-8_DUWHGqfFvMTXc02G4fYG5A9bT-reNtbr4GfZQZQDcIqoiOHPBqA0h23Wp8B5_hwtN2IDogadV1wKym0FGHoR7bVn0dZWsaefc-ciEyTFJbaqbFsO1cRyFGqVEsuiO1VbY_wVkK";
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (user) {
+            document.getElementById('userName').textContent = user.name;
+        }
+        
+        fetchVenues();
+    });
+
+    function logout() {
+        localStorage.removeItem('user');
+        sessionStorage.clear();
+        window.location.href = 'landing-page.html';
+    }
+
+    async function fetchVenues() {
+        try {
+            const resp = await fetch(`/api/venues?t=${Date.now()}`, {
+                headers: { 'Cache-Control': 'no-cache' }
+            });
+            allVenues = await resp.json();
+            allVenues.sort((a, b) => b.id - a.id); // Show newest first
+            applyFilters();
+        } catch (e) {
+            console.error(e);
+            document.getElementById('venueGrid').innerHTML = '<p class="col-span-3 text-red-500 text-sm">Failed to load venues.</p>';
+        }
+    }
+
+    function setFilter(type) {
+        currentFilter = type;
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            if (btn.dataset.type === type) {
+                btn.classList.add('bg-primary-fixed', 'text-on-primary-fixed');
+                btn.classList.remove('bg-surface-container', 'text-outline');
+            } else {
+                btn.classList.add('bg-surface-container', 'text-outline');
+                btn.classList.remove('bg-primary-fixed', 'text-on-primary-fixed');
+            }
+        });
+        applyFilters();
+    }
+
+    function applyFilters() {
+        const query = document.getElementById('searchInput').value.toLowerCase();
+        let filtered = allVenues;
+
+        if (currentFilter !== 'ALL') {
+            filtered = filtered.filter(v => v.venueType === currentFilter);
+        }
+
+        if (query) {
+            filtered = filtered.filter(v => 
+                (v.name && v.name.toLowerCase().includes(query)) || 
+                (v.facilities && v.facilities.toLowerCase().includes(query)) ||
+                (v.location && v.location.toLowerCase().includes(query))
+            );
+        }
+
+        renderVenues(filtered);
+    }
+
+    function renderVenues(venues) {
+        const grid = document.getElementById('venueGrid');
+        grid.innerHTML = '';
+        
+        if (venues.length === 0) {
+            grid.innerHTML = '<p class="col-span-full text-center text-slate-500">No venues found.</p>';
+            return;
+        }
+
+        venues.forEach(venue => {
+            const card = `
+                <div class="group bg-white rounded-2xl overflow-hidden shadow-sm hover:translate-y-[-4px] transition-all duration-300">
+                    <div class="relative h-56 overflow-hidden">
+                        <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" src="${venue.imageUrl || fallbackImage}" alt="${venue.name}"/>
+                        <div class="absolute top-4 left-4">
+                            <span class="px-3 py-1 rounded-full bg-green-100 text-green-700 text-[0.6875rem] font-bold uppercase tracking-wider">Available</span>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-headline text-xl font-extrabold text-on-surface mb-1">${venue.name}</h3>
+                        <p class="font-body text-sm text-slate-400 flex items-center gap-1 mb-4">
+                            <span class="material-symbols-outlined text-[1rem]">groups</span>
+                            Capacity: ${venue.capacity}
+                        </p>
+                        <p class="text-xs text-slate-500 mb-6 italic">${venue.location}</p>
+                        <button onclick="window.location.href='clubadmin-venuecheckavailability.html?id=${venue.id}'" class="w-full py-3.5 bg-gradient-to-br from-primary to-primary-container text-white font-headline font-bold text-sm rounded-xl hover:opacity-90 transition-all">Check Availability</button>
+                    </div>
+                </div>
+            `;
+            grid.innerHTML += card;
+        });
+    }
+</script>
+    <script src="assets/js/transitions.js"></script>
+</body></html>

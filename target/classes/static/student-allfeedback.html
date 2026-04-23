@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Scholar Hub | Public Feedbacks</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#21417f"
+                    },
+                    fontFamily: {"headline": ["Manrope"], "body": ["Inter"]},
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        body { background-color: #f3f4f5; }
+    </style>
+</head>
+<body class="font-body text-slate-800">
+<header class="bg-white border-b border-slate-200 sticky top-0 z-50 h-16 flex items-center">
+        <div class="max-w-7xl mx-auto px-6 w-full flex justify-between items-center">
+            <div class="flex items-center gap-12" id="navContainer">
+                <!-- Nav populated via roles -->
+            </div>
+            <div class="flex items-center gap-4">
+                <button class="relative p-2 text-slate-500 hover:text-primary transition-colors">
+                    <span class="material-symbols-outlined">notifications</span>
+                </button>
+                <div class="flex items-center gap-3 pl-3 border-l border-slate-200 relative cursor-pointer group" onclick="document.getElementById('profileDropdown').classList.toggle('hidden')">
+                    <div class="h-9 w-9 rounded-full overflow-hidden border border-slate-200 bg-slate-100 flex items-center justify-center" data-flip-id="user-profile">
+                        <span class="material-symbols-outlined text-slate-500">person</span>
+                    </div>
+                    <span id="userName" class="text-sm font-semibold text-slate-700 hidden lg:block">User Profile</span>
+                    <span class="material-symbols-outlined text-sm text-slate-400">expand_more</span>
+                    <div id="profileDropdown" class="hidden absolute top-full right-0 mt-4 w-48 bg-white rounded-xl shadow-lg border border-slate-200 py-2 z-50">
+                        <div class="px-4 py-2 border-b border-slate-100 mb-1">
+                            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Account</p>
+                        </div>
+                        <a href="profile.html" class="flex items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 transition-colors">
+                            <span class="material-symbols-outlined text-[18px]">person</span>My Profile
+                        </a>
+                        <div class="h-[1px] bg-slate-100 my-1 mx-2"></div>
+                        <a href="javascript:void(0)" onclick="logout()" class="flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors font-semibold">
+                            <span class="material-symbols-outlined text-[18px]">logout</span>Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-6 py-12">
+    <div class="text-center mb-12">
+        <h1 class="text-4xl font-extrabold font-headline text-slate-900 mb-2">Event Feedback</h1>
+        <p class="text-slate-500">Share your experience or read what others have to say</p>
+    </div>
+
+    <!-- Standard Tabs -->
+    <div class="flex justify-center mb-12">
+        <div id="feedbackTabs" class="inline-flex p-1 bg-white rounded-2xl shadow-sm border border-slate-200">
+            <button id="tab-submit-btn" onclick="window.location.href='student-feedback.html'" class="px-6 py-3 text-sm font-semibold rounded-xl text-slate-500 hover:bg-slate-50 transition-colors">Submit Feedback</button>
+            <button onclick="window.location.href='student-allfeedback.html'" class="px-6 py-3 text-sm font-bold rounded-xl tab-active">All Feedbacks</button>
+            <button onclick="window.location.href='student-mysentfeedback.html'" class="px-6 py-3 text-sm font-semibold rounded-xl text-slate-500 hover:bg-slate-50 transition-colors">My Sent Feedbacks <span id="mySentCount"></span></button>
+            <button id="analyticsTabBtn" onclick="window.location.href='clubadmin-feedback.html'" class="hidden px-6 py-3 text-sm font-semibold rounded-xl text-slate-500 hover:bg-slate-50 transition-colors">Club Event Analytics</button>
+        </div>
+    </div>
+
+    <div id="feedbackList" class="space-y-6">
+        <!-- Data populated via JS -->
+         <p class="text-center text-slate-400">Loading feedback...</p>
+    </div>
+</main>
+
+<script>
+    const user = JSON.parse(localStorage.getItem('user'));
+    let feedbackPollingInterval = null;
+    if (!user) { window.location.href = 'login.html'; return; }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('userName').textContent = user.name;
+        if (user.avatar) document.getElementById('userAvatar').src = user.avatar;
+        
+        renderNavBar();
+        renderFeedbackTabs();
+        fetchAllFeedback();
+        updateMySentCount();
+
+        // Start polling for live updates
+        feedbackPollingInterval = setInterval(fetchAllFeedback, 5000);
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            const dropdown = document.getElementById('profileDropdown');
+            const profileBtn = dropdown.parentElement;
+            if (!profileBtn.contains(e.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
+    });
+
+    function renderNavBar() {
+        const nav = document.getElementById('navContainer');
+        const role = user.role;
+        const logo = `<div class="flex items-center gap-2 cursor-pointer" onclick="window.location.href='${role.toLowerCase() === 'admin' ? 'admin' : 'student'}-dashboard.html'">
+            <img src="assets/images/logo.png" alt="Scholar Hub" class="h-8 md:h-10">
+        </div>`;
+        
+        let links = '';
+        if (role === 'STUDENT') {
+            links = `<nav class="hidden md:flex items-center space-x-8 text-sm font-semibold">
+                <a class="text-slate-500 hover:text-primary transition-colors" href="student-dashboard.html">Dashboard</a>
+                <a class="text-slate-500 hover:text-primary transition-colors" href="student-event.html">Events</a>
+                <a class="text-slate-500 hover:text-primary transition-colors" href="student-clubs.html">Clubs</a>
+                <a class="text-slate-500 hover:text-primary transition-colors" href="student-venues.html">Venues</a>
+                <a class="text-primary border-b-2 border-primary pb-1 font-bold" href="student-feedback.html">Feedback</a>
+            </nav>`;
+        } else if (role === 'CLUB_ADMIN') {
+            links = `<nav class="hidden md:flex items-center space-x-8 text-sm font-semibold">
+                <a class="text-slate-500 hover:text-primary transition-colors" href="clubadmin-dashboard.html">Dashboard</a>
+                <a class="text-slate-500 hover:text-primary transition-colors" href="clubadmin-myclub.html">My Club</a>
+                <a class="text-slate-500 hover:text-primary transition-colors" href="clubadmin-events.html">Events</a>
+                <a class="text-slate-500 hover:text-primary transition-colors" href="clubadmin-clubs.html">Clubs</a>
+                <a class="text-slate-500 hover:text-primary transition-colors" href="clubadmin-venue.html">Venues</a>
+                <a class="text-primary border-b-2 border-primary pb-1 font-bold" href="clubadmin-feedback.html">Feedback</a>
+            </nav>`;
+        }
+        nav.innerHTML = logo + links;
+    }
+
+    function renderFeedbackTabs() {
+        if (user.role === 'CLUB_ADMIN') {
+            document.getElementById('analyticsTabBtn').classList.remove('hidden');
+            // Redirect club admins to their respective feedback submission page
+            document.getElementById('tab-submit-btn').onclick = () => window.location.href = 'clubadmin-feedback.html?tab=submit';
+        }
+    }
+
+    async function updateMySentCount() {
+        try {
+            const resp = await fetch(`/api/feedback/student/${user.id}`);
+            const data = await resp.json();
+            document.getElementById('mySentCount').textContent = `(${data.length})`;
+        } catch (e) { console.error(e); }
+    }
+
+    function logout() {
+        localStorage.removeItem('user');
+        window.location.href = 'login.html';
+    }
+
+    async function fetchAllFeedback() {
+        try {
+            const resp = await fetch('/api/feedback/all');
+            const feedback = await resp.json();
+            const list = document.getElementById('feedbackList');
+            list.innerHTML = '';
+            
+            if (feedback.length === 0) {
+                list.innerHTML = '<div class="bg-white p-12 text-center rounded-2xl shadow-sm text-slate-400">No public feedback available yet.</div>';
+                return;
+            }
+
+            feedback.forEach(f => {
+                const card = `
+                    <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 flex flex-col space-y-4 hover:shadow-md transition-shadow">
+                        <div class="flex justify-between items-start">
+                             <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center overflow-hidden">
+                                     <span class="material-symbols-outlined text-slate-300">account_circle</span>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-sm text-on-surface">${f.student ? f.student.name : 'Anonymous'}</p>
+                                    <p class="text-[0.625rem] text-slate-400 font-bold uppercase tracking-widest">${new Date(f.submittedAt).toLocaleDateString()}</p>
+                                </div>
+                             </div>
+                             <div class="flex items-center bg-blue-50 text-primary px-3 py-1 rounded-full text-xs font-bold ring-1 ring-blue-200">
+                                <span class="material-symbols-outlined text-xs fill-1 mr-1">star</span>
+                                ${f.rating}/5
+                             </div>
+                        </div>
+                        <div>
+                            <p class="text-xs font-bold text-primary mb-1 uppercase tracking-wider">${f.event.title}</p>
+                            <p class="text-sm text-on-surface leading-relaxed font-body">${f.comment}</p>
+                        </div>
+                    </div>
+                `;
+                list.innerHTML += card;
+            });
+        } catch (e) {
+            console.error("Failed to load feedback", e);
+        }
+    }
+</script>
+</body>
+</html>

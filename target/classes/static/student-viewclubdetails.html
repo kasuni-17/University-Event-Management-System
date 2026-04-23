@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Scholar Hub | Club Profile</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#21417f",
+                        "on-surface": "#191c1d",
+                        "on-surface-variant": "#444650",
+                        "surface-container-low": "#f3f4f5",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-container": "#80f98b",
+                        "on-secondary-container": "#007327",
+                        "outline": "#747781",
+                        "outline-variant": "#c4c6d2",
+                        "surface-container-high": "#e7e8e9"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .premium-shadow {
+            box-shadow: 0 12px 40px rgba(25, 28, 29, 0.06);
+        }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface">
+<main class="min-h-screen">
+    <!-- Hero Banner Section -->
+    <div class="relative h-[320px] w-full overflow-hidden">
+        <img id="clubCover" alt="Club background" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1540575861501-7ad05823c94b?auto=format&fit=crop&q=80&w=2070"/>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+        <!-- Floating Back Button -->
+        <div class="absolute top-6 left-8 z-20">
+            <a class="inline-flex items-center gap-2 bg-white/90 hover:bg-white backdrop-blur-sm text-primary font-bold px-5 py-2.5 rounded-full transition-all premium-shadow border border-white/20" href="javascript:void(0)" onclick="goBackToClubs()">
+                <span class="material-symbols-outlined">arrow_back</span>
+                <span>Back to Clubs</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Profile Header Overlap -->
+    <div class="max-w-7xl mx-auto px-8 -mt-24 relative z-10">
+        <div class="bg-surface-container-lowest premium-shadow p-8 rounded-xl flex flex-col md:flex-row items-end md:items-center justify-between gap-6">
+            <div class="flex flex-col md:flex-row items-start md:items-center gap-6">
+                <!-- Club Logo -->
+                <div class="w-32 h-32 rounded-xl bg-primary flex items-center justify-center text-white premium-shadow border-4 border-white overflow-hidden">
+                    <img id="clubLogo" src="" alt="Logo" class="w-full h-full object-cover hidden">
+                    <span id="clubIcon" class="material-symbols-outlined text-5xl" style="font-variation-settings: 'FILL' 1;">groups</span>
+                </div>
+                <div class="space-y-2">
+                    <div class="flex items-center gap-3">
+                        <h1 id="clubName" class="text-3xl font-headline font-extrabold text-primary">Loading Club...</h1>
+                        <span id="clubCategory" class="bg-secondary-container text-on-secondary-container text-[0.6875rem] font-bold px-3 py-1 rounded-full uppercase tracking-wider">Category</span>
+                    </div>
+                    <p class="text-on-surface-variant flex items-center gap-2 font-medium">
+                        <span class="material-symbols-outlined text-primary text-sm">group</span>
+                        <span id="memberCount">350+</span> Members
+                    </p>
+                    <!-- Social Icons -->
+                    <div class="flex gap-4 pt-2">
+                        <a class="text-outline hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined text-lg">language</span></a>
+                        <a class="text-outline hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined text-lg">photo_camera</span></a>
+                        <a class="text-outline hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined text-lg">groups</span></a>
+                    </div>
+                </div>
+            </div>
+            <div class="flex gap-3 w-full md:w-auto">
+                <button onclick="goToJoinForm()" class="flex-1 md:flex-none px-8 py-3 bg-gradient-to-br from-primary to-primary-container text-white font-bold rounded-lg hover:opacity-90 transition-all flex items-center justify-center gap-2 premium-shadow">
+                    Join Club
+                </button>
+                <button class="flex-1 md:flex-none px-8 py-3 bg-surface-container-low text-primary font-bold rounded-lg hover:bg-surface-container-high transition-all flex items-center justify-center gap-2">
+                    Contact
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Grid -->
+    <div class="max-w-7xl mx-auto px-8 py-12 grid grid-cols-1 lg:grid-cols-3 gap-10">
+        <!-- Left Column: About & Content -->
+        <div class="lg:col-span-2 space-y-10">
+            <section class="bg-surface-container-lowest p-8 rounded-xl premium-shadow">
+                <h2 class="text-xl font-headline font-bold text-primary mb-6">About Us</h2>
+                <div id="clubDescription" class="space-y-6 text-on-surface-variant leading-relaxed">
+                    Loading description...
+                </div>
+            </section>
+            
+            <section>
+                <div class="flex items-center justify-between mb-8">
+                    <h2 class="text-xl font-headline font-bold text-primary">Upcoming Events</h2>
+                    <button onclick="window.location.href='student-event.html'" class="text-primary font-bold text-sm hover:underline">View All Events</button>
+                </div>
+                <div id="eventsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Event Cards Populated via JS -->
+                    <p class="text-on-surface-variant italic">Checking for upcoming events...</p>
+                </div>
+            </section>
+        </div>
+
+        <!-- Right Column: Sidebar -->
+        <div class="space-y-10">
+            <!-- Club Leadership -->
+            <section class="bg-surface-container-low p-8 rounded-xl">
+                <h2 class="text-lg font-headline font-bold text-primary mb-6">Club Leadership</h2>
+                <div class="space-y-6">
+                    <div class="flex items-center gap-4">
+                        <img id="presidentAvatar" alt="President" class="w-12 h-12 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBDDiGHGa2p_ftOMEy0w_AtMvvcUI12cWpCSa9ZGGFlQIrZ4aPDzHqdBi129XKjptVn15z8IPyG-zG4nI6WuswfgduvDhe3woOnCDBv2mYTNcp85iSRvKhPCEoQsFq2SlBatXKMcxb0Cb4LtQ2lHnNezS_76TQy1XYfUCah_X9l_8A7Ta9Xjij7Az5hwEQHuam5_IwlIpy_mMn5IuhrTWvFondwVjPgsWJ5qeW58VV0H80a6X5ZbcybpuhTJWqiVWZMaLLoPPj2Qg-o"/>
+                        <div>
+                            <h4 id="presidentName" class="font-bold text-on-surface text-sm">Marcus Chen</h4>
+                            <p class="text-xs text-outline">President</p>
+                        </div>
+                    </div>
+                    <!-- Mock secondary roles -->
+                    <div class="flex items-center gap-4 opacity-70">
+                        <div class="w-12 h-12 rounded-full bg-slate-200 flex items-center justify-center">
+                            <span class="material-symbols-outlined text-slate-400">person</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-on-surface text-sm">Sarah Jenkins</h4>
+                            <p class="text-xs text-outline">Vice President</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Member Benefits -->
+            <section class="bg-primary text-white p-8 rounded-xl premium-shadow relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -mr-12 -mt-12"></div>
+                <h2 class="text-lg font-headline font-bold mb-6 relative z-10">Member Benefits</h2>
+                <div class="space-y-5 relative z-10">
+                    <div class="flex gap-4">
+                        <div class="bg-white/20 p-2 rounded-lg h-fit">
+                            <span class="material-symbols-outlined text-lg">psychology</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-sm">Advanced Workshops</h4>
+                            <p class="text-xs text-blue-100 leading-relaxed">Exclusive access to pro-tier technical sessions.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-4">
+                        <div class="bg-white/20 p-2 rounded-lg h-fit">
+                            <span class="material-symbols-outlined text-lg">hub</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-sm">Industry Networking</h4>
+                            <p class="text-xs text-blue-100 leading-relaxed">Direct connection to tech recruiters and alumni.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</main>
+
+<footer class="bg-surface-container-low py-12 border-t border-outline-variant/10">
+    <div class="max-w-7xl mx-auto px-8 flex flex-col md:flex-row justify-between items-center gap-8 text-center md:text-left">
+        <div>
+            <span class="text-lg font-headline font-bold text-primary">Scholar Hub</span>
+            <p class="text-sm text-outline mt-1">Empowering Student Communities</p>
+        </div>
+        <div class="flex gap-8">
+            <a class="text-sm font-medium text-on-surface-variant hover:text-primary" href="#">Support</a>
+            <a class="text-sm font-medium text-on-surface-variant hover:text-primary" href="#">Guidelines</a>
+            <a class="text-sm font-medium text-on-surface-variant hover:text-primary" href="#">Privacy</a>
+        </div>
+        <p class="text-xs text-outline">© 2024 Scholar Hub Academic Portal</p>
+    </div>
+</footer>
+
+<script>
+    let currentClub = null;
+
+    document.addEventListener('DOMContentLoaded', async () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const clubId = urlParams.get('id');
+
+        if (!clubId) {
+            window.location.href = 'student-clubs.html';
+            return;
+        }
+
+        try {
+            const resp = await fetch(`/api/clubs/${clubId}`);
+            if (resp.ok) {
+                currentClub = await resp.json();
+                renderClubDetails(currentClub);
+                fetchClubEvents(clubId);
+            } else {
+                alert("Club not found.");
+                window.location.href = 'student-clubs.html';
+            }
+        } catch (e) {
+            console.error("Error loading club details", e);
+        }
+    });
+
+    function renderClubDetails(club) {
+        document.title = `${club.name} | Scholar Hub Profile`;
+        document.getElementById('clubName').textContent = club.name;
+        document.getElementById('clubCategory').textContent = club.category || 'Organistion';
+        document.getElementById('clubDescription').innerHTML = `<p>${club.description}</p>`;
+        
+        if (club.logoUrl) {
+            const logoImg = document.getElementById('clubLogo');
+            logoImg.src = club.logoUrl;
+            logoImg.classList.remove('hidden');
+            document.getElementById('clubIcon').classList.add('hidden');
+        }
+
+        if (club.coverUrl) {
+            document.getElementById('clubCover').src = club.coverUrl;
+        }
+
+        document.getElementById('presidentName').textContent = club.presidentName || "Club President";
+        // Optionally set email/contact info
+    }
+
+    async function fetchClubEvents(clubId) {
+        try {
+            // Updated endpoint logic in backend would be nice, for now let's hope 
+            // the EventService.getEventsByClub is exposed or we can filter all events.
+            const resp = await fetch('/api/events');
+            if (resp.ok) {
+                const allEvents = await resp.json();
+                const clubEvents = allEvents.filter(e => e.organizer && e.organizer.id == clubId);
+                renderEvents(clubEvents);
+            }
+        } catch (e) {
+            console.error("Error loading events", e);
+        }
+    }
+
+    function renderEvents(events) {
+        const grid = document.getElementById('eventsGrid');
+        if (events.length === 0) {
+            grid.innerHTML = '<p class="col-span-full text-on-surface-variant italic">No upcoming events scheduled for this club yet.</p>';
+            return;
+        }
+
+        grid.innerHTML = '';
+        events.slice(0, 4).forEach(ev => {
+            const date = new Date(ev.startTime);
+            const card = `
+                <div class="bg-surface-container-lowest rounded-xl overflow-hidden premium-shadow group cursor-pointer" onclick="window.location.href='student-event.html'">
+                    <div class="h-32 bg-surface-container-high relative">
+                        <img alt="Event" class="w-full h-full object-cover" src="${ev.posterUrl || 'https://images.unsplash.com/photo-1540575861501-7ad05823c94b?auto=format&fit=crop&q=80&w=2070'}"/>
+                        <div class="absolute top-3 left-3 bg-white px-3 py-1 rounded-md text-center shadow-sm">
+                            <span class="block text-xs font-bold text-primary uppercase">${date.toLocaleString('default', { month: 'short' })}</span>
+                            <span class="block text-lg font-black text-on-surface leading-none">${date.getDate()}</span>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <h3 class="font-headline font-bold text-lg mb-1">${ev.title}</h3>
+                        <p class="text-xs text-on-surface-variant mb-4">${ev.location || 'University Campus'}</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-medium text-outline flex items-center gap-1">
+                                <span class="material-symbols-outlined text-sm">schedule</span> ${ev.startTime.slice(11, 16)}
+                            </span>
+                            <button class="text-primary font-bold text-sm hover:underline">Details</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            grid.innerHTML += card;
+        });
+    }
+
+    function goToJoinForm() {
+        if (currentClub) {
+            window.location.href = `student-joinclubform.html?id=${currentClub.id}`;
+        }
+    }
+
+    function goBackToClubs() {
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (user && (user.role === 'CLUB_ADMIN' || user.role === 'ADMIN')) {
+            window.location.href = 'clubadmin-clubs.html';
+        } else {
+            window.location.href = 'student-clubs.html';
+        }
+    }
+</script>
+</body>
+</html>

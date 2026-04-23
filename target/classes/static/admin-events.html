@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Uni Event Portal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="assets/css/transitions.css">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-tertiary-container": "#ffcc55","on-secondary-fixed-variant": "#00531a","tertiary-fixed-dim": "#fabd00","on-primary-fixed": "#001944","inverse-on-surface": "#f0f1f2","surface-tint": "#3f5d9c","on-secondary-fixed": "#002106","on-error": "#ffffff","on-primary-fixed-variant": "#254583","tertiary-fixed": "#ffdf9e","inverse-surface": "#2e3132","surface-dim": "#d9dadb","surface-container-high": "#e7e8e9","primary-fixed": "#d9e2ff","surface-container-lowest": "#ffffff","error-container": "#ffdad6","background": "#f8f9fa","secondary-fixed": "#83fc8e","outline": "#747781","surface-container": "#edeeef","on-tertiary-fixed-variant": "#5b4300","secondary-fixed-dim": "#66df75","on-primary-container": "#c2d2ff","surface-bright": "#f8f9fa","on-tertiary-fixed": "#261a00","on-primary": "#ffffff","on-error-container": "#93000a","on-surface": "#191c1d","surface": "#f8f9fa","tertiary-container": "#745600","secondary": "#006e25","on-secondary-container": "#007327","primary-fixed-dim": "#afc6ff","on-background": "#191c1d","inverse-primary": "#afc6ff","primary": "#21417f","secondary-container": "#80f98b","primary-container": "#3b5998","on-surface-variant": "#444650","on-secondary": "#ffffff","on-tertiary": "#ffffff","surface-container-low": "#f3f4f5","tertiary": "#574000","outline-variant": "#c4c6d2","surface-variant": "#e1e3e4","error": "#ba1a1a","surface-container-highest": "#e1e3e4"
+            },
+            fontFamily: {"headline": ["Manrope"],"body": ["Inter"],"label": ["Inter"]},
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; vertical-align: middle; }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, .font-headline { font-family: 'Manrope', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen">
+<div id="layout-root">
+<header class="bg-white border-b border-slate-200 sticky-nav h-16 flex items-center shadow-sm">
+  <div class="max-w-7xl mx-auto px-6 w-full flex justify-between items-center h-full">
+    <div class="flex items-center gap-8 h-full">
+      <img src="assets/images/logo.png" alt="SLIIT Events Hub" class="h-10 object-contain">
+      <nav class="hidden md:flex items-center gap-6 font-['Manrope'] font-semibold tracking-tight h-full">
+        <a class="nav-link h-full flex items-center text-slate-500 hover:text-primary transition-colors" href="admin-dashboard.html">Dashboard</a>
+        <a class="nav-link h-full flex items-center text-slate-500 hover:text-primary transition-colors" href="admin-user.html">Users</a>
+        <a class="nav-link h-full flex items-center text-slate-500 hover:text-primary transition-colors" href="admin-events.html">Events</a>
+        <a class="nav-link h-full flex items-center text-slate-500 hover:text-primary transition-colors" href="admin-clubs.html">Clubs</a>
+        <a class="nav-link h-full flex items-center text-slate-500 hover:text-primary transition-colors" href="admin-venue.html">Venues</a>
+        <a class="nav-link h-full flex items-center text-slate-500 hover:text-primary transition-colors" href="admin-feedback.html">Feedback</a>
+      </nav>
+    </div>
+    <div class="flex items-center gap-4 h-full">
+      <button class="p-2 text-slate-500 hover:bg-slate-100 rounded-lg relative">
+        <span class="material-symbols-outlined">notifications</span>
+        <span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+      </button>
+      <div class="flex items-center gap-3 pl-3 border-l border-slate-200 relative cursor-pointer group h-full" onclick="document.getElementById('profileDropdown').classList.toggle('hidden')">
+        <div class="h-9 w-9 rounded-full overflow-hidden border border-slate-200 bg-slate-100 flex items-center justify-center">
+          <span class="material-symbols-outlined text-slate-500">person</span>
+        </div>
+        <span class="text-sm font-semibold text-slate-700 hidden lg:block">Admin User</span>
+        <span class="material-symbols-outlined text-sm text-slate-400">expand_more</span>
+        <div id="profileDropdown" class="hidden absolute top-full right-0 mt-4 w-48 bg-white rounded-xl shadow-lg border border-slate-200 py-2 z-50">
+            <a href="javascript:void(0)" onclick="logout()" class="flex items-center gap-2 px-4 py-2 text-sm text-error hover:bg-error/5 transition-colors font-semibold">
+                <span class="material-symbols-outlined text-[18px]">logout</span>
+                Logout
+            </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="page-transition-enter">
+    <div class="max-w-7xl mx-auto px-6 py-12 w-full">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+<div>
+<h1 class="text-[1.75rem] font-extrabold text-on-surface font-headline leading-tight">Events Management</h1>
+<p class="text-outline mt-1">Curate and oversee all campus activities and gathering requests.</p>
+</div>
+<div class="flex bg-surface-container-low p-1.5 rounded-xl border border-outline-variant/15">
+<button onclick="scrollToSection('newlyPublished')" class="px-5 py-2 rounded-lg bg-surface-container-lowest shadow-sm text-primary font-semibold text-sm transition-all status-btn">Newly Published</button>
+<button onclick="scrollToSection('upcoming')" class="px-5 py-2 rounded-lg text-outline hover:text-primary text-sm font-medium transition-all status-btn">Upcoming Events</button>
+<button onclick="scrollToSection('past')" class="px-5 py-2 rounded-lg text-outline hover:text-primary text-sm font-medium transition-all status-btn">Past Events</button>
+</div>
+</div>
+<!-- Search -->
+<!-- Search & Filters -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+    <div class="bg-surface-container-lowest p-1 rounded-2xl shadow-sm border border-outline-variant/15 flex items-center px-4 gap-3 focus-within:border-primary/60 transition-colors w-full">
+        <span class="material-symbols-outlined text-outline">search</span>
+        <input id="eventsSearch" class="w-full bg-transparent border-none focus:ring-0 text-sm py-4 text-on-surface placeholder:text-outline/60" placeholder="Search events by name, organizer, or venue..." type="text"/>
+    </div>
+    <div class="bg-surface-container-lowest p-1 rounded-2xl shadow-sm border border-outline-variant/15 flex items-center px-4 gap-3 focus-within:border-primary/60 transition-colors w-full">
+        <span class="material-symbols-outlined text-outline">filter_list</span>
+        <select id="regFilter" class="w-full bg-transparent border-none focus:ring-0 text-sm py-4 text-on-surface" onchange="runFilters()">
+            <option value="all">All Events</option>
+            <option value="public">Public Events Only</option>
+            <option value="registration">Registration Required</option>
+        </select>
+    </div>
+    <div class="bg-surface-container-lowest p-1 rounded-2xl shadow-sm border border-outline-variant/15 flex items-center px-4 gap-3 focus-within:border-primary/60 transition-colors w-full">
+        <span class="material-symbols-outlined text-outline">calendar_month</span>
+        <select id="dateFilter" class="w-full bg-transparent border-none focus:ring-0 text-sm py-4 text-on-surface" onchange="runFilters()">
+            <option value="all">All Dates</option>
+            <option value="lastWeek">Last Week</option>
+            <option value="lastMonth">Last Month</option>
+            <option value="semester">This Semester</option>
+        </select>
+    </div>
+</div>
+
+<!-- Newly Published / Pending Approval -->
+<div id="newlyPublished" class="mb-16">
+    <div class="flex items-center gap-3 mb-6">
+        <div class="h-8 w-1 bg-primary rounded-full"></div>
+        <h2 class="text-xl font-bold font-headline">Newly Published</h2>
+        <span id="pendingCountBadge" class="ml-2 px-2.5 py-0.5 rounded-full bg-secondary-container text-on-secondary-container text-[0.6875rem] font-bold uppercase tracking-wider">0 Pending Approval</span>
+        <a href="admin-newevent.html" class="ml-auto flex items-center gap-2 px-5 py-2.5 bg-[#3B5998] hover:bg-[#2e4677] text-white rounded-lg font-semibold text-sm transition-all shadow-sm">
+            <span class="material-symbols-outlined text-sm">add</span>New Event
+        </a>
+    </div>
+    <div id="pendingEventsGrid" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Rendered by JS -->
+    </div>
+</div>
+
+<!-- Upcoming Events -->
+<div id="upcoming" class="mb-16">
+    <div class="flex items-center justify-between mb-8">
+        <div class="flex items-center gap-3">
+            <div class="h-8 w-1 bg-primary rounded-full"></div>
+            <h2 class="text-xl font-bold font-headline">Upcoming Events</h2>
+        </div>
+        <button class="flex items-center gap-2 text-sm font-bold text-primary hover:underline">Manage All Upcoming <span class="material-symbols-outlined">arrow_forward</span></button>
+    </div>
+    <div id="upcomingEventsGrid" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Rendered by JS -->
+    </div>
+</div>
+
+<!-- Past Events -->
+<div id="past" class="mb-20">
+    <div class="flex items-center gap-3 mb-8">
+        <div class="h-8 w-1 bg-outline rounded-full"></div>
+        <h2 class="text-xl font-bold font-headline">Past Events</h2>
+    </div>
+    <div id="pastEventsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Rendered by JS -->
+    </div>
+    </div>
+</main>
+
+<script>
+    let allPending = [];
+    let allUpcoming = [];
+    let allPast = [];
+
+    document.addEventListener("DOMContentLoaded", () => {
+        loadEvents();
+
+        document.getElementById('eventsSearch').addEventListener('input', runFilters);
+    });
+
+    function runFilters() {
+        const query = document.getElementById('eventsSearch').value.toLowerCase();
+        const regFilterValue = document.getElementById('regFilter').value;
+        const dateFilterValue = document.getElementById('dateFilter').value;
+
+        const filterFn = (ev) => {
+            const orgName = ev.organizer ? (typeof ev.organizer === 'object' ? ev.organizer.name : ev.organizer) : '';
+            const matchesQuery = ev.title.toLowerCase().includes(query) || orgName.toLowerCase().includes(query);
+            
+            let matchesReg = true;
+            if (regFilterValue === 'public') matchesReg = !ev.registrationRequired;
+            if (regFilterValue === 'registration') matchesReg = ev.registrationRequired === true;
+
+            let matchesDate = true;
+            if (dateFilterValue !== 'all') {
+                const eventDate = new Date(ev.startTime);
+                const now = new Date();
+                if (dateFilterValue === 'lastWeek') {
+                    const lastWeek = new Date();
+                    lastWeek.setDate(now.getDate() - 7);
+                    matchesDate = eventDate >= lastWeek && eventDate <= now;
+                } else if (dateFilterValue === 'lastMonth') {
+                    const lastMonth = new Date();
+                    lastMonth.setMonth(now.getMonth() - 1);
+                    matchesDate = eventDate >= lastMonth && eventDate <= now;
+                } else if (dateFilterValue === 'semester') {
+                    // Semester logic: Current half year
+                    const semStart = now.getMonth() < 6 ? new Date(now.getFullYear(), 0, 1) : new Date(now.getFullYear(), 6, 1);
+                    matchesDate = eventDate >= semStart;
+                }
+            }
+
+            return matchesQuery && matchesReg && matchesDate;
+        };
+
+        renderEvents(allPending.filter(filterFn), 'pendingEventsGrid', true);
+        renderEvents(allUpcoming.filter(filterFn), 'upcomingEventsGrid', false);
+        renderPastEvents(allPast.filter(filterFn), 'pastEventsGrid');
+    }
+
+    function scrollToSection(id) {
+        document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        // Update active button state
+        const btns = document.querySelectorAll('.status-btn');
+        btns.forEach(btn => {
+            btn.classList.remove('bg-surface-container-lowest', 'shadow-sm', 'text-primary', 'font-semibold');
+            btn.classList.add('text-outline', 'font-medium');
+        });
+        const activeBtn = event.currentTarget;
+        activeBtn.classList.remove('text-outline', 'font-medium');
+        activeBtn.classList.add('bg-surface-container-lowest', 'shadow-sm', 'text-primary', 'font-semibold');
+    }
+
+    async function loadEvents() {
+        try {
+            const [pendingRes, upcomingRes, pastRes] = await Promise.all([
+                fetch('/api/events/admin/pending'),
+                fetch('/api/events/admin/upcoming'),
+                fetch('/api/events/admin/past')
+            ]);
+            
+            allPending = await pendingRes.json();
+            allUpcoming = await upcomingRes.json();
+            allPast = await pastRes.json();
+
+            document.getElementById('pendingCountBadge').textContent = `${allPending.length} Pending Approval`;
+
+            renderEvents(allPending, 'pendingEventsGrid', true);
+            renderEvents(allUpcoming, 'upcomingEventsGrid', false);
+            renderPastEvents(allPast, 'pastEventsGrid');
+        } catch(e) {
+            console.error(e);
+        }
+    }
+
+    function renderEvents(events, gridId, isPending = false) {
+        const grid = document.getElementById(gridId);
+        grid.innerHTML = '';
+        if(events.length === 0) {
+            grid.innerHTML = '<p class="text-outline col-span-full">No events found.</p>';
+            return;
+        }
+
+        events.forEach(ev => {
+            const categoryObj = getCategoryStyles(ev.eventType || 'Academic');
+            const imageUrl = ev.posterUrl || 'https://lh3.googleusercontent.com/aida-public/AB6AXuAEnvYK_IA-jsUMTPmgUtZhBJ5xRa8rEJ18OGZDcuNpWl0hN4wNnMwYPr4IBHyQFZ8h8E7dD1kLqyH_HwMqgLQZ8-0a97shV0kjbMuwyBgMzkL2ZNq_YNjkwWopTcPyz-L2M32-8_DUWHGqfFvMTXc02G4fYG5A9bT-reNtbr4GfZQZQDcIqoiOHPBqA0h23Wp8B5_hwtN2IDogadV1wKym0FGHoR7bVn0dZWsaefc-ciEyTFJbaqbFsO1cRyFGqVEsuiO1VbY_wVkK';
+            
+            let actionButtons = '';
+            if (isPending) {
+                // For pending events
+                actionButtons = `
+                    <button onclick="approveEvent(${ev.id})" class="py-2.5 rounded-lg bg-gradient-to-br from-primary to-primary-container text-on-primary text-sm font-semibold hover:opacity-90 transition-opacity">Approve</button>
+                    <button onclick="rejectEvent(${ev.id})" class="py-2.5 rounded-lg border border-error/20 text-error text-sm font-semibold hover:bg-error-container/20 transition-colors">Reject</button>
+                    <a class="col-span-2 py-2 rounded-lg text-primary text-xs font-bold uppercase tracking-wider hover:bg-surface-container-high transition-colors text-center" href="admin-pendingeventdetails.html?id=${ev.id}">View Details</a>
+                `;
+            } else {
+                // For upcoming events
+                actionButtons = `
+                    <button onclick="editEvent(${ev.id})" class="py-2.5 rounded-lg bg-gradient-to-br from-primary to-primary-container text-on-primary text-sm font-semibold hover:opacity-90 transition-opacity">Edit Details</button>
+                    <button onclick="deleteEvent(${ev.id})" class="py-2.5 rounded-lg border border-error/20 text-error text-sm font-semibold hover:bg-error-container/20 transition-colors">Delete</button>
+
+                    <a class="col-span-2 py-2 rounded-lg text-primary text-xs font-bold uppercase tracking-wider hover:bg-surface-container-high transition-colors text-center" href="admin-upcomingeventsdetails.html?id=${ev.id}">View Details</a>
+                `;
+            }
+
+            const card = `
+                <div class="bg-surface-container-lowest rounded-xl border border-outline-variant/15 hover:border-primary/20 transition-all p-6 flex flex-col h-full group">
+                    <div class="mb-4 relative overflow-hidden rounded-lg">
+                        <img class="w-full h-40 object-cover transition-transform duration-500 group-hover:scale-105" src="${imageUrl}" alt="Event"/>
+                        <div class="absolute top-3 left-3 px-3 py-1 ${categoryObj.bg} text-white rounded-full text-[0.6875rem] font-bold uppercase shadow-sm">${ev.eventType || 'Event'}</div>
+                        <div class="absolute top-10 left-3 px-3 py-1 ${ev.registrationRequired ? 'bg-orange-500' : 'bg-slate-800/70'} text-white rounded-full text-[0.625rem] font-bold uppercase shadow-sm backdrop-blur-sm tracking-wider flex items-center gap-1">
+                            ${ev.registrationRequired ? '<span class="material-symbols-outlined text-[12px]">how_to_reg</span> Req. Registration' : '<span class="material-symbols-outlined text-[12px]">public</span> Public'}
+                        </div>
+                    </div>
+                    <div class="flex-grow">
+                        <h3 class="text-lg font-bold font-headline text-on-surface mb-2">${ev.title || 'Untitled Event'}</h3>
+                        <p class="text-sm text-outline mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-base">${categoryObj.icon}</span> ${ev.organizer ? (typeof ev.organizer === 'object' ? ev.organizer.name : ev.organizer) : 'Student Union'}</p>
+                        <div class="space-y-2 mb-6">
+                            <div class="flex items-center gap-2 text-sm text-on-surface-variant"><span class="material-symbols-outlined text-base text-primary">calendar_today</span>${formatDate(ev.startTime)}</div>
+                            <div class="flex items-center gap-2 text-sm text-on-surface-variant"><span class="material-symbols-outlined text-base text-primary">location_on</span>${ev.location || 'Campus'}</div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        ${actionButtons}
+                    </div>
+                </div>
+            `;
+            grid.insertAdjacentHTML('beforeend', card);
+        });
+    }
+
+    function renderPastEvents(events, gridId) {
+        const grid = document.getElementById(gridId);
+        grid.innerHTML = '';
+        if(events.length === 0) {
+            grid.innerHTML = '<p class="text-outline col-span-full">No past events found.</p>';
+            return;
+        }
+
+        events.forEach(ev => {
+            const categoryObj = getCategoryStyles(ev.eventType || 'Academic');
+            const card = `
+                <div class="bg-surface-container-low opacity-80 hover:opacity-100 rounded-xl border border-outline-variant/15 transition-all p-6 flex flex-col h-full group">
+                    <div class="mb-4 relative overflow-hidden rounded-lg grayscale group-hover:grayscale-0 transition-all">
+                        <img class="w-full h-40 object-cover transition-transform duration-500 group-hover:scale-105" src="${ev.posterUrl || 'https://lh3.googleusercontent.com/aida-public/AB6AXuAEnvYK_IA-jsUMTPmgUtZhBJ5xRa8rEJ18OGZDcuNpWl0hN4wNnMwYPr4IBHyQFZ8h8E7dD1kLqyH_HwMqgLQZ8-0a97shV0kjbMuwyBgMzkL2ZNq_YNjkwWopTcPyz-L2M32-8_DUWHGqfFvMTXc02G4fYG5A9bT-reNtbr4GfZQZQDcIqoiOHPBqA0h23Wp8B5_hwtN2IDogadV1wKym0FGHoR7bVn0dZWsaefc-ciEyTFJbaqbFsO1cRyFGqVEsuiO1VbY_wVkK'}" alt="Event"/>
+                        <div class="absolute top-3 left-3 px-3 py-1 bg-outline text-white rounded-full text-[0.6875rem] font-bold uppercase">${ev.eventType || 'Event'}</div>
+                    </div>
+                    <div class="flex-grow">
+                        <h3 class="text-lg font-bold font-headline text-on-surface mb-2">${ev.title || 'Untitled'}</h3>
+                        <p class="text-sm text-outline mb-4 flex items-center gap-2"><span class="material-symbols-outlined text-base">${categoryObj.icon}</span> ${ev.organizer ? (typeof ev.organizer === 'object' ? ev.organizer.name : ev.organizer) : 'Admin'}</p>
+                        <div class="space-y-2 mb-6">
+                            <div class="flex items-center gap-2 text-sm text-on-surface-variant"><span class="material-symbols-outlined text-base text-outline">history</span>${formatDate(ev.startTime)}</div>
+                            <div class="flex items-center gap-2 text-sm text-on-surface-variant"><span class="material-symbols-outlined text-base text-outline">location_on</span>${ev.location || 'Campus'}</div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <a class="py-2.5 rounded-lg bg-surface-container-high text-primary text-xs font-bold uppercase tracking-wider hover:bg-primary-fixed transition-colors text-center" href="admin-pasteventdetails.html?id=${ev.id}">View Details</a>
+                        <button onclick="deleteEvent(${ev.id})" class="py-2.5 rounded-lg border border-error/20 text-error text-xs font-bold uppercase tracking-wider hover:bg-error-container transition-colors">Remove</button>
+                    </div>
+                </div>
+            `;
+            grid.insertAdjacentHTML('beforeend', card);
+        });
+    }
+
+    function getCategoryStyles(category) {
+        // Simple mapping for display
+        const map = {
+            'Academic': { bg: 'bg-primary/90', icon: 'school' },
+            'Career': { bg: 'bg-tertiary', icon: 'work' },
+            'Culture': { bg: 'bg-secondary', icon: 'public' },
+            'Social': { bg: 'bg-secondary', icon: 'groups' },
+            'Tech': { bg: 'bg-outline', icon: 'precision_manufacturing' },
+            'Sports': { bg: 'bg-[#FF5722]', icon: 'sports_soccer' }
+        };
+        return map[category] || { bg: 'bg-primary', icon: 'event' };
+    }
+
+    function formatDate(dateString) {
+        if(!dateString) return 'TBA';
+        const d = new Date(dateString);
+        return d.toLocaleDateString() + ' • ' + d.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+    }
+
+    async function approveEvent(id) {
+        openDeleteModal({
+            title: 'Approve Event',
+            message: 'Are you sure you want to approve this event registration and publish it?',
+            icon: 'check_circle',
+            iconColor: 'text-primary',
+            iconBg: 'bg-primary/10',
+            confirmText: 'Approve',
+            confirmBtnClass: 'bg-primary',
+            onConfirm: async () => {
+                await fetch(`/api/events/${id}/approve`, { method: 'POST' });
+                loadEvents();
+            }
+        });
+    }
+
+    async function rejectEvent(id) {
+        openDeleteModal({
+            title: 'Reject Event',
+            message: 'Are you sure you want to reject this event request?',
+            icon: 'cancel',
+            iconColor: 'text-error',
+            iconBg: 'bg-error/10',
+            confirmText: 'Reject',
+            confirmBtnClass: 'bg-error',
+            onConfirm: async () => {
+                await fetch(`/api/events/${id}/reject`, { method: 'POST' });
+                loadEvents();
+            }
+        });
+    }
+
+    async function deleteEvent(id) {
+        openDeleteModal({
+            title: 'Confirm Deletion',
+            message: 'Are you sure you want to permanently delete this event? This action cannot be undone.',
+            icon: 'delete',
+            iconColor: 'text-error',
+            iconBg: 'bg-error/10',
+            confirmText: 'Delete',
+            confirmBtnClass: 'bg-error',
+            onConfirm: async () => {
+                await fetch(`/api/events/${id}`, { method: 'DELETE' });
+                loadEvents();
+            }
+        });
+    }
+
+    function editEvent(id) {
+        window.location.href = `admin-newevent.html?id=${id}`;
+    }
+
+    async function logout() {
+        localStorage.clear();
+        sessionStorage.clear();
+        window.location.href = 'landing-page.html';
+    }
+
+</script>
+
+<!-- Confirmation Modal -->
+<div id="deleteModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+    <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full overflow-hidden transform animate-in zoom-in-95 duration-200">
+        <div class="p-8 text-center">
+            <div class="w-20 h-20 bg-error/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                <span id="modalIcon" class="material-symbols-outlined text-4xl text-error">warning</span>
+            </div>
+            <h3 id="modalTitle" class="text-2xl font-bold text-slate-900 mb-2">Are you sure?</h3>
+            <p id="modalMessage" class="text-slate-500 leading-relaxed mb-8">This action cannot be undone. Please confirm you want to proceed.</p>
+            <div class="flex gap-3">
+                <button onclick="closeDeleteModal()" class="flex-1 px-6 py-3.5 rounded-xl font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 transition-all border border-slate-200">Cancel</button>
+                <button id="confirmDeleteBtn" class="flex-1 px-6 py-3.5 rounded-xl font-bold text-white bg-error hover:bg-error/90 shadow-lg shadow-error/20 transition-all">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openDeleteModal(config) {
+        const modal = document.getElementById('deleteModal');
+        const icon = document.getElementById('modalIcon');
+        const title = document.getElementById('modalTitle');
+        const message = document.getElementById('modalMessage');
+        const confirmBtn = document.getElementById('confirmDeleteBtn');
+
+        icon.textContent = config.icon || 'warning';
+        icon.className = `material-symbols-outlined text-4xl ${config.iconColor || 'text-error'}`;
+        icon.parentElement.className = `w-20 h-20 ${config.iconBg || 'bg-error/10'} rounded-full flex items-center justify-center mx-auto mb-6`;
+        title.textContent = config.title;
+        message.textContent = config.message;
+        confirmBtn.textContent = config.confirmText || 'Confirm';
+        confirmBtn.className = `flex-1 px-6 py-3.5 rounded-xl font-bold text-white ${config.confirmBtnClass || 'bg-error'} hover:opacity-90 transition-all shadow-lg`;
+        
+        confirmBtn.onclick = async () => {
+            await config.onConfirm();
+            closeDeleteModal();
+        };
+
+        modal.classList.remove('hidden');
+    }
+
+    function closeDeleteModal() {
+        document.getElementById('deleteModal').classList.add('hidden');
+    }
+</script>
+</main>
+<footer class="bg-slate-900 text-slate-400 py-12 border-t border-slate-800 mt-auto">
+  <div class="max-w-[1400px] mx-auto px-12 flex flex-col md:flex-row justify-between items-center gap-4">
+    <p class="text-xs">© 2024 Uni Event Portal. University Event Management System.</p>
+    <div class="flex gap-6 text-xs uppercase tracking-widest font-bold">
+      <a class="hover:text-white transition-colors" href="#">Privacy Policy</a>
+      <a class="hover:text-white transition-colors" href="#">Terms of Service</a>
+      <a class="hover:text-white transition-colors" href="#">Help Desk</a>
+    </div>
+  </div>
+</footer>
+</div>
+<script src="assets/js/transitions.js"></script>
+</body></html>

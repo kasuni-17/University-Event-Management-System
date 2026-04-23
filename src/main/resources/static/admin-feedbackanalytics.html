@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Feedback Analytics | Scholar Hub Admin</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#21417f",
+                        "on-primary": "#ffffff",
+                        "on-surface": "#191c1d",
+                        "on-surface-variant": "#444650",
+                        "surface-container-low": "#f3f4f5",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-container": "#c2d2ff",
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"]
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        body { background-color: #f8fafc; }
+    </style>
+</head>
+<body class="font-body text-on-surface antialiased">
+<header class="bg-white border-b border-slate-200 sticky top-0 z-50 h-16 flex items-center shadow-sm">
+    <div class="max-w-7xl mx-auto px-6 w-full flex justify-between items-center">
+        <div class="flex items-center gap-12" id="navContainer">
+            <div class="flex items-center gap-2 cursor-pointer" onclick="window.location.href='admin-dashboard.html'">
+                <img src="assets/images/logo.png" alt="Scholar Hub" class="h-8 md:h-10">
+            </div>
+            <nav class="hidden md:flex items-center space-x-8 text-sm font-semibold">
+                <a class="text-slate-500 hover:text-primary transition-colors" href="admin-dashboard.html">Dashboard</a>
+                <a class="text-slate-500 hover:text-primary transition-colors" href="admin-user.html">Users</a>
+                <a class="text-slate-500 hover:text-primary transition-colors" href="admin-events.html">Events</a>
+                <a class="text-slate-500 hover:text-primary transition-colors" href="admin-clubs.html">Clubs</a>
+                <a class="text-slate-500 hover:text-primary transition-colors" href="admin-venue.html">Venues</a>
+                <a class="text-primary border-b-2 border-primary pb-1 font-bold" href="admin-feedback.html">Feedback</a>
+            </nav>
+        </div>
+        <div class="flex items-center gap-4">
+            <div class="flex items-center gap-3 pl-3 border-l border-slate-200 relative cursor-pointer group" onclick="document.getElementById('profileDropdown').classList.toggle('hidden')">
+                <div class="h-9 w-9 rounded-full overflow-hidden border border-slate-200 bg-slate-100 flex items-center justify-center" data-flip-id="user-profile">
+                  <span class="material-symbols-outlined text-slate-500">person</span>
+                </div>
+                <span id="userName" class="text-sm font-semibold text-slate-700 hidden lg:block">Admin User</span>
+                <span class="material-symbols-outlined text-sm text-slate-400">expand_more</span>
+                
+                <div id="profileDropdown" class="hidden absolute top-full right-0 mt-4 w-48 bg-white rounded-xl shadow-lg border border-slate-200 py-2 z-50">
+                    <a href="login.html" class="flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors font-semibold">
+                        <span class="material-symbols-outlined text-[18px]">logout</span>
+                        Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-6 py-12 space-y-8">
+    <div class="flex items-center gap-2 text-slate-500 hover:text-primary transition-colors cursor-pointer mb-6" onclick="window.location.href='admin-feedback.html'">
+        <span class="material-symbols-outlined">arrow_back</span>
+        <span class="font-semibold text-sm">Back to Feedback Management</span>
+    </div>
+
+    <div class="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm">
+        <h1 id="eventTitle" class="text-3xl font-extrabold font-headline text-slate-900 mb-2">Event Name</h1>
+        <div class="flex flex-wrap gap-4 text-sm text-slate-500">
+            <div id="eventDate" class="flex items-center gap-2"></div>
+            <div id="eventLocation" class="flex items-center gap-2"></div>
+            <div id="eventOrganizer" class="flex items-center gap-2"></div>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm">
+            <p class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-2">Total Feedbacks</p>
+            <h3 id="totalFeedbacks" class="text-4xl font-extrabold text-slate-900">0</h3>
+        </div>
+        <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm">
+            <p class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-2">Average Rating</p>
+            <h3 id="averageRating" class="text-4xl font-extrabold text-slate-900">0.0 <span class="text-amber-400 text-2xl">★</span></h3>
+        </div>
+        <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm">
+            <p class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-2">Sentiment Score</p>
+            <h3 id="sentimentScore" class="text-4xl font-extrabold text-slate-900">0%</h3>
+        </div>
+    </div>
+
+    <!-- Chart Section -->
+    <div class="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm">
+        <div class="flex items-center gap-2 mb-8">
+            <span class="material-symbols-outlined text-primary">bar_chart</span>
+            <h3 class="text-xl font-bold text-slate-900">Rating Distribution</h3>
+        </div>
+        <div class="h-[300px] w-full">
+            <canvas id="ratingChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Comments Section -->
+    <div class="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="p-8 border-b border-slate-100">
+            <h3 class="text-xl font-bold text-slate-900">Student Comments</h3>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-left">
+                <thead class="bg-slate-50">
+                    <tr class="text-[11px] font-black text-slate-400 uppercase tracking-widest">
+                        <th class="px-8 py-4">User</th>
+                        <th class="px-8 py-4">Rating</th>
+                        <th class="px-8 py-4">Comment</th>
+                        <th class="px-8 py-4">Date</th>
+                    </tr>
+                </thead>
+                <tbody id="commentsBody" class="divide-y divide-slate-100">
+                    <tr>
+                        <td colspan="4" class="px-8 py-10 text-center text-slate-400 italic">No comments available.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<script>
+    const eventId = new URLSearchParams(window.location.search).get('id');
+    let ratingChart = null;
+
+    document.addEventListener('DOMContentLoaded', async () => {
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (!user) { window.location.href = 'login.html'; return; }
+        
+        document.getElementById('userName').textContent = user.name;
+        if (user.avatar) document.getElementById('userAvatar').src = user.avatar;
+
+        if (!eventId) {
+            alert("No event ID provided");
+            window.location.href = 'admin-feedback.html';
+            return;
+        }
+
+        initChart();
+        await loadEventDetails();
+        await loadEventAnalytics();
+    });
+
+    async function loadEventDetails() {
+        try {
+            const resp = await fetch(`/api/events/${eventId}`);
+            const ev = await resp.json();
+            document.getElementById('eventTitle').textContent = ev.title;
+            document.getElementById('eventDate').innerHTML = `<span class="material-symbols-outlined text-sm">calendar_today</span> ${new Date(ev.startTime).toLocaleDateString()}`;
+                    } catch (e) { console.error(e); }
+    }
+
+    async function loadEventAnalytics() {
+        try {
+            const resp = await fetch(`/api/feedback/admin/event/${eventId}/analytics`);
+            const data = await resp.json();
+            
+            document.getElementById('totalFeedbacks').textContent = data.totalFeedback;
+            document.getElementById('averageRating').innerHTML = `${data.averageRating.toFixed(1)} <span class="text-amber-400 text-2xl">★</span>`;
+            
+            // Calculate sentiment (4-5 stars / total)
+            const dist = data.ratingDistribution;
+            const pos = (dist[4]||0) + (dist[5]||0);
+            const sentiment = data.totalFeedback > 0 ? Math.round((pos / data.totalFeedback) * 100) : 0;
+            document.getElementById('sentimentScore').textContent = sentiment + "%";
+
+            updateChart(dist);
+            renderComments(data.feedbacks);
+        } catch (e) { console.error(e); }
+    }
+
+    function initChart() {
+        const ctx = document.getElementById('ratingChart').getContext('2d');
+        ratingChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['1 Star', '2 Stars', '3 Stars', '4 Stars', '5 Stars'],
+                datasets: [{
+                    data: [0, 0, 0, 0, 0],
+                    backgroundColor: ['#ef4444', '#f97316', '#fbbf24', '#a3e635', '#22c55e'],
+                    borderRadius: 8,
+                    barThickness: 40
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true, grid: { borderDash: [5, 5] }, ticks: { stepSize: 1 } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+    }
+
+    function updateChart(dist) {
+        if (!ratingChart) return;
+        const values = [dist[1]||0, dist[2]||0, dist[3]||0, dist[4]||0, dist[5]||0];
+        ratingChart.data.datasets[0].data = values;
+        ratingChart.update();
+    }
+
+    function renderComments(feedbacks) {
+        const body = document.getElementById('commentsBody');
+        body.innerHTML = '';
+        if (!feedbacks || feedbacks.length === 0) {
+            body.innerHTML = '<tr><td colspan="4" class="px-8 py-10 text-center text-slate-400 italic">No comments available.</td></tr>';
+            return;
+        }
+
+        feedbacks.forEach(f => {
+            const tr = document.createElement('tr');
+            tr.className = "hover:bg-slate-50 transition-colors";
+            tr.innerHTML = `
+                <td class="px-8 py-5 text-sm text-slate-600 font-medium">${f.student ? f.student.name : 'Anonymous'}</td>
+                <td class="px-8 py-5">
+                    <div class="flex text-amber-400">
+                        ${'★'.repeat(f.rating)}${'☆'.repeat(5-f.rating)}
+                    </div>
+                </td>
+                <td class="px-8 py-5 text-sm text-slate-500 max-w-xs truncate" title="${f.comment}">${f.comment}</td>
+                <td class="px-8 py-5 text-xs text-slate-400">${new Date(f.submittedAt).toLocaleDateString()}</td>
+            `;
+            body.appendChild(tr);
+        });
+    }
+</script>
+</body>
+</html>

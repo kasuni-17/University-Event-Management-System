@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animation System Demo - UniEvent</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="assets/css/animations.css">
+    <style>
+        .demo-section {
+            scroll-behavior: smooth;
+        }
+        .demo-box {
+            min-height: 200px;
+        }
+    </style>
+</head>
+<body class="bg-slate-50">
+    <!-- Fixed Animation Progress Bar -->
+    <div class="progress-bar"></div>
+
+    <!-- Navigation -->
+    <nav class="bg-white border-b border-slate-200 sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <h1 class="text-2xl font-bold text-primary">UniEvent Animation System</h1>
+                <div class="flex gap-4">
+                    <button onclick="AnimationSystem.showLoading(); setTimeout(() => AnimationSystem.hideLoading(), 2000);"
+                            class="px-4 py-2 bg-primary text-white rounded-lg transition-fast hover:opacity-90">
+                        Show Loading
+                    </button>
+                    <button onclick="AnimationSystem.showToast('Demo toast notification!', 'success', 3000);"
+                            class="px-4 py-2 bg-secondary text-white rounded-lg transition-fast hover:opacity-90">
+                        Show Toast
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-6 py-12 space-y-16">
+
+        <!-- ============================================
+             1. PAGE TRANSITIONS
+             ============================================ -->
+        <section class="demo-section">
+            <h2 class="text-3xl font-bold mb-6">1. Page Transitions</h2>
+            <p class="text-slate-600 mb-8">Smooth fade and slide animations when navigating between pages.</p>
+
+            <div class="grid grid-cols-2 gap-6">
+                <!-- Example 1 -->
+                <div class="bg-white rounded-xl p-8 shadow-sm border border-slate-200">
+                    <h3 class="font-bold mb-4">Default Page Transition</h3>
+                    <button onclick="demoPageTransition()"
+                            class="px-4 py-2 bg-primary text-white rounded-lg btn-ripple">
+                        Try Transition
+                    </button>
+                    <div id="pageDemo" class="mt-6 p-4 bg-slate-100 rounded-lg opacity-0">
+                        This content just transitioned in! 
+                    </div>
+                </div>
+
+                <!-- Example 2 -->
+                <div class="bg-white rounded-xl p-8 shadow-sm border border-slate-200">
+                    <h3 class="font-bold mb-4">Batch Fade In</h3>
+                    <button onclick="demoBatchFadeIn()"
+                            class="px-4 py-2 bg-primary text-white rounded-lg btn-ripple">
+                        Batch Fade
+                    </button>
+                    <div class="mt-6 space-y-2">
+                        <div class="p-2 bg-slate-100 rounded opacity-0">Item 1</div>
+                        <div class="p-2 bg-slate-100 rounded opacity-0">Item 2</div>
+                        <div class="p-2 bg-slate-100 rounded opacity-0">Item 3</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================
+             2. LOADING ANIMATIONS
+             ============================================ -->
+        <section class="demo-section">
+            <h2 class="text-3xl font-bold mb-6">2. Loading Animations</h2>
+            <p class="text-slate-600 mb-8">Progress bars and spinners for async operations.</p>
+
+            <div class="grid grid-cols-3 gap-6">
+                <!-- Spinner -->
+                <div class="bg-white rounded-xl p-8 shadow-sm border border-slate-200 flex flex-col items-center gap-4">
+                    <span class="spinner"></span>
+                    <p class="text-sm text-slate-600">Default Spinner</p>
+                </div>
+
+                <!-- Small Spinner -->
+                <div class="bg-white rounded-xl p-8 shadow-sm border border-slate-200 flex flex-col items-center gap-4">
+                    <span class="spinner small"></span>
+                    <p class="text-sm text-slate-600">Small Spinner</p>
+                </div>
+
+                <!-- Large Spinner -->
+                <div class="bg-white rounded-xl p-8 shadow-sm border border-slate-200 flex flex-col items-center gap-4">
+                    <span class="spinner large"></span>
+                    <p class="text-sm text-slate-600">Large Spinner</p>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl p-8 shadow-sm border border-slate-200 mt-6">
+                <h3 class="font-bold mb-4">Progress Bar (Fixed Top)</h3>
+                <p class="text-sm text-slate-600 mb-4">Triggered automatically on page load (set loading timeout to 200ms)</p>
+                <button onclick="AnimationSystem.showLoading(); setTimeout(() => AnimationSystem.hideLoading(), 2000);"
+                        class="px-4 py-2 bg-primary text-white rounded-lg btn-ripple">
+                    Simulate Load (2s)
+                </button>
+            </div>
+        </section>
+
+        <!-- ============================================
+             3. BUTTON INTERACTIONS
+             ============================================ -->
+        <section class="demo-section">
+            <h2 class="text-3xl font-bold mb-6">3. Button Interactions</h2>
+            <p class="text-slate-600 mb-8">Micro-interactions for button clicks and hover states.</p>
+
+            <div class="grid grid-cols-4 gap-6">
+                <button class="px-6 py-3 bg-primary text-white rounded-lg transition-fast hover:opacity-90 active:scale-95">
+                    Primary Button
+                </button>
+
+                <button class="btn-ripple px-6 py-3 bg-secondary text-white rounded-lg transition-fast hover:opacity-90">
+                    With Ripple
+                </button>
+
+                <button class="px-6 py-3 border-2 border-primary text-primary rounded-lg transition-fast hover:bg-primary/5">
+                    Outline Button
+                </button>
+
+                <button class="px-6 py-3 bg-slate-200 text-slate-700 rounded-lg transition-fast hover:scale-105">
+                    Ghost Button
+                </button>
+            </div>
+
+            <div class="bg-white rounded-xl p-8 shadow-sm border border-slate-200 mt-6">
+                <h3 class="font-bold mb-4">All buttons have:</h3>
+                <ul class="space-y-2 text-sm text-slate-600">
+                    <li>✓ Smooth hover effects (200ms)</li>
+                    <li>✓ Scale feedback on click (97% → 100%)</li>
+                    <li>✓ Ripple effect option</li>
+                    <li>✓ Respects prefers-reduced-motion</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- ============================================
+             4. CARD HOVER EFFECTS
+             ============================================ -->
+        <section class="demo-section">
+            <h2 class="text-3xl font-bold mb-6">4. Card Hover Effects</h2>
+            <p class="text-slate-600 mb-8">Smooth lift and shadow animations on hover.</p>
+
+            <div class="grid grid-cols-3 gap-6">
+                <!-- Card 1 -->
+                <div class="card-hover bg-white rounded-xl p-6 shadow-sm border border-slate-200 cursor-pointer">
+                    <div class="w-full h-32 bg-gradient-to-br from-primary to-primary-container rounded-lg mb-4"></div>
+                    <h3 class="font-bold text-lg mb-2">Club Name</h3>
+                    <p class="text-sm text-slate-600 mb-4">Hover to see the lift effect</p>
+                    <button class="w-full px-4 py-2 bg-primary text-white rounded-lg text-sm">Select</button>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="card-hover bg-white rounded-xl p-6 shadow-sm border border-slate-200 cursor-pointer">
+                    <div class="w-full h-32 bg-gradient-to-br from-secondary to-secondary-container rounded-lg mb-4"></div>
+                    <h3 class="font-bold text-lg mb-2">Event Title</h3>
+                    <p class="text-sm text-slate-600 mb-4">Cards lift on hover</p>
+                    <button class="w-full px-4 py-2 bg-secondary text-white rounded-lg text-sm">Register</button>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="card-hover bg-white rounded-xl p-6 shadow-sm border border-slate-200 cursor-pointer">
+                    <div class="w-full h-32 bg-gradient-to-br from-tertiary to-tertiary-fixed rounded-lg mb-4"></div>
+                    <h3 class="font-bold text-lg mb-2">Venue Space</h3>
+                    <p class="text-sm text-slate-600 mb-4">-5px translateY effect</p>
+                    <button class="w-full px-4 py-2 bg-tertiary text-white rounded-lg text-sm">View</button>
+                </div>
+            </div>
+
+            <!-- Staggered Card Entrance -->
+            <div class="mt-8">
+                <h3 class="font-bold text-lg mb-4">Staggered Entrance (Click to Animate)</h3>
+                <button onclick="demoCardEntrance()" class="px-4 py-2 bg-primary text-white rounded-lg btn-ripple mb-6">
+                    Animate Cards
+                </button>
+                
+                <div class="grid grid-cols-3 gap-6">
+                    <div class="card-enter card-enter-1 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 h-40 flex items-center justify-center">
+                        <p class="text-sm font-semibold text-slate-700">Card 1 (0ms delay)</p>
+                    </div>
+                    <div class="card-enter card-enter-2 bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-6 h-40 flex items-center justify-center">
+                        <p class="text-sm font-semibold text-slate-700">Card 2 (50ms delay)</p>
+                    </div>
+                    <div class="card-enter card-enter-3 bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-6 h-40 flex items-center justify-center">
+                        <p class="text-sm font-semibold text-slate-700">Card 3 (100ms delay)</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================
+             5. MODAL ANIMATIONS
+             ============================================ -->
+        <section class="demo-section">
+            <h2 class="text-3xl font-bold mb-6">5. Modal Animations</h2>
+            <p class="text-slate-600 mb-8">Smooth scale and fade animations for modals.</p>
+
+            <button onclick="demoShowModal()" class="px-6 py-3 bg-primary text-white rounded-lg btn-ripple">
+                Open Modal
+            </button>
+
+            <!-- Modal Backdrop -->
+            <div id="modalBackdrop" class="fixed inset-0 bg-black/50 hidden z-40"></div>
+
+            <!-- Modal -->
+            <div id="demoModal" class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
+                                      bg-white rounded-2xl shadow-2xl w-96 hidden z-50">
+                <div class="p-6">
+                    <h2 class="text-2xl font-bold mb-2">Modal Title</h2>
+                    <p class="text-slate-600 mb-6">This modal slides up with a smooth animation when opened.</p>
+                    
+                    <div class="space-y-3">
+                        <input type="text" placeholder="Input with focus animation" 
+                               class="w-full px-4 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20"/>
+                    </div>
+                    
+                    <div class="flex gap-3 mt-6">
+                        <button onclick="demoHideModal()" class="flex-1 px-4 py-2 bg-slate-200 text-slate-700 rounded-lg transition-normal hover:bg-slate-300">
+                            Cancel
+                        </button>
+                        <button onclick="demoHideModal(); AnimationSystem.showToast('Saved!', 'success', 3000);"
+                                class="flex-1 px-4 py-2 bg-primary text-white rounded-lg btn-ripple">
+                            Save
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================
+             6. DROPDOWN ANIMATIONS
+             ============================================ -->
+        <section class="demo-section">
+            <h2 class="text-3xl font-bold mb-6">6. Dropdown Animations</h2>
+            <p class="text-slate-600 mb-8">Smooth expand/collapse with sliding animations.</p>
+
+            <div class="space-y-4">
+                <div class="bg-white rounded-xl border border-slate-200 overflow-hidden">
+                    <button onclick="AnimationSystem.toggleDropdown(document.getElementById('dropdown1'))"
+                            class="w-full px-6 py-3 rounded-t-none hover:bg-slate-50 flex justify-between items-center transition-normal">
+                        <span class="font-bold">Dropdown 1</span>
+                        <span class="material-symbols-outlined">expand_more</span>
+                    </button>
+                    <div id="dropdown1" class="dropdown-smooth max-h-0" style="display: none;">
+                        <a href="#" class="block px-6 py-3 border-t border-slate-100 hover:bg-slate-50 transition-colors">Option 1</a>
+                        <a href="#" class="block px-6 py-3 border-t border-slate-100 hover:bg-slate-50 transition-colors">Option 2</a>
+                        <a href="#" class="block px-6 py-3 border-t border-slate-100 hover:bg-slate-50 transition-colors">Option 3</a>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl border border-slate-200 overflow-hidden">
+                    <button onclick="AnimationSystem.toggleDropdown(document.getElementById('dropdown2'))"
+                            class="w-full px-6 py-3 rounded-t-none hover:bg-slate-50 flex justify-between items-center transition-normal">
+                        <span class="font-bold">Dropdown 2</span>
+                        <span class="material-symbols-outlined">expand_more</span>
+                    </button>
+                    <div id="dropdown2" class="dropdown-smooth max-h-0" style="display: none;">
+                        <a href="#" class="block px-6 py-3 border-t border-slate-100 hover:bg-slate-50 transition-colors">Settings</a>
+                        <a href="#" class="block px-6 py-3 border-t border-slate-100 hover:bg-slate-50 transition-colors">Profile</a>
+                        <a href="#" class="block px-6 py-3 border-t border-slate-100 hover:bg-slate-50 transition-colors">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================
+             7. LIST ANIMATIONS
+             ============================================ -->
+        <section class="demo-section">
+            <h2 class="text-3xl font-bold mb-6">7. List Item Animations</h2>
+            <p class="text-slate-600 mb-8">Staggered entrance and smooth exit animations for lists.</p>
+
+            <button onclick="demoListItems()" class="px-6 py-3 bg-primary text-white rounded-lg btn-ripple mb-6">
+                Animate List Items
+            </button>
+
+            <div class="bg-white rounded-xl border border-slate-200 overflow-hidden">
+                <ul id="demoList" class="space-y-0">
+                    <li class="list-item-enter list-item-enter-1 px-6 py-4 border-b border-slate-100 hover:bg-slate-50 transition-colors flex justify-between items-center">
+                        <span>Member 1 - Active</span>
+                        <button class="material-symbols-outlined text-slate-400 hover:text-slate-600">more_vert</button>
+                    </li>
+                    <li class="list-item-enter list-item-enter-2 px-6 py-4 border-b border-slate-100 hover:bg-slate-50 transition-colors flex justify-between items-center">
+                        <span>Member 2 - Active</span>
+                        <button class="material-symbols-outlined text-slate-400 hover:text-slate-600">more_vert</button>
+                    </li>
+                    <li class="list-item-enter list-item-enter-3 px-6 py-4 border-b border-slate-100 hover:bg-slate-50 transition-colors flex justify-between items-center">
+                        <span>Member 3 - Inactive</span>
+                        <button class="material-symbols-outlined text-slate-400 hover:text-slate-600">more_vert</button>
+                    </li>
+                    <li class="list-item-enter list-item-enter-4 px-6 py-4 border-b border-slate-100 hover:bg-slate-50 transition-colors flex justify-between items-center">
+                        <span>Member 4 - Active</span>
+                        <button class="material-symbols-outlined text-slate-400 hover:text-slate-600">more_vert</button>
+                    </li>
+                    <li class="list-item-enter list-item-enter-5 px-6 py-4 hover:bg-slate-50 transition-colors flex justify-between items-center">
+                        <span>Member 5 - Active</span>
+                        <button class="material-symbols-outlined text-slate-400 hover:text-slate-600">more_vert</button>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- ============================================
+             8. INPUT ANIMATIONS
+             ============================================ -->
+        <section class="demo-section">
+            <h2 class="text-3xl font-bold mb-6">8. Input Animations</h2>
+            <p class="text-slate-600 mb-8">Focus effects and error shake animations.</p>
+
+            <div class="grid grid-cols-2 gap-6">
+                <div class="bg-white rounded-xl p-6 border border-slate-200">
+                    <label class="block text-sm font-bold mb-2">Input with Focus Glow</label>
+                    <input type="text" placeholder="Click to see focus animation"
+                           class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:outline-none transition-normal"/>
+                </div>
+
+                <div class="bg-white rounded-xl p-6 border border-slate-200">
+                    <label class="block text-sm font-bold mb-2">Input with Error Shake</label>
+                    <input id="errorInput" type="text" placeholder="Click button to shake"
+                           class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:outline-none transition-normal"/>
+                    <button onclick="AnimationSystem.shakeInput(document.getElementById('errorInput'))"
+                            class="mt-3 w-full px-4 py-2 bg-error text-white rounded-lg text-sm transition-fast hover:opacity-90">
+                        Trigger Error
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================
+             9. UTILITY CLASSES
+             ============================================ -->
+        <section class="demo-section">
+            <h2 class="text-3xl font-bold mb-6">9. Utility Transition Classes</h2>
+            <p class="text-slate-600 mb-8">Quick transition classes for common animations.</p>
+
+            <div class="grid grid-cols-3 gap-6">
+                <div class="transition-fast hover:scale-110 hover:bg-primary/10 bg-slate-100 rounded-xl p-6 cursor-pointer">
+                    <p class="font-bold mb-2">transition-fast</p>
+                    <p class="text-sm text-slate-600">150ms duration</p>
+                </div>
+
+                <div class="transition-normal hover:scale-105 hover:bg-primary/10 bg-slate-100 rounded-xl p-6 cursor-pointer">
+                    <p class="font-bold mb-2">transition-normal</p>
+                    <p class="text-sm text-slate-600">300ms duration (default)</p>
+                </div>
+
+                <div class="transition-slow hover:scale-102 hover:bg-primary/10 bg-slate-100 rounded-xl p-6 cursor-pointer">
+                    <p class="font-bold mb-2">transition-slow</p>
+                    <p class="text-sm text-slate-600">500ms duration</p>
+                </div>
+
+                <div class="transition-transform hover:translate-x-2 hover:bg-slate-50 bg-slate-100 rounded-xl p-6 cursor-pointer">
+                    <p class="font-bold mb-2">transition-transform</p>
+                    <p class="text-sm text-slate-600">Transform only</p>
+                </div>
+
+                <div class="transition-opacity hover:opacity-50 bg-slate-100 rounded-xl p-6 cursor-pointer">
+                    <p class="font-bold mb-2">transition-opacity</p>
+                    <p class="text-sm text-slate-600">Opacity only</p>
+                </div>
+
+                <div class="transition-shadow hover:shadow-xl bg-slate-100 rounded-xl p-6 cursor-pointer">
+                    <p class="font-bold mb-2">transition-shadow</p>
+                    <p class="text-sm text-slate-600">Shadow only</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================
+             10. BADGES & NOTIFICATIONS
+             ============================================ -->
+        <section class="demo-section">
+            <h2 class="text-3xl font-bold mb-6">10. Badges & Notifications</h2>
+            <p class="text-slate-600 mb-8">Attention-grabbing animations for badges.</p>
+
+            <div class="flex gap-8 items-center">
+                <div class="relative">
+                    <button class="relative px-6 py-3 bg-primary text-white rounded-lg">
+                        Notifications
+                        <span class="badge-pulse absolute -top-2 -right-2 w-5 h-5 bg-error text-white text-xs rounded-full flex items-center justify-center">
+                            3
+                        </span>
+                    </button>
+                </div>
+
+                <div class="relative">
+                    <button class="relative px-6 py-3 bg-secondary text-white rounded-lg">
+                        Messages
+                        <span class="badge-bounce absolute -top-2 -right-2 w-5 h-5 bg-error text-white text-xs rounded-full flex items-center justify-center">
+                            1
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Loading Overlay Template -->
+    <div class="loading-overlay" style="display: none;">
+        <div class="flex flex-col items-center gap-4">
+            <span class="spinner"></span>
+            <p class="text-sm text-slate-600">Loading resources...</p>
+        </div>
+    </div>
+
+    <!-- Toast Container (auto-created) -->
+
+    <!-- Scripts -->
+    <script src="assets/js/animation-system.js"></script>
+
+    <script>
+        // Demo Functions
+        function demoPageTransition() {
+            const demo = document.getElementById('pageDemo');
+            demo.classList.remove('page-fade-in');
+            demo.style.animation = 'none';
+            demo.offsetHeight; // reflow
+            demo.classList.add('page-fade-in');
+        }
+
+        function demoBatchFadeIn() {
+            const items = document.querySelectorAll('#batchDemo div');
+            AnimationSystem.batchFadeIn(items, 100);
+        }
+
+        function demoCardEntrance() {
+            // Re-trigger animations
+            const cards = document.querySelectorAll('.card-enter');
+            cards.forEach(card => {
+                card.style.animation = 'none';
+                card.offsetHeight;
+                card.style.animation = '';
+            });
+        }
+
+        function demoShowModal() {
+            const modal = document.getElementById('demoModal');
+            const backdrop = document.getElementById('modalBackdrop');
+            AnimationSystem.showModal(modal, backdrop);
+        }
+
+        function demoHideModal() {
+            const modal = document.getElementById('demoModal');
+            const backdrop = document.getElementById('modalBackdrop');
+            AnimationSystem.hideModal(modal, backdrop);
+        }
+
+        function demoListItems() {
+            const items = document.querySelectorAll('#demoList li');
+            AnimationSystem.animateListItems(items);
+        }
+    </script>
+</body>
+</html>

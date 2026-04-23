@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Page Not Found</title>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#21417f",
+                        "surface-container-lowest": "#ffffff",
+                        "surface": "#f8f9fa",
+                        "on-surface": "#191c1d",
+                        "on-surface-variant": "#444650",
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope", "sans-serif"],
+                        "body": ["Inter", "sans-serif"],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .brand-gradient { background: linear-gradient(135deg, #21417f 0%, #3b5998 100%); }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface h-screen flex flex-col items-center justify-center">
+    <div class="text-center bg-surface-container-lowest p-12 rounded-xl shadow-sm border border-gray-100 max-w-md w-full">
+        <span class="material-symbols-outlined text-6xl text-primary mb-4 block">error</span>
+        <h1 class="font-headline text-3xl font-bold text-on-surface mb-2">Page Not Found</h1>
+        <p class="text-on-surface-variant mb-8 text-sm">The page you're looking for doesn't exist or has been moved.</p>
+        <a href="/" class="inline-flex items-center gap-2 brand-gradient text-white px-6 py-3 rounded-lg font-medium hover:opacity-90 transition-opacity">
+            <span class="material-symbols-outlined text-[20px]">arrow_back</span>
+            Return to Home
+        </a>
+    </div>
+</body>
+</html>

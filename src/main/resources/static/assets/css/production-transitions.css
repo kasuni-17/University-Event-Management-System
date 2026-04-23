@@ -1,0 +1,172 @@
+/**
+ * ============================================================================
+ * PRODUCTION-LEVEL PAGE TRANSITION SYSTEM (V3)
+ * Inspired by Stripe, Linear, and Vercel.
+ * ============================================================================
+ * 
+ * CORE DESIGN PRINCIPLES:
+ * 1. Visual Continuity (No jump cuts)
+ * 2. Intentional Motion (Direction-aware)
+ * 3. Performance First (GPU-only properties)
+ * 4. Layered Depth (Parallax & Overlays)
+ */
+
+:root {
+    /* Refined Timing */
+    --pt-duration-fast: 200ms;
+    --pt-duration-normal: 350ms;
+    --pt-duration-page: 450ms;
+    --pt-duration-shared: 600ms;
+
+    /* SaaS Easing - Pure cubic-bezier(0.4, 0, 0.2, 1) */
+    --pt-easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --pt-easing-out: cubic-bezier(0, 0, 0.2, 1);
+    --pt-easing-in: cubic-bezier(0.4, 0, 1, 1);
+    --pt-easing-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ============================================================================
+   1. TRANSITION WRAPPER
+   ============================================================================ */
+
+.page-director-wrapper {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    overflow: hidden;
+    perspective: 1200px;
+}
+
+.page-content-layer {
+    width: 100%;
+    min-height: 100vh;
+    background: inherit;
+    will-change: transform, opacity;
+}
+
+/* Outgoing page during transition */
+.page-leaving {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 10;
+}
+
+/* Incoming page during transition */
+.page-entering {
+    position: relative;
+    z-index: 20;
+}
+
+/* ============================================================================
+   2. SHARED ELEMENTS (FLIP)
+   ============================================================================ */
+
+[data-shared-id] {
+    will-change: transform, opacity, border-radius;
+    z-index: 50;
+}
+
+.shared-element-ghost {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    will-change: transform, width, height, opacity;
+}
+
+/* ============================================================================
+   3. DIRECTIONAL CLASSES (Helper)
+   ============================================================================ */
+
+/* These are primarily handled by GSAP but CSS can provide fallbacks */
+.nav-forward .page-entering { animation: fade-in-right var(--pt-duration-page) var(--pt-easing) forwards; }
+.nav-back .page-entering { animation: fade-in-left var(--pt-duration-page) var(--pt-easing) forwards; }
+
+@keyframes fade-in-right {
+    from { opacity: 0; transform: translateX(40px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fade-in-left {
+    from { opacity: 0; transform: translateX(-40px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+/* ============================================================================
+   4. SKELETON REVEAL SYSTEM
+   ============================================================================ */
+
+.skeleton-reveal {
+    opacity: 0;
+    transform: translateY(12px);
+    will-change: opacity, transform;
+}
+
+.skeleton-reveal.revealed {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity var(--pt-duration-normal) var(--pt-easing),
+                transform var(--pt-duration-normal) var(--pt-easing);
+}
+
+/* ============================================================================
+   5. MICRO-INTERACTIONS
+   ============================================================================ */
+
+/* Button Hover/Press */
+.btn-animate {
+    transition: transform var(--pt-duration-fast) var(--pt-easing),
+                box-shadow var(--pt-duration-fast) var(--pt-easing);
+}
+
+.btn-animate:hover {
+    transform: translateY(-2px);
+}
+
+.btn-animate:active {
+    transform: translateY(0) scale(0.96);
+}
+
+/* Card Depth */
+.card-animate {
+    transition: transform var(--pt-duration-normal) var(--pt-easing),
+                box-shadow var(--pt-duration-normal) var(--pt-easing);
+}
+
+.card-animate:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+}
+
+/* ============================================================================
+   6. DEPTH & LAYERS
+   ============================================================================ */
+
+.layer-bg { z-index: 0; position: fixed; inset: 0; }
+.layer-content { z-index: 10; position: relative; }
+.layer-overlay { z-index: 100; position: fixed; inset: 0; pointer-events: none; }
+
+/* Backdrop Blur Overlay during transitions */
+.transition-blur {
+    position: fixed;
+    inset: 0;
+    backdrop-filter: blur(0px);
+    background: rgba(255, 255, 255, 0);
+    z-index: 90;
+    pointer-events: none;
+    will-change: backdrop-filter, background;
+}
+
+/* ============================================================================
+   7. ACCESSIBILITY
+   ============================================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}

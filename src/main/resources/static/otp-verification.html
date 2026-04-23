@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Verify Email | Scholar Hub</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="assets/css/transitions.css">
+    <script id="tailwind-config">
+          tailwind.config = {
+            darkMode: "class",
+            theme: {
+              extend: {
+                colors: {
+                  "surface-container-low": "#f3f4f5",
+                  "surface": "#f8f9fa",
+                  "primary-fixed-dim": "#afc6ff",
+                  "on-tertiary-fixed-variant": "#5b4300",
+                  "primary-container": "#3b5998",
+                  "surface-tint": "#3f5d9c",
+                  "on-tertiary-fixed": "#261a00",
+                  "on-secondary-fixed-variant": "#00531a",
+                  "on-error-container": "#93000a",
+                  "primary-fixed": "#d9e2ff",
+                  "error-container": "#ffdad6",
+                  "inverse-primary": "#afc6ff",
+                  "outline": "#747781",
+                  "on-tertiary-container": "#ffcc55",
+                  "on-tertiary": "#ffffff",
+                  "inverse-surface": "#2e3132",
+                  "tertiary-container": "#745600",
+                  "secondary-container": "#80f98b",
+                  "on-secondary": "#ffffff",
+                  "surface-container-highest": "#e1e3e4",
+                  "background": "#f8f9fa",
+                  "secondary": "#006e25",
+                  "on-primary-fixed-variant": "#254583",
+                  "on-primary": "#ffffff",
+                  "on-primary-fixed": "#001944",
+                  "tertiary": "#574000",
+                  "secondary-fixed-dim": "#66df75",
+                  "on-primary-container": "#c2d2ff",
+                  "inverse-on-surface": "#f0f1f2",
+                  "tertiary-fixed-dim": "#fabd00",
+                  "surface-bright": "#f8f9fa",
+                  "surface-container-high": "#e7e8e9",
+                  "surface-dim": "#d9dadb",
+                  "on-error": "#ffffff",
+                  "outline-variant": "#c4c6d2",
+                  "on-surface": "#191c1d",
+                  "on-surface-variant": "#444650",
+                  "tertiary-fixed": "#ffdf9e",
+                  "surface-container": "#edeeef",
+                  "secondary-fixed": "#83fc8e",
+                  "primary": "#21417f",
+                  "on-secondary-container": "#007327",
+                  "surface-variant": "#e1e3e4",
+                  "on-secondary-fixed": "#002106",
+                  "error": "#ba1a1a",
+                  "surface-container-lowest": "#ffffff",
+                  "on-background": "#191c1d"
+                },
+                fontFamily: {
+                  "headline": ["Manrope"],
+                  "body": ["Inter"]
+                },
+                borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+              },
+            },
+          }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .bg-auth-pattern {
+            background-color: #f8f9fa;
+            background-image: radial-gradient(#d9e2ff 0.5px, transparent 0.5px), radial-gradient(#d9e2ff 0.5px, #f8f9fa 0.5px);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+        }
+        .otp-input:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(33, 65, 127, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-auth-pattern font-body text-on-surface min-h-screen flex flex-col">
+<main class="flex-grow flex items-center justify-center px-4 py-12">
+    <div class="w-full max-w-md bg-surface-container-lowest rounded-2xl shadow-[0_20px_50px_rgba(25,28,29,0.1)] overflow-hidden">
+        <div class="px-8 pt-10 pb-6 text-center relative">
+            <!-- Back Button with Arrow -->
+            <a href="signup.html" class="absolute top-6 left-6 flex items-center gap-1.5 text-slate-400 hover:text-primary transition-all text-xs font-bold group">
+                <span class="material-symbols-outlined text-[20px] group-hover:-translate-x-1.5 transition-transform">arrow_back</span>
+                Back
+            </a>
+            
+            <div class="flex flex-col items-center gap-4 mb-8">
+                <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
+                    <span class="material-symbols-outlined text-primary text-3xl">mark_email_read</span>
+                </div>
+                <div>
+                    <h2 class="font-headline text-2xl font-bold text-on-surface">Verify Email</h2>
+                    <p class="text-on-surface-variant text-sm mt-2">
+                        We've sent a 6-digit code to <br/>
+                        <span id="displayEmail" class="font-semibold text-primary">student@my.sliit.lk</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast Notification -->
+        <div id="otpToast" class="fixed top-6 right-6 z-[9999] transform translate-x-[150%] transition-transform duration-500 ease-out">
+            <div class="bg-surface-container-lowest border-l-4 border-error rounded-xl shadow-2xl p-4 flex items-center gap-4 min-w-[320px]">
+                <div id="toastIconBg" class="bg-error/10 p-2 rounded-full">
+                    <span class="material-symbols-outlined text-error" id="toastIcon">error</span>
+                </div>
+                <div>
+                    <p class="text-sm font-bold text-on-surface" id="toastTitle">Verification Notice</p>
+                    <p id="toastMsg" class="text-xs text-on-surface-variant">Invalid code.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="px-8 pb-10">
+            <form id="otpForm" class="space-y-8">
+                <div class="flex justify-between gap-2" id="otpInputs">
+                    <input type="text" maxlength="1" class="otp-input w-12 h-14 text-center text-xl font-bold bg-surface-container-low border-none rounded-xl focus:ring-2 focus:ring-primary transition-all" required autoFocus/>
+                    <input type="text" maxlength="1" class="otp-input w-12 h-14 text-center text-xl font-bold bg-surface-container-low border-none rounded-xl focus:ring-2 focus:ring-primary transition-all" required/>
+                    <input type="text" maxlength="1" class="otp-input w-12 h-14 text-center text-xl font-bold bg-surface-container-low border-none rounded-xl focus:ring-2 focus:ring-primary transition-all" required/>
+                    <input type="text" maxlength="1" class="otp-input w-12 h-14 text-center text-xl font-bold bg-surface-container-low border-none rounded-xl focus:ring-2 focus:ring-primary transition-all" required/>
+                    <input type="text" maxlength="1" class="otp-input w-12 h-14 text-center text-xl font-bold bg-surface-container-low border-none rounded-xl focus:ring-2 focus:ring-primary transition-all" required/>
+                    <input type="text" maxlength="1" class="otp-input w-12 h-14 text-center text-xl font-bold bg-surface-container-low border-none rounded-xl focus:ring-2 focus:ring-primary transition-all" required/>
+                </div>
+
+                <div class="space-y-4">
+                    <button type="submit" class="w-full bg-primary text-on-primary font-headline font-bold py-4 rounded-xl shadow-lg shadow-primary/20 hover:scale-[0.98] active:scale-95 transition-all duration-150">
+                        Verify Account
+                    </button>
+                    
+                    <div class="text-center">
+                        <p class="text-xs text-on-surface-variant">
+                            Didn't receive the code? 
+                            <button type="button" id="resendBtn" class="text-primary font-bold hover:underline ml-1">Resend</button>
+                        </p>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+
+<script>
+    const email = localStorage.getItem('pendingEmail');
+    const signupData = JSON.parse(localStorage.getItem('signupData'));
+
+    if (!email || !signupData) {
+        window.location.href = 'signup.html';
+    }
+
+    document.getElementById('displayEmail').innerText = email;
+
+    const inputs = document.querySelectorAll('.otp-input');
+    inputs.forEach((input, index) => {
+        input.addEventListener('input', (e) => {
+            if (e.target.value.length === 1 && index < inputs.length - 1) {
+                inputs[index + 1].focus();
+            }
+        });
+
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Backspace' && !e.target.value && index > 0) {
+                inputs[index - 1].focus();
+            }
+        });
+    });
+
+    function showToast(message, type = 'error') {
+        const toast = document.getElementById('otpToast');
+        const toastMsg = document.getElementById('toastMsg');
+        const toastTitle = document.getElementById('toastTitle');
+        const toastIcon = document.getElementById('toastIcon');
+        const toastIconBg = document.getElementById('toastIconBg');
+        const toastContainer = toast.querySelector('div');
+        
+        toastMsg.innerText = message;
+        
+        if (type === 'success') {
+           toastTitle.innerText = "Success";
+           toastIcon.innerText = "check_circle";
+           toastContainer.classList.replace('border-error', 'border-green-500');
+           toastIcon.classList.replace('text-error', 'text-green-500');
+           toastIconBg.classList.replace('bg-error/10', 'bg-green-500/10');
+        } else {
+           toastTitle.innerText = "Verification Notice";
+           toastIcon.innerText = "error";
+           toastContainer.classList.replace('border-green-500', 'border-error');
+           toastIcon.classList.replace('text-green-500', 'text-error');
+           toastIconBg.classList.replace('bg-green-500/10', 'bg-error/10');
+        }
+        
+        toast.classList.remove('translate-x-[150%]');
+        toast.classList.add('translate-x-0');
+        setTimeout(() => {
+            toast.classList.remove('translate-x-0');
+            toast.classList.add('translate-x-[150%]');
+        }, 3000);
+    }
+
+    document.getElementById('resendBtn').addEventListener('click', async () => {
+        try {
+            const res = await fetch('/api/users/request-otp', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ email })
+            });
+            if (res.ok) {
+                showToast("New code sent!", "success");
+            } else {
+                const err = await res.text();
+                showToast(err || "Failed to resend. Try again.");
+            }
+        } catch (err) {
+            showToast("Network error.");
+        }
+    });
+
+    document.getElementById('otpForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const otp = Array.from(inputs).map(i => i.value).join('');
+        
+        if (otp.length < 6) {
+            showToast("Please enter the full code.");
+            return;
+        }
+
+        try {
+            const verifyRes = await fetch('/api/users/verify-otp', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ email, otp })
+            });
+
+            if (verifyRes.ok) {
+                // OTP Correct, now create the account
+                const signupRes = await fetch('/api/users', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(signupData)
+                });
+
+                if (signupRes.ok) {
+                    showToast("Email verified and account created!", "success");
+                    localStorage.removeItem('pendingEmail');
+                    localStorage.removeItem('signupData');
+                    
+                    setTimeout(() => {
+                        if (signupData.role === 'CLUB_ADMIN') {
+                            window.location.href = 'clubadmin-registrationpending.html';
+                        } else {
+                            window.location.href = 'login.html';
+                        }
+                    }, 1500);
+                } else {
+                    const err = await signupRes.text();
+                    showToast(err || "Creation failed.");
+                }
+            } else {
+                showToast("Invalid or expired code.");
+            }
+        } catch (err) {
+            showToast("Server error. Please try again.");
+        }
+    });
+</script>
+</body>
+</html>

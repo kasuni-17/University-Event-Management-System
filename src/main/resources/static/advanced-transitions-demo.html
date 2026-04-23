@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Transitions - Interactive Demo</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/advanced-transitions.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            background: white;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            font-size: 32px;
+            background: linear-gradient(135deg, #6366f1, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        nav a {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 0 5px;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 8px;
+            color: #6366f1;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+
+            &:hover {
+                background: rgba(99, 102, 241, 0.15);
+                border-color: rgba(99, 102, 241, 0.4);
+                transform: translateY(-2px);
+            }
+
+            &:active {
+                transform: translateY(0) scale(0.96);
+            }
+        }
+
+        .demo-section {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .demo-section h2 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #1f2937;
+        }
+
+        .demo-section p {
+            color: #6b7280;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        /* DEMO 1: Simple Page Transition */
+        .page-demo {
+            perspective: 1000px;
+            min-height: 300px;
+        }
+
+        .demo-page {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            padding: 40px;
+            color: white;
+            text-align: center;
+        }
+
+        .demo-page h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .demo-page p {
+            opacity: 0.9;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        /* DEMO 2: Shared Elements */
+        .shared-demo {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .demo-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            will-change: transform;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+            &:hover {
+                transform: translateY(-6px);
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            }
+
+            &:active {
+                transform: translateY(-2px) scale(0.96);
+            }
+        }
+
+        .demo-card-img {
+            width: 100%;
+            height: 120px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+
+        .demo-card-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1f2937;
+        }
+
+        .demo-card-desc {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        /* DEMO 3: Skeleton Loading */
+        .skeleton-demo {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        /* DEMO 4: Button Interactions */
+        .button-demo {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            padding: 30px;
+            background: #f9fafb;
+            border-radius: 12px;
+        }
+
+        .demo-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            will-change: transform, box-shadow;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .demo-btn-primary {
+            background: linear-gradient(135deg, #6366f1, #3b82f6);
+            color: white;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+
+            &:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 20px rgba(99, 102, 241, 0.5);
+            }
+
+            &:active {
+                transform: translateY(0) scale(0.96);
+            }
+        }
+
+        .demo-btn-secondary {
+            background: white;
+            color: #6366f1;
+            border: 2px solid #6366f1;
+
+            &:hover {
+                background: rgba(99, 102, 241, 0.05);
+            }
+
+            &:active {
+                transform: scale(0.96);
+            }
+        }
+
+        /* DEMO 5: Modal */
+        .modal-demo-trigger {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            will-change: transform;
+            transition: all 0.2s;
+
+            &:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 20px rgba(245, 87, 108, 0.4);
+            }
+
+            &:active {
+                transform: translateY(0) scale(0.96);
+            }
+        }
+
+        .modal-wrapper {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            will-change: transform, opacity;
+        }
+
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            pointer-events: none;
+            backdrop-filter: blur(0px);
+            will-change: backdrop-filter, opacity;
+        }
+
+        .modal-wrapper h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: #1f2937;
+        }
+
+        .modal-wrapper p {
+            color: #6b7280;
+            margin-bottom: 30px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        /* DEMO 6: Input Focus */
+        .input-demo {
+            display: grid;
+            gap: 20px;
+            max-width: 500px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group label {
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #1f2937;
+        }
+
+        .input-group input {
+            padding: 12px 16px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            font-size: 14px;
+            will-change: box-shadow, border-color;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+            &:focus {
+                outline: none;
+                border-color: rgba(99, 102, 241, 0.5);
+                box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1), 0 0 0 1px rgba(99, 102, 241, 0.5);
+            }
+        }
+
+        /* DEMO 7: List Stagger */
+        .list-demo {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-width: 400px;
+        }
+
+        .list-item {
+            background: #f3f4f6;
+            padding: 16px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            will-change: transform, opacity;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        .list-item-action {
+            padding: 8px 16px;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+
+            &:hover {
+                background: #f3f4f6;
+            }
+
+            &:active {
+                transform: scale(0.95);
+            }
+        }
+
+        /* Scrollable Content */
+        .scroll-section {
+            display: flex;
+            gap: 30px;
+            overflow-x: auto;
+            padding: 20px 0;
+        }
+
+        .scroll-item {
+            flex-shrink: 0;
+            width: 300px;
+            height: 200px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            opacity: 0;
+            will-change: opacity, transform;
+        }
+
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .stat {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            will-change: transform;
+
+            &:hover {
+                transform: translateY(-6px);
+            }
+
+            h4 {
+                font-size: 14px;
+                opacity: 0.9;
+                margin-bottom: 10px;
+            }
+
+            .number {
+                font-size: 36px;
+                font-weight: 700;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .shared-demo {
+                grid-template-columns: 1fr;
+            }
+
+            .skeleton-demo {
+                grid-template-columns: 1fr;
+            }
+
+            .button-demo {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="container">
+        <header>
+            <h1>Advanced Transitions</h1>
+            <nav>
+                <a href="#" onclick="demoPageTransition(event)">Page</a>
+                <a href="#" onclick="demoShared(event)">Shared</a>
+                <a href="#" onclick="demoSkeleton(event)">Skeleton</a>
+                <a href="#" onclick="demoScroll(event)">Scroll</a>
+            </nav>
+        </header>
+
+        <!-- DEMO 1: Page Transition -->
+        <div class="demo-section">
+            <h2>1. Page Transition</h2>
+            <p>Smooth scale-down + fade-out for outgoing page, slide-up + fade-in for incoming page</p>
+            
+            <div class="page-demo">
+                <div class="demo-page" id="demoPage1">
+                    <h3>Current Page</h3>
+                    <p>Click button to transition</p>
+                    <button class="demo-btn demo-btn-primary" onclick="triggerPageTransition()">
+                        Transition Out
+                    </button>
+                </div>
+            </div>
+
+            <button class="demo-btn demo-btn-primary" onclick="resetDemo()">Reset Demo</button>
+        </div>
+
+        <!-- DEMO 2: Shared Elements -->
+        <div class="demo-section">
+            <h2>2. Shared Element Transitions (FLIP)</h2>
+            <p>Elements with matching data-shared-element IDs animate between positions</p>
+            
+            <div class="shared-demo">
+                <div>
+                    <h3 style="margin-bottom: 15px;">Card List</h3>
+                    <div class="card-grid" id="cardList">
+                        <div class="demo-card" data-shared-element="card1" onclick="sharedElementDemo(this)">
+                            <div class="demo-card-img"></div>
+                            <div class="demo-card-title">Card 1</div>
+                            <div class="demo-card-desc">Click to expand</div>
+                        </div>
+                        <div class="demo-card" data-shared-element="card2" onclick="sharedElementDemo(this)">
+                            <div class="demo-card-img"></div>
+                            <div class="demo-card-title">Card 2</div>
+                            <div class="demo-card-desc">Click to expand</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="cardDetail" style="display: none; perspective: 1000px;">
+                    <h3 style="margin-bottom: 15px;">Detail View</h3>
+                    <div class="demo-card" data-shared-element="card1" style="width: 100%; cursor: pointer;" onclick="backToList()">
+                        <div class="demo-card-img" style="height: 200px;"></div>
+                        <div class="demo-card-title">Expanded Card</div>
+                        <div class="demo-card-desc">This element animated from the card list using FLIP technique. Click anywhere to go back.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DEMO 3: Skeleton Loading -->
+        <div class="demo-section">
+            <h2>3. Skeleton Loading → Progressive Reveal</h2>
+            <p>Skeleton placeholders fade out while content fades in with stagger animation</p>
+            
+            <button class="demo-btn demo-btn-primary" onclick="triggerSkeleton()">Load Content</button>
+            
+            <div class="skeleton-demo" style="margin-top: 30px;">
+                <div id="skeleton1" class="demo-card skeleton" style="margin-bottom: 20px;"></div>
+                <div id="skeleton2" class="demo-card skeleton" style="margin-bottom: 20px;"></div>
+                <div id="skeleton3" class="demo-card skeleton" style="margin-bottom: 20px;"></div>
+            </div>
+
+            <div class="skeleton-demo" style="margin-top: 30px; opacity: 0;">
+                <div class="demo-card" style="transform: translateY(10px);">
+                    <div style="color: #6366f1; font-weight: 600; margin-bottom: 5px;">Metric 1</div>
+                    <div style="font-size: 24px; color: #1f2937; font-weight: 700;">284</div>
+                </div>
+                <div class="demo-card" style="transform: translateY(10px);">
+                    <div style="color: #6366f1; font-weight: 600; margin-bottom: 5px;">Metric 2</div>
+                    <div style="font-size: 24px; color: #1f2937; font-weight: 700;">1,234</div>
+                </div>
+                <div class="demo-card" style="transform: translateY(10px);">
+                    <div style="color: #6366f1; font-weight: 600; margin-bottom: 5px;">Metric 3</div>
+                    <div style="font-size: 24px; color: #1f2937; font-weight: 700;">45%</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DEMO 4: Button Interactions -->
+        <div class="demo-section">
+            <h2>4. Button Micro-Interactions</h2>
+            <p>Spring physics on tap feedback with ripple effect</p>
+            
+            <div class="button-demo">
+                <button class="demo-btn demo-btn-primary">Primary Button</button>
+                <button class="demo-btn demo-btn-secondary">Secondary Button</button>
+                <button class="demo-btn demo-btn-primary">Another Action</button>
+            </div>
+        </div>
+
+        <!-- DEMO 5: Card Hover -->
+        <div class="demo-section">
+            <h2>5. Card Hover Effects</h2>
+            <p>Smooth lift and shadow depth animation on hover</p>
+            
+            <div class="stats">
+                <div class="stat">
+                    <h4>Metric A</h4>
+                    <div class="number">2,847</div>
+                </div>
+                <div class="stat">
+                    <h4>Metric B</h4>
+                    <div class="number">+24%</div>
+                </div>
+                <div class="stat">
+                    <h4>Metric C</h4>
+                    <div class="number">98%</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DEMO 6: Input Focus -->
+        <div class="demo-section">
+            <h2>6. Input Focus Animation</h2>
+            <p>Glow effect on input focus with smooth border transition</p>
+            
+            <div class="input-demo">
+                <div class="input-group">
+                    <label>Email</label>
+                    <input type="email" placeholder="your@email.com">
+                </div>
+                <div class="input-group">
+                    <label>Message</label>
+                    <input type="text" placeholder="Type something...">
+                </div>
+            </div>
+        </div>
+
+        <!-- DEMO 7: List Stagger -->
+        <div class="demo-section">
+            <h2>7. List Item Stagger Animation</h2>
+            <p>Sequential entrance animation with 50-100ms delay between items</p>
+            
+            <button class="demo-btn demo-btn-primary" onclick="triggerListStagger()">Animate List</button>
+            
+            <div class="list-demo" style="margin-top: 30px;">
+                <div class="list-item">
+                    <span>Item 1</span>
+                    <button class="list-item-action">Action</button>
+                </div>
+                <div class="list-item">
+                    <span>Item 2</span>
+                    <button class="list-item-action">Action</button>
+                </div>
+                <div class="list-item">
+                    <span>Item 3</span>
+                    <button class="list-item-action">Action</button>
+                </div>
+                <div class="list-item">
+                    <span>Item 4</span>
+                    <button class="list-item-action">Action</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- DEMO 8: Modal -->
+        <div class="demo-section">
+            <h2>8. Modal with Backdrop Blur</h2>
+            <p>Scale up animation with background blur effect</p>
+            
+            <button class="modal-demo-trigger" onclick="showModal()">Open Modal</button>
+
+            <div class="modal-backdrop" id="modalBackdrop" onclick="hideModal()"></div>
+            <div class="modal-wrapper" id="modalDemo">
+                <h3>Welcome</h3>
+                <p>This modal animates in with spring physics and smoky backdrop blur.</p>
+                <div class="modal-actions">
+                    <button class="demo-btn demo-btn-secondary" onclick="hideModal()">Cancel</button>
+                    <button class="demo-btn demo-btn-primary" onclick="hideModal()">Confirm</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- DEMO 9: Scroll Animation -->
+        <div class="demo-section">
+            <h2>9. Scroll-Based Animation</h2>
+            <p>Elements fade in when scrolled into view</p>
+            
+            <p style="margin-bottom: 30px;">Scroll down to see items fade in...</p>
+
+            <div class="scroll-section">
+                <div class="scroll-item" data-scroll-animate>Scroll Item 1</div>
+                <div class="scroll-item" data-scroll-animate>Scroll Item 2</div>
+                <div class="scroll-item" data-scroll-animate>Scroll Item 3</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="modalBackdrop" class="modal-backdrop"></div>
+    <div id="modalDemo" class="modal-wrapper">
+        <h3>Modal Title</h3>
+        <p>This is a demo modal with spring physics animation and backdrop blur.</p>
+        <div class="modal-actions">
+            <button class="demo-btn demo-btn-secondary" onclick="hideModal()">Cancel</button>
+            <button class="demo-btn demo-btn-primary" onclick="hideModal()">Confirm</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/assets/js/advanced-transitions.js"></script>
+    <script>
+        // Initialize transitions
+        const trans = window.advancedTransitions || new AdvancedTransitions();
+
+        // Demo 1: Page Transition
+        function triggerPageTransition() {
+            const page = document.getElementById('demoPage1');
+            trans
+                .pageTransitionOut(page)
+                .then(() => {
+                    // Simulate navigation
+                    setTimeout(() => {
+                        gsap.set(page, { opacity: 0, y: 20, scale: 0.95 });
+                        page.textContent = 'New Page (Wait 1 second to transition back)';
+                        trans.pageTransitionIn(page);
+                        setTimeout(resetDemo, 2000);
+                    }, 300);
+                });
+        }
+
+        function resetDemo() {
+            const page = document.getElementById('demoPage1');
+            gsap.to(page, { y: 0, scale: 1, opacity: 1, duration: 0 });
+            page.innerHTML = `
+                <h3>Current Page</h3>
+                <p>Click button to transition</p>
+                <button class="demo-btn demo-btn-primary" onclick="triggerPageTransition()">
+                    Transition Out
+                </button>
+            `;
+        }
+
+        // Demo 2: Shared Elements
+        function sharedElementDemo(element) {
+            const cardList = document.getElementById('cardList');
+            const cardDetail = document.getElementById('cardDetail');
+
+            // Capture position
+            trans.captureSharedElements();
+
+            // Hide list
+            gsap.to(cardList, { opacity: 0, pointerEvents: 'none', duration: 0.2 });
+
+            // Show detail
+            cardDetail.style.display = 'block';
+            gsap.set(cardDetail, { opacity: 0 });
+            gsap.to(cardDetail, { opacity: 1, duration: 0.3 });
+
+            // Animate shared element
+            trans.animateSharedElements();
+        }
+
+        function backToList() {
+            // Reset
+            document.getElementById('cardDetail').style.display = 'none';
+            gsap.to(document.getElementById('cardList'), { opacity: 1, pointerEvents: 'auto', duration: 0.2 });
+        }
+
+        // Demo 3: Skeleton
+        function triggerSkeleton() {
+            const skeletons = document.querySelectorAll('.skeleton');
+            const contents = document.querySelectorAll('.skeleton-demo:last-of-type');
+
+            trans.revealContent(
+                document.querySelector('.skeleton-demo:first-of-type').parentElement,
+                '.skeleton',
+                '.skeleton-demo:last-of-type > *'
+            );
+        }
+
+        // Demo 6: List Stagger
+        function triggerListStagger() {
+            const items = document.querySelectorAll('.list-item');
+            trans.staggerAnimation(
+                items,
+                { opacity: 0, y: 10 },
+                { opacity: 1, y: 0 },
+                0.08
+            );
+        }
+
+        // Demo 8: Modal
+        function showModal() {
+            const modal = document.getElementById('modalDemo');
+            const backdrop = document.getElementById('modalBackdrop');
+            trans.showModal(modal, backdrop);
+        }
+
+        function hideModal() {
+            const modal = document.getElementById('modalDemo');
+            const backdrop = document.getElementById('modalBackdrop');
+            trans.hideModal(modal, backdrop);
+        }
+
+        // Initialize all interactions
+        document.addEventListener('DOMContentLoaded', () => {
+            trans.setupButtonInteractions('.demo-btn');
+            trans.setupCardInteractions('.demo-card');
+            trans.setupInputInteractions('input');
+            trans.setupScrollAnimations('[data-scroll-animate]');
+        });
+    </script>
+</body>
+</html>
